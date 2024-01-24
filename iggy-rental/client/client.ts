@@ -16,7 +16,6 @@ global.exports["iggy-laptop"].RegisterLaptopCallback(
     "rental:rentvehicle",
     (model: string) => {
         emitNet("iggy-rental:server:rentvehicle", model);
-
         return true;
     }
 );
@@ -93,9 +92,31 @@ async function loadBlips() {
     });
 }
 
-//TODO: WHAT WHAS I THINKING CREATING THE PED IN A LOOP ALSO ADD A DISTANCE CHECK TO LOOP TO OPTIMIZE.
-// I AM DUMB
 async function loadNPCs() {
+    RentalSpots.forEach(async (spot, i) => {
+        if (!DoesEntityExist(spot.ped)) {
+            let hash = GetHashKey(spot.pedModel);
+            RequestModel(hash);
+            while (!HasModelLoaded(hash)) {
+                await Delay(10);
+            }
+            let ped = CreatePed(
+                5,
+                hash,
+                spot.pedLocation.x,
+                spot.pedLocation.y,
+                spot.pedLocation.z,
+                spot.pedLocation.w,
+                false,
+                true
+            );
+            FreezeEntityPosition(ped, true);
+            SetEntityInvincible(ped, true);
+            SetBlockingOfNonTemporaryEvents(ped, true);
+            TaskStartScenarioInPlace(ped, "WORLD_HUMAN_CLIPBOARD", 0, true);
+            spot.ped = ped;
+        }
+    });
     while (true) {
         let coords = GetEntityCoords(PlayerPedId(), false);
 
@@ -108,37 +129,6 @@ async function loadNPCs() {
                 spot.pedLocation.y,
                 spot.pedLocation.z
             );
-            if (dist <= 25.0) {
-                if (!DoesEntityExist(spot.ped)) {
-                    let hash = GetHashKey(spot.pedModel);
-                    RequestModel(hash);
-                    while (!HasModelLoaded(hash)) {
-                        await Delay(10);
-                    }
-                    let ped = CreatePed(
-                        5,
-                        hash,
-                        spot.pedLocation.x,
-                        spot.pedLocation.y,
-                        spot.pedLocation.z,
-                        spot.pedLocation.w,
-                        false,
-                        true
-                    );
-                    FreezeEntityPosition(ped, true);
-                    SetEntityInvincible(ped, true);
-                    SetBlockingOfNonTemporaryEvents(ped, true);
-                    TaskStartScenarioInPlace(
-                        ped,
-                        "WORLD_HUMAN_CLIPBOARD",
-                        0,
-                        true
-                    );
-                    spot.ped = ped;
-                }
-            } else {
-                await Delay(2000);
-            }
 
             if (dist <= 5) {
                 QBCore.Functions.DrawText3D(
