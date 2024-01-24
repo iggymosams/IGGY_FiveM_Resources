@@ -335,3 +335,5 @@ global.exports("getDevmode", getDevmode);
 export function setOpen(newOpen: boolean) {
     open = newOpen;
 }
+
+export { getDevmode };

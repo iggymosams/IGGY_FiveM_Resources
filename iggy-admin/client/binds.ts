@@ -1,4 +1,4 @@
-import { DevMode } from "./client";
+import { getDevmode } from "./client";
 import { Bind } from "../shared/types";
 import {
     RegisterNuiCallback,
@@ -31,7 +31,7 @@ function RegisterBind(id: string, bind: string, name: string) {
 }
 
 function executeBind(bind: string) {
-    if (DevMode) {
+    if (getDevmode()) {
         binds.forEach((b) => {
             if (b.name === bind) {
                 if (b.cmd === undefined) return;
