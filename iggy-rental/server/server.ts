@@ -1,12 +1,7 @@
-import {
-    RentalSpot,
-    RentalSpots,
-    Vector3,
-    Vector4,
-} from "./../shared/RentalSpots";
+import { RentalSpot, RentalSpots } from "./../shared/RentalSpots";
 import { Player, Server } from "qbcore.js";
 import { VEHICLES } from "./../shared/Vehicles";
-import { calcDist } from "./../shared/utils";
+import { CalcDist } from "./../shared/utils";
 
 const QBCore: Server = global.exports["qb-core"].GetCoreObject();
 
@@ -15,6 +10,7 @@ interface RentedVehicle {
     player: number;
     spot: number;
     plate: string;
+    claimed: boolean;
 }
 
 let RentedVehicles: RentedVehicle[] = [];
@@ -92,7 +88,7 @@ function findNearestRentalSpot(ped: number): {
     let bestDist: number = Number.MAX_SAFE_INTEGER;
     let spotIndex: number;
     RentalSpots.forEach((spot, i) => {
-        let dist = calcDist(
+        let dist = CalcDist(
             coords[0],
             coords[1],
             coords[2],
@@ -117,6 +113,7 @@ onNet(
             player: source,
             spot: spot,
             plate: plate,
+            claimed: false,
         });
     }
 );
@@ -128,17 +125,21 @@ onNet("iggy-rental:server:claimKeys", (spot: number) => {
     let Player = QBCore.Functions.GetPlayer(source);
 
     filter.forEach((vehicle) => {
-        let info = {
-            plate: vehicle.plate,
-        };
-        emitNet("iggy-rental:client:giveKeys", source, vehicle.plate);
-        TriggerClientEvent(
-            "inventory:client:ItemBox",
-            source,
-            QBCore.Shared.Items["rentalpapers"],
-            "add"
-        );
-        Player.Functions.AddItem("rentalpapers", 1, 1, info);
+        if (!vehicle.claimed) {
+            vehicle.claimed = true;
+            let info = {
+                plate: vehicle.plate,
+                description: vehicle.plate,
+            };
+            emitNet("iggy-rental:client:giveKeys", source, vehicle.plate);
+            TriggerClientEvent(
+                "inventory:client:ItemBox",
+                source,
+                QBCore.Shared.Items["rentalpapers"],
+                "add"
+            );
+            Player.Functions.AddItem("rentalpapers", 1, 1, info);
+        }
     });
 });
 
