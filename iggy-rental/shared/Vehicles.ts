@@ -1,0 +1,98 @@
+export const VEHICLES = [
+    {
+        model: "toros",
+        name: "Toros",
+        price: 1000,
+        image: "https://static.wikia.nocookie.net/gtawiki/images/d/d3/Toros-GTAO-front.png",
+    },
+    {
+        model: "futo",
+        name: "Futo",
+        price: 1000,
+        image: "https://static.wikia.nocookie.net/gtawiki/images/e/ea/Futo-GTAVe-front.png",
+    },
+    {
+        model: "issi3",
+        name: "Issi Classic",
+        price: 1000,
+        image: "https://static.wikia.nocookie.net/gtawiki/images/9/9f/IssiClassic-GTAO-front.png",
+    },
+    {
+        model: "iwagen",
+        name: "I-Wagen",
+        price: 1000,
+        image: "https://static.wikia.nocookie.net/gtawiki/images/b/be/IWagen-GTAOe-front.png",
+    },
+    {
+        model: "club",
+        name: "Club",
+        price: 1000,
+        image: "https://static.wikia.nocookie.net/gtawiki/images/b/be/IWagen-GTAOe-front.png",
+    },
+    {
+        model: "dilettante",
+        name: "Dilettante",
+        price: 1000,
+        image: "https://static.wikia.nocookie.net/gtawiki/images/b/be/IWagen-GTAOe-front.png",
+    },
+    {
+        model: "sentinel",
+        name: "Sentinel",
+        price: 1000,
+        image: "https://static.wikia.nocookie.net/gtawiki/images/b/be/IWagen-GTAOe-front.png",
+    },
+    {
+        model: "faggio",
+        name: "Faggio",
+        price: 1000,
+        image: "https://static.wikia.nocookie.net/gtawiki/images/b/be/IWagen-GTAOe-front.png",
+    },
+    {
+        model: "dukes3",
+        name: "Dukes3",
+        price: 1000,
+        image: "https://static.wikia.nocookie.net/gtawiki/images/b/be/IWagen-GTAOe-front.png",
+    },
+    {
+        model: "faction",
+        name: "Faction",
+        price: 1000,
+        image: "https://static.wikia.nocookie.net/gtawiki/images/b/be/IWagen-GTAOe-front.png",
+    },
+    {
+        model: "dominator",
+        name: "Dominator",
+        price: 1000,
+        image: "https://static.wikia.nocookie.net/gtawiki/images/b/be/IWagen-GTAOe-front.png",
+    },
+    {
+        model: "sanchez",
+        name: "Sanchez",
+        price: 1000,
+        image: "https://static.wikia.nocookie.net/gtawiki/images/b/be/IWagen-GTAOe-front.png",
+    },
+    {
+        model: "terminus",
+        name: "Terminus",
+        price: 1000,
+        image: "https://static.wikia.nocookie.net/gtawiki/images/b/be/IWagen-GTAOe-front.png",
+    },
+    {
+        model: "winky",
+        name: "Winky",
+        price: 1000,
+        image: "https://static.wikia.nocookie.net/gtawiki/images/b/be/IWagen-GTAOe-front.png",
+    },
+    {
+        model: "blazer",
+        name: "Blazer",
+        price: 1000,
+        image: "https://static.wikia.nocookie.net/gtawiki/images/b/be/IWagen-GTAOe-front.png",
+    },
+    {
+        model: "elegy",
+        name: "Elegy",
+        price: 1000,
+        image: "https://static.wikia.nocookie.net/gtawiki/images/b/be/IWagen-GTAOe-front.png",
+    },
+];

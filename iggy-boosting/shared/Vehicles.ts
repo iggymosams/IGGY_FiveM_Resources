@@ -1,0 +1,33 @@
+import { VehicleClass, vehicleList } from "./types";
+
+export const VEHICLES: vehicleList = {
+    ["asbo"]: { model: "asbo", name: "Asbo", class: "C" },
+    ["blista"]: { model: "blista", name: "Blista", class: "C" },
+    ["adder"]: { model: "adder", name: "Adder", class: "A" },
+    ["db11"]: { model: "db11", name: "DB 11", class: "A" },
+    ["futo"]: { model: "futo", name: "Futo", class: "C" },
+    ["club"]: { model: "club", name: "Club", class: "C" },
+    ["dilettante"]: { model: "dilettante", name: "Dilettante", class: "B" },
+    ["kanjo"]: { model: "kanjo", name: "Blista Kanjo", class: "B" },
+    ["issi2"]: { model: "issi2", name: "Issi", class: "B" },
+    ["issi3"]: { model: "issi3", name: "Issi Classic", class: "C" },
+    ["panto"]: { model: "panto", name: "Panto", class: "C" },
+    ["prairie"]: { model: "prairie", name: "Prairie", class: "C" },
+    ["rhapsody"]: { model: "rhapsody", name: "Rhapsody", class: "B" },
+    ["brioso2"]: { model: "brioso2", name: "Brioso 300", class: "C" },
+    ["weevil"]: { model: "weevil", name: "Weevil", class: "C" },
+    ["cogcabrio"]: {
+        model: "cogcabrio",
+        name: "Cognoscenti Cabrio",
+        class: "B",
+    },
+    ["exemplar"]: { model: "exemplar", name: "Exemplar", class: "B" },
+    ["f620"]: { model: "f620", name: "F620", class: "B" },
+    ["felon"]: { model: "felon", name: "Felon", class: "B" },
+    ["felon2"]: { model: "felon2", name: "Felon GT", class: "B" },
+    ["jackal"]: { model: "jackal", name: "Jackal", class: "B" },
+    ["yosemite3"]: { model: "yosemite3", name: "Yosemite Rancher", class: "C" },
+    ["cavalcade"]: { model: "cavalcade", name: "Cavalcade", class: "C" },
+    ["rocoto"]: { model: "rocoto", name: "Rocoto", class: "B" },
+    ["habanero"]: { model: "habanero", name: "Habanero", class: "C" },
+};

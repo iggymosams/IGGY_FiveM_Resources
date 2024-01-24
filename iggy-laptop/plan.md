@@ -1,0 +1,7 @@
+- You can use a laptop/tablet to open the car rental app
+  - phone app???
+- Then pickup the papers from a npc
+- You can then pick a car to rent
+- The player is charged for the vehicle + a deposit
+- The player can they return the vehicle at any time to recive there deposit back
+  - The vehicle has to be repaired and fueled up
