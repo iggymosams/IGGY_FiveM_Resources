@@ -8,7 +8,7 @@
 <div
     class="h-44 w-full rounded-md overflow-hidden outline outline-1 outline-emerald-400"
 >
-    <div class="h-4/6 bg-gray-600 w-full relative">
+    <div class="h-4/6 bg-neutral-600 w-full relative">
         <img
             alt="A picture of the car"
             class="h-full w-full object-cover"

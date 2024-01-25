@@ -59,7 +59,7 @@
 {#if !expired}
     <div
         class={`h-1/6 w-full rounded-full flex-none border-2 ${
-            active ? "border-green-500" : "border-gray-400"
+            active ? "border-green-500" : "border-neutral-400"
         } `}
     >
         <div class=" w-full flex h-full items-center p-1">

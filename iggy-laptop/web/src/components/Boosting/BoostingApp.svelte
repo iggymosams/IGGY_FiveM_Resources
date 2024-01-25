@@ -68,7 +68,7 @@
         "updateActiveContract",
         (contract) => {
             activeContract = contract;
-        },
+        }
     );
 
     useNuiEvent<Group[]>("boosting", "updateGroups", (newGroups) => {
@@ -106,12 +106,12 @@
                 },
             },
         ],
-        2000,
+        2000
     );
 
     function generateFutureTimestamp(
         hoursFromNow: number,
-        minutesFromNow: number,
+        minutesFromNow: number
     ): number {
         const futureTime = new Date();
         futureTime.setHours(futureTime.getHours() + hoursFromNow);
@@ -205,7 +205,7 @@
                     {/if}
                 {:else}
                     <button
-                        class="bg-gray-400 p-3 w-1/3 rounded-lg hover:bg-gray-500 text-black self-center"
+                        class="bg-neutral-400 p-3 w-1/3 rounded-lg hover:bg-neutral-500 text-black self-center"
                         on:click|preventDefault={toggleReady}
                         >Join Contract Queue</button
                     >
@@ -214,7 +214,7 @@
             {#if request}
                 <div
                     transition:slide={{ duration: 150 }}
-                    class="w-1/3 absolute bottom-0 right-0 h-16 p-2 bg-gray-400 text-black flex items-center gap-2 justify-evenly z-10 rounded-tl-lg"
+                    class="w-1/3 absolute bottom-0 right-0 h-16 p-2 bg-neutral-400 text-black flex items-center gap-2 justify-evenly z-10 rounded-tl-lg"
                 >
                     <span> {request.name} would like to join your group </span>
                     <button
@@ -240,13 +240,13 @@
             <div class="w-full flex justify-center gap-2">
                 {#if isReady}
                     <button
-                        class="bg-gray-400 py-1 w-1/6 self-center text-black"
+                        class="bg-neutral-400 py-1 w-1/6 self-center text-black"
                         on:click|preventDefault={toggleReady}
                         >Leave Queue</button
                     >
                 {/if}
                 <button
-                    class="bg-gray-400 py-1 w-1/6 self-center text-black"
+                    class="bg-neutral-400 py-1 w-1/6 self-center text-black"
                     on:click|preventDefault={leaveGroup}>Leave Group</button
                 >
             </div>
@@ -255,12 +255,12 @@
                 class="flex-auto w-1/2 flex flex-col overflow-y-auto gap-1 self-center text-black text-lg"
             >
                 <button
-                    class="bg-gray-400 p-3 w-full rounded-lg hover:bg-gray-500"
+                    class="bg-neutral-400 p-3 w-full rounded-lg hover:bg-neutral-500"
                     on:click|preventDefault={createGroup}>Create Group</button
                 >
                 {#each groups as group}
                     <button
-                        class="bg-gray-400 p-3 w-full rounded-lg hover:bg-gray-500"
+                        class="bg-neutral-400 p-3 w-full rounded-lg hover:bg-neutral-500"
                         on:click|preventDefault={() => joinGroup(group.id)}
                     >
                         {group.leaderName} ({1 +

@@ -4,13 +4,15 @@
 
     export let type: "ERROR" | "SUCCESS";
     export let message: string;
+    export let onClick: () => void | undefined = () => {};
 </script>
 
-<div
+<button
     transition:slide={{ duration: 150 }}
     class={`w-full aspect-[10/1] ${
         type === "ERROR" ? "bg-red-400" : "bg-green-400"
-    } rounded-md align-baseline flex items-center px-3 gap-3`}
+    } rounded-md align-baseline flex items-center px-3 gap-3 z-10`}
+    on:click={onClick}
 >
     {#if type === "ERROR"}
         <Icon icon="material-symbols:error" class="text-2xl h-full" />
@@ -20,4 +22,4 @@
     <span class="overflow-ellipsis">
         {message}
     </span>
-</div>
+</button>

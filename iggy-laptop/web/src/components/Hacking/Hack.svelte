@@ -90,7 +90,7 @@
         for (let index = 0; index < selected.length; index++) {
             active = selected[index];
             await new Promise((resolve) =>
-                setTimeout(resolve, 1000 / difficulty),
+                setTimeout(resolve, 1000 / difficulty)
             );
         }
         startCountdown(30 / difficulty);
@@ -139,9 +139,11 @@
 </script>
 
 {#if visible}
-    <div class="bg-black w-9/12 aspect-video rounded-lg flex overflow-hidden">
+    <div
+        class="bg-gray-900 w-9/12 aspect-video rounded-lg flex overflow-hidden"
+    >
         <div
-            class="bg-gray-600 h-full w-4/6 grid grid-cols-5 justify-evenly gap-2 items-center justify-items-center p-2"
+            class="h-full w-4/6 grid grid-cols-5 justify-evenly gap-2 items-center justify-items-center p-2"
         >
             {#each Array(25) as _, index (index)}
                 <HackButton
@@ -155,7 +157,7 @@
                 />
             {/each}
         </div>
-        <div class="bg-gray-900 h-full w-2/6 p-3 flex flex-col justify-evenly">
+        <div class="h-full w-2/6 p-3 flex flex-col justify-evenly">
             <div class="w-full text-center text-white text-2xl">
                 <Countdown bind:this={countdown} {onTimerComplete} />
             </div>
