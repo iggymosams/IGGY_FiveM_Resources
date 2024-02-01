@@ -166,6 +166,26 @@ function getCommandFromId(id: string): Command {
     return;
 }
 
+function GetBoosts(): OptionChoice[] {
+    let boosts: OptionChoice[] = [];
+    let config: {
+        [key: string]: {
+            model: string;
+            name: string;
+            class: "A" | "B" | "C";
+        };
+    } = global.exports["iggy-boosting"].GetBoostVehicles();
+    Object.keys(config).forEach((v) => {
+        let boost = config[v];
+        let choice: OptionChoice = {
+            value: boost.model,
+            label: `[${boost.class}] ${boost.name} (${boost.model})`,
+        };
+        boosts.push(choice);
+    });
+    return boosts;
+}
+
 export {
     SendMenuMessage,
     RegisterNuiCallback,
@@ -176,4 +196,5 @@ export {
     PerformanceUpgradeVehicle,
     isDoor,
     getCommandFromId,
+    GetBoosts,
 };

@@ -39,7 +39,8 @@ onNet(
         mins: string,
         cost: number,
         reward: number,
-        target: number
+        target: number,
+        rewardQBit?: number
     ) => {
         let player = QBCore.Functions.GetPlayer(target);
 
@@ -49,7 +50,8 @@ onNet(
         } else {
             let hr = +hours;
             let min = +mins;
-            let rewardCrypto = Math.floor(cost * RandomNumber(1, 3));
+            let rewardCrypto =
+                rewardQBit || Math.floor(cost * RandomNumber(1, 3));
             CreateContract(
                 vehicle.class,
                 model,

@@ -5,6 +5,8 @@
     import { debugData } from "../../utils/debugData";
     import { fetchNui } from "../../utils/fetchNui";
     import type { Contract, Rep, RunningContract } from "./types";
+    import RepBar from "./RepBar.svelte";
+
     let rep: Rep;
     let contracts: Contract[] = [];
 
@@ -119,22 +121,7 @@
         <h1 class="w-full text-center text-3xl font-bold faded-border p-1">
             Boosting
         </h1>
-        <h2 class="text-7xl w-full text-center font-black">
-            {rep ? rep.level : "Loading"}
-        </h2>
-        <div
-            class="w-full h-4 bg-black rounded-full overflow-hidden"
-            id="progressbar"
-        >
-            <div
-                class={`h-full bg-gradient-to-l to-red-500 from-green-400 bg-fixed`}
-                style={`width: ${
-                    rep ? ((rep.xp - rep.min) / (rep.max - rep.min)) * 100 : 0
-                }%`}
-                id="bar"
-            />
-        </div>
-
+        <RepBar {rep} />
         <div class="w-full flex flex-col flex-auto overflow-y-auto gap-1">
             {#if isReady}
                 {#if contracts.length !== 0 || activeContract}
@@ -181,8 +168,10 @@
             {#if isReady}
                 <button
                     class="bg-neutral-400 py-1 w-1/6 self-center text-black"
-                    on:click|preventDefault={toggleReady}>Leave Queue</button
+                    on:click|preventDefault={toggleReady}
                 >
+                    Leave Queue.
+                </button>
             {/if}
         </div>
     </div>

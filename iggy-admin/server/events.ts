@@ -484,3 +484,27 @@ RegisterAdminCommand(
         }
     }
 );
+
+RegisterAdminCommand(
+    "iggy-admin:server:createBoost",
+    (src: number, data: CommandData) => {
+        let target = data.target.serverId;
+        console.log(data);
+        let boost = data.values["boost"].value;
+        let rewardRep = data.values["rewardRep"];
+        let cost = data.values["cost"];
+        let rewardQBit = data.values["rewardQBit"];
+        let time = data.values["time"];
+
+        emit(
+            "iggy-boosting:server:createContract",
+            boost,
+            0,
+            time,
+            cost,
+            rewardRep,
+            target,
+            rewardQBit
+        );
+    }
+);

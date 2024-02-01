@@ -1,4 +1,4 @@
-import { GetItems, GetVehicles } from "../client/cl_utils";
+import { GetBoosts, GetItems, GetVehicles } from "../client/cl_utils";
 import { CommandGroup, SelectionMenuCommandGroups } from "./types";
 
 export let Commands: CommandGroup[] = [
@@ -213,6 +213,46 @@ export let Commands: CommandGroup[] = [
                         id: "plate",
                         name: "Plate",
                         type: "INPUT_TEXT",
+                    },
+                ],
+            },
+            {
+                id: "createBoost",
+                name: "Create Boost",
+                type: "SERVER",
+                event: "iggy-admin:server:createBoost",
+                commandType: "COLLAPSE",
+                options: [
+                    {
+                        id: "player",
+                        name: "Player",
+                        type: "PLAYER_LIST",
+                    },
+                    {
+                        id: "boost",
+                        name: "Boost",
+                        type: "INPUT_SELECT",
+                        choices: GetBoosts(),
+                    },
+                    {
+                        id: "rewardRep",
+                        name: "Rep Reward",
+                        type: "NUMBER",
+                    },
+                    {
+                        id: "cost",
+                        name: "Cost",
+                        type: "NUMBER",
+                    },
+                    {
+                        id: "rewardQBit",
+                        name: "QBit Reward",
+                        type: "NUMBER",
+                    },
+                    {
+                        id: "time",
+                        name: "Duration (in mins)",
+                        type: "NUMBER",
                     },
                 ],
             },

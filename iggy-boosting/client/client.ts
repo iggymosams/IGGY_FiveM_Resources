@@ -1,3 +1,4 @@
+import { VEHICLES } from "./../shared/Vehicles";
 import { Config } from "./../shared/Config";
 import { Client } from "qbcore.js";
 import { CalcDist, Delay, RandomNumber } from "../shared/utils";
@@ -613,3 +614,8 @@ RegisterCommand(
     },
     false
 );
+
+function GetBoostVehicles() {
+    return VEHICLES;
+}
+global.exports("GetBoostVehicles", GetBoostVehicles);

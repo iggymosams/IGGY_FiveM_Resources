@@ -78,7 +78,7 @@
                 {:else if option.type === "INPUT_TEXT"}
                     <input
                         bind:value={optionValues[option.id]}
-                        class="w-full p-1"
+                        class="w-full p-1 mb-1"
                         placeholder={option.name}
                     />
                 {:else if option.type === "INPUT_SELECT"}
@@ -94,7 +94,7 @@
                 {:else if option.type === "NUMBER"}
                     <input
                         bind:value={optionValues[option.id]}
-                        class="w-full p-1"
+                        class="w-full p-1 mb-1"
                         placeholder={option.name}
                         type="number"
                     />

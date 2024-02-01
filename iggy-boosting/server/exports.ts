@@ -1,11 +1,7 @@
 import { Rep } from "../shared/types";
 import { oxmysql as MySQL } from "@overextended/oxmysql";
 
-let RepDatabase: { [key: string]: number } = {
-    // ["ZWA38478"]: 50,
-    // ["IKE80578"]: 0,
-    // ["BQW53039"]: 0,
-};
+let RepDatabase: { [key: string]: number } = {};
 
 function getRepFromNumber(amount: number): Rep {
     if (amount < 50) {
