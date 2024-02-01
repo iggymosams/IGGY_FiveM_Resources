@@ -27,6 +27,8 @@
             icon: "mdi:engine",
             colour: "sky-500",
             minimized: true,
+            requiresVPN: true,
+            policeDeny: true,
         },
         {
             id: "groups",
@@ -45,6 +47,7 @@
     ];
 
     let isVisible = false;
+    let hasVPN = false;
 
     let notifactions: notification[] = [];
     let backgroundUrl = "";
@@ -94,15 +97,13 @@
     interface visibilityData {
         open: boolean;
         backgroundURL: string;
+        hasVPN: boolean;
     }
-    useNuiEvent<visibilityData>(
-        "base",
-        "setVisible",
-        ({ open, backgroundURL }) => {
-            backgroundUrl = backgroundURL;
-            isVisible = open;
-        }
-    );
+    useNuiEvent<visibilityData>("base", "setVisible", (data) => {
+        backgroundUrl = data.backgroundURL;
+        isVisible = data.open;
+        hasVPN = data.hasVPN;
+    });
 
     useNuiEvent<{ sound: string; volume: number }>(
         "base",
@@ -214,12 +215,14 @@
                 {/each}
             </div>
             {#each apps as app}
-                <AppIcon
-                    name={app.name}
-                    icon={app.icon}
-                    colour={app.colour}
-                    onClick={() => openApp(app)}
-                />
+                {#if (hasVPN && app.requiresVPN) || !app.requiresVPN}
+                    <AppIcon
+                        name={app.name}
+                        icon={app.icon}
+                        colour={app.colour}
+                        onClick={() => openApp(app)}
+                    />
+                {/if}
             {/each}
         </div>
         <TaskBar

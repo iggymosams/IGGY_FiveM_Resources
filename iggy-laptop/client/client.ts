@@ -1,3 +1,4 @@
+import { Client } from "@zerio2/qbcore.js";
 import { CalcDist } from "../shared/utils";
 import "./exports";
 import {
@@ -7,6 +8,9 @@ import {
     SendAppMessage,
     SetFocus,
 } from "./exports";
+
+const QBCore: Client = global.exports["qb-core"].GetCoreObject();
+
 RegisterCommand(
     "iggy-laptop:open",
     () => {
@@ -29,7 +33,7 @@ RegisterLaptopCallback("hideLaptop", () => {
 });
 
 onNet("iggy-laptop:client:open", () => {
-    OpenLaptop(true, true);
+    OpenLaptop(true, true, QBCore.Functions.HasItem("vpn"));
 });
 
 onNet(

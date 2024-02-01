@@ -28,13 +28,18 @@ function SendAppMessage(app: string, action: string, data?: unknown) {
 }
 global.exports("SendAppMessage", SendAppMessage);
 
-async function OpenLaptop(hasFocus: boolean, hasCursor: boolean) {
+async function OpenLaptop(
+    hasFocus: boolean,
+    hasCursor: boolean,
+    hasVPN?: boolean
+) {
     isOpen = true;
     doAnimation();
     await Delay(300);
     SendAppMessage("base", "setVisible", {
         open: true,
         backgroundURL: "https://i.imgur.com/9w3jC08.jpeg", //TODO: Load from database
+        hasVPN: hasVPN || false,
     });
     SetFocus(hasFocus, hasCursor);
 }

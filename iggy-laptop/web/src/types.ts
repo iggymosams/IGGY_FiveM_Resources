@@ -10,4 +10,6 @@ export interface App {
     icon: string;
     colour: string;
     minimized: boolean;
+    requiresVPN?: boolean;
+    policeDeny?: boolean;
 }
