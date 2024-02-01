@@ -142,13 +142,15 @@ onNet("iggy-groups:client:promotePlayer", () => {
 });
 
 onNet("iggy-groups:client:newRequest", (player: PlayerData) => {
-    if (requests.includes(player)) return;
+    if (requests.find((p) => p.citizenid === player.citizenid) !== undefined)
+        return;
     requests = [...requests, player];
     global.exports["iggy-laptop"].SendAppMessage(
         "groups",
         "updateRequests",
         requests
     );
+    global.exports["iggy-laptop"].PlaySound("request.mp3", 0.2);
 });
 
 onNet("iggy-groups:client:joinGroup", (newGroup: Group) => {

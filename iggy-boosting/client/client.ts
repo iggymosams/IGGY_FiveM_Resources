@@ -308,7 +308,12 @@ global.exports["iggy-laptop"].RegisterLaptopCallback(
             NetworkGetEntityFromNetworkId(runningContract.vehicle)
         );
         let state = ent.state.hacks;
-
+        global.exports["iggy-laptop"].PlayInDistance(
+            GetEntityCoords(PlayerPedId(), true),
+            3,
+            "beep.mp3",
+            0.5
+        );
         if (state.remaining - 1 === 0) {
             emitNet("qb-phone:server:sendNewMail", {
                 sender: "???",

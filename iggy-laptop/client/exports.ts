@@ -1,9 +1,10 @@
-import { Delay } from "../shared/utils";
+import { CalcDist, Delay } from "../shared/utils";
 
 export let isOpen = false;
 let HasFocus = false;
 let HasCursor = false;
 let laptopObj;
+
 function RegisterLaptopCallback(name: string, callback: Function) {
     RegisterNuiCallbackType(`iggy-laptop:ui:${name}`);
     on(
@@ -126,6 +127,30 @@ async function doAnimation() {
     DeleteEntity(laptopObj);
 }
 
+function PlaySound(sound: string, volume: number) {
+    SendAppMessage("base", "playSound", {
+        sound: sound,
+        volume: volume,
+    });
+}
+global.exports("PlaySound", PlaySound);
+
+function PlayInDistance(
+    coords: number[],
+    maxDist: number,
+    sound: string,
+    volume: number
+) {
+    emitNet(
+        "iggy-laptop:server:PlayInDistance",
+        coords,
+        maxDist,
+        sound,
+        volume
+    );
+}
+global.exports("PlayInDistance", PlayInDistance);
+
 export {
     RegisterLaptopCallback,
     SendAppMessage,
@@ -134,4 +159,5 @@ export {
     GetFocus,
     CloseLaptop,
     GetIsOpen,
+    PlaySound,
 };

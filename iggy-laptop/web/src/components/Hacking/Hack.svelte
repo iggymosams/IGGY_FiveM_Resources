@@ -62,6 +62,10 @@
                 }
 
                 password[i] = Math.floor(Math.random() * (9 - 0) + 0);
+                let file = "../build/sounds/glitch.mp3";
+                let sound = new Audio(file);
+                sound.volume = 1;
+                sound.play();
                 await new Promise((resolve) => setTimeout(resolve, 500));
             }
 

@@ -1,3 +1,4 @@
+import { CalcDist } from "../shared/utils";
 import "./exports";
 import {
     RegisterLaptopCallback,
@@ -30,3 +31,26 @@ RegisterLaptopCallback("hideLaptop", () => {
 onNet("iggy-laptop:client:open", () => {
     OpenLaptop(true, true);
 });
+
+onNet(
+    "iggy-laptop:client:PlayInDistance",
+    (coords: number[], maxDist: number, sound: string, volume: number) => {
+        let myCoords = GetEntityCoords(PlayerPedId(), true);
+        let dist = CalcDist(
+            coords[0],
+            coords[1],
+            coords[2],
+            myCoords[0],
+            myCoords[1],
+            myCoords[2]
+        );
+        if (dist < maxDist) {
+            let vol = volume / dist;
+            if (dist === 0) vol = volume;
+            SendAppMessage("base", "playSound", {
+                sound: sound,
+                volume: vol,
+            });
+        }
+    }
+);

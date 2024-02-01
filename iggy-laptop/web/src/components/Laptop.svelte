@@ -104,6 +104,17 @@
         }
     );
 
+    useNuiEvent<{ sound: string; volume: number }>(
+        "base",
+        "playSound",
+        async (data) => {
+            let file = "../build/sounds/" + data.sound;
+            let sound = new Audio(file);
+            sound.volume = data.volume;
+            sound.play();
+        }
+    );
+
     onMount(() => {
         const keyHandler = (e: KeyboardEvent) => {
             if (isVisible && ["Escape"].includes(e.code)) {
