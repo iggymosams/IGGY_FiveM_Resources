@@ -15,6 +15,7 @@
     export let id: number;
     export let active = false;
     export let plate: string | undefined = undefined;
+    export let disabled: boolean = false;
     let expired = false;
 
     const timeRemaining = writable("");
@@ -100,12 +101,20 @@
             </div>
             <button
                 class={`${
-                    active ? "bg-green-500" : "bg-sky-700 hover:bg-sky-600"
-                } rounded-full p-3 px-4 ml-auto h-full  active:scale-95 transition-all duration-150`}
+                    active && !disabled ? "bg-green-500" : "bg-sky-700 "
+                } rounded-full p-3 px-4 ml-auto h-full  transition-all duration-150 ${
+                    disabled
+                        ? "cursor-not-allowed bg-gray-500"
+                        : "active:scale-95 hover:bg-sky-600 "
+                }`}
                 on:click={acceptContract}
-                disabled={active}
+                disabled={active || disabled}
             >
-                {active ? "Active Contract" : "Accept Contract"}
+                {active
+                    ? "Active Contract"
+                    : disabled
+                      ? "Not in Group"
+                      : "Accept Contract"}
             </button>
         </div>
     </div>

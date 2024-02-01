@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { visibility } from "../store/stores";
     import { debugData } from "../utils/debugData";
     import { useNuiEvent } from "../utils/useNuiEvent";
     import { fly, blur } from "svelte/transition";
@@ -7,6 +6,7 @@
     import AppIcon from "./AppIcon.svelte";
     import RentalApp from "./Rental/RentalApp.svelte";
     import BoostingApp from "./Boosting/BoostingApp.svelte";
+    import GroupsApp from "./Groups/GroupsApp.svelte";
     import TaskBar from "./TaskBar.svelte";
     import Notification from "./Notification.svelte";
     import { onMount } from "svelte";
@@ -29,10 +29,17 @@
             minimized: true,
         },
         {
+            id: "groups",
+            name: "Groups",
+            icon: "clarity:group-solid",
+            colour: "violet-500",
+            minimized: true,
+        },
+        {
             id: "settings",
             name: "Settings",
             icon: "material-symbols:settings",
-            colour: "gray-300",
+            colour: "gray-400",
             minimized: true,
         },
     ];
@@ -175,6 +182,8 @@
                                     <RentalApp />
                                 {:else if app.id === "boosting"}
                                     <BoostingApp />
+                                {:else if app.id === "groups"}
+                                    <GroupsApp />
                                 {/if}
                             </div>
                         </div>

@@ -1,3 +1,4 @@
+import { Group } from "./../../iggy-groups/shared/Group";
 import { Config } from "./../shared/Config";
 import {
     DROP_OFF_LOCATIONS,
@@ -9,7 +10,6 @@ import { Player, Server } from "qbcore.js";
 import { VEHICLES } from "./../shared/Vehicles";
 import {
     Contract,
-    Group,
     Rep,
     RunningContract,
     VehicleClass,
@@ -26,10 +26,7 @@ import { generateTime } from "./ContractUtils";
 
 const QBCore: Server = global.exports["qb-core"].GetCoreObject();
 
-let groups: Group[] = [];
 let runningContracts: { [key: number]: RunningContract } = {};
-
-let currentGroupId = 1;
 
 let queue: string[] = [];
 
@@ -71,7 +68,6 @@ onNet("iggy-boosting:server:getRep", async () => {
     let src = source;
     let player = QBCore.Functions.GetPlayer(src);
     let rep: Rep = await GetRep(player.PlayerData.citizenid);
-    console.log(src, rep);
     emitNet("iggy-boosting:client:updateRep", src, rep);
 });
 
@@ -81,8 +77,7 @@ onNet("iggy-boosting:server:acceptContract", async (id: number) => {
 
     let player = QBCore.Functions.GetPlayer(src);
     let cid = player.PlayerData.citizenid;
-    let group = findGroupByPlayer(cid);
-
+    let group: Group = global.exports["iggy-groups"].GetPlayerGroup(cid);
     if (Date.now() / 1000 > contract.time) {
         emitNet("iggy-boosting:client:error-expired", src);
         DeleteContract(src, id);
@@ -125,21 +120,16 @@ onNet("iggy-boosting:server:acceptContract", async (id: number) => {
         emitNet("iggy-boosting:client:error-veh", src);
         return;
     } else {
-        let leader = QBCore.Functions.GetPlayerByCitizenId(group.leaderCid);
-        player.Functions.RemoveMoney("crypto", contract.cost, "Started Boost");
-        emitNet(
+        group.leader.Functions.RemoveMoney(
+            "crypto",
+            contract.cost,
+            "Started Boost"
+        );
+        global.exports["iggy-groups"].GroupEmitNet(
+            group.id,
             "iggy-boosting:client:success-started",
-            leader.PlayerData.source,
             runningContracts[group.id]
         );
-        group.players.forEach((playerCid) => {
-            let plr = QBCore.Functions.GetPlayerByCitizenId(playerCid);
-            emitNet(
-                "iggy-boosting:client:success-started",
-                plr.PlayerData.source,
-                runningContracts[group.id]
-            );
-        });
 
         DeleteContract(src, id);
     }
@@ -173,22 +163,14 @@ onNet("iggy-boosting:server:hackComplete", async (netId: number) => {
 
         let player = QBCore.Functions.GetPlayer(src);
         let cid = player.PlayerData.citizenid;
-        let group = findGroupByPlayer(cid);
+        let group: Group = global.exports["iggy-groups"].GetPlayerGroup(cid);
 
-        let leader = QBCore.Functions.GetPlayerByCitizenId(group.leaderCid);
-        emitNet(
-            "iggy-boosting:client:dropoffblip",
-            leader.PlayerData.source,
-            true
+        // TODO: ADD IS HOST OR SMT
+        global.exports["iggy-groups"].GroupEmitNet(
+            group.id,
+            "iggy-boosting:client:dropoffblip"
         );
-        group.players.forEach((playerCid) => {
-            let plr = QBCore.Functions.GetPlayerByCitizenId(playerCid);
-            emitNet(
-                "iggy-boosting:client:dropoffblip",
-                plr.PlayerData.source,
-                false
-            );
-        });
+
         let runningContract = runningContracts[group.id];
         let veh = NetworkGetEntityFromNetworkId(runningContract.vehicle);
         let dropoff = runningContract.dropoff.location;
@@ -210,7 +192,10 @@ onNet("iggy-boosting:server:hackComplete", async (netId: number) => {
                 dropped = true;
             }
         }
-        emitNet("iggy-boosting:client:emptyVehicle", leader.PlayerData.source);
+        emitNet(
+            "iggy-boosting:client:emptyVehicle",
+            group.leader.PlayerData.source
+        );
 
         let empty: boolean = false;
         while (!empty) {
@@ -229,21 +214,22 @@ onNet("iggy-boosting:server:hackComplete", async (netId: number) => {
 
         await Delay(5000);
         DeleteEntity(veh);
-        let players: string[] = [group.leaderCid, ...group.players.concat()];
+        let players: Player[] = [group.leader, ...group.players.concat()];
 
-        players.forEach((playerCid) => {
-            let plr = QBCore.Functions.GetPlayerByCitizenId(playerCid);
-            GiveRep(playerCid, runningContract.contract.rewardRep);
-            plr.Functions.AddMoney(
+        players.forEach((player) => {
+            GiveRep(
+                player.PlayerData.citizenid,
+                runningContract.contract.rewardRep
+            );
+            player.Functions.AddMoney(
                 "crypto",
                 runningContract.contract.rewardCrypto
             );
-            emitNet(
-                "iggy-boosting:client:finishContract",
-                plr.PlayerData.source
-            );
         });
-
+        global.exports["iggy-groups"].GroupEmitNet(
+            group.id,
+            "iggy-boosting:client:finishContract"
+        );
         runningContracts[group.id] = undefined;
     }
 });
@@ -264,108 +250,20 @@ onNet("iggy-boosting:server:hackFailed", (netId: number) => {
     );
 });
 
-onNet("iggy-boosting:server:createGroup", (cid: string, name: string) => {
-    let group: Group = {
-        id: currentGroupId,
-        leaderCid: cid,
-        leaderName: name,
-        players: [],
-        maxSlots: 2,
-    };
-    currentGroupId++;
-    groups = [...groups, group];
-    emitNet("iggy-boosting:client:refreshGroups", -1, groups);
-});
-
-// iggy-boosting:server:requestGroup
-onNet(
-    "iggy-boosting:server:requestGroup",
-    (id: number, cid: string, name: string) => {
-        let group: Group = findGroupById(id);
-        let leader = QBCore.Functions.GetPlayerByCitizenId(group.leaderCid);
-        emitNet(
-            "iggy-boosting:client:requestGroup",
-            leader.PlayerData.source,
-            cid,
-            name
-        );
-    }
-);
-
-// iggy-boosting:server:acceptRequest
-onNet(
-    "iggy-boosting:server:acceptRequest",
-    (cid: string, leaderCid: string) => {
-        let group: Group = findGroupByLeader(leaderCid);
-        group.players = [...group.players, cid];
-        let plr = QBCore.Functions.GetPlayerByCitizenId(cid);
-        let leaderPlr = QBCore.Functions.GetPlayerByCitizenId(leaderCid);
-        emitNet("iggy-boosting:client:acceptedRequest", plr.PlayerData.source);
-        emitNet(
-            "iggy-boosting:client:requestAccepted",
-            leaderPlr.PlayerData.source
-        );
-        emitNet("iggy-boosting:client:refreshGroups", -1, groups);
-    }
-);
-
-onNet("iggy-boosting:server:getGroups", () => {
-    emitNet("iggy-boosting:client:refreshGroups", source, groups);
-});
-
 onNet("iggy-boosting:server:started", () => {
     let src: number = source;
     let player = QBCore.Functions.GetPlayer(src);
     let cid = player.PlayerData.citizenid;
-    let group = findGroupByPlayer(cid);
-
-    let leader = QBCore.Functions.GetPlayerByCitizenId(group.leaderCid);
-    emitNet(
+    let group: Group = global.exports["iggy-groups"].GetPlayerGroup(cid);
+    global.exports["iggy-groups"].GroupEmitNet(
+        group.id,
         "iggy-boosting:client:started",
-        leader.PlayerData.source,
         runningContracts[group.id]
     );
-    group.players.forEach((playerCid) => {
-        let plr = QBCore.Functions.GetPlayerByCitizenId(playerCid);
-        emitNet(
-            "iggy-boosting:client:started",
-            plr.PlayerData.source,
-            runningContracts[group.id]
-        );
-    });
 });
 
 onNet("iggy-boosting:server:disableVehicle", (netid: number) => {
     emitNet("iggy-boosting:client:disableVehicle", -1, netid);
-});
-
-onNet("iggy-boosting:server:leaveGroup", () => {
-    let src: number = source;
-
-    let plr = QBCore.Functions.GetPlayer(src);
-    let group: Group = findGroupByPlayer(plr.PlayerData.citizenid);
-    if (group.leaderCid === plr.PlayerData.citizenid) {
-        if (group.players.length > 0) {
-            group.leaderCid = group.players[0];
-            let newLeader = QBCore.Functions.GetPlayerByCitizenId(
-                group.leaderCid
-            );
-            group.leaderName =
-                newLeader.PlayerData.charinfo.firstname +
-                " " +
-                newLeader.PlayerData.charinfo.lastname;
-            group.players = group.players.filter(
-                (player) => player !== group.leaderCid
-            );
-        } else {
-            groups = groups.filter((g) => g.id !== group.id);
-        }
-    } else {
-        group.players = group.players.filter(
-            (player) => player !== plr.PlayerData.citizenid
-        );
-    }
-    emitNet("iggy-boosting:client:refreshGroups", source, groups);
 });
 
 onNet("iggy-boosting:server:toggleReady", (ready: boolean) => {
@@ -381,20 +279,6 @@ onNet("iggy-boosting:server:toggleReady", (ready: boolean) => {
         });
     }
 });
-
-function findGroupByPlayer(cid: string): Group {
-    return groups.find((group) => {
-        return group.players.includes(cid) || group.leaderCid === cid;
-    });
-}
-
-function findGroupByLeader(cid: string): Group {
-    return groups.find((group) => group.leaderCid === cid);
-}
-
-function findGroupById(id: number): Group {
-    return groups.find((group) => group.id === id);
-}
 
 function getDropOff(i: number): DropOffLocation {
     if (i >= 10) {
@@ -470,7 +354,7 @@ function getHacksFromClass(vehClass: VehicleClass): number {
 async function spawnVeh(src: number) {
     let player = QBCore.Functions.GetPlayer(src);
     let cid = player.PlayerData.citizenid;
-    let group = findGroupByPlayer(cid);
+    let group: Group = global.exports["iggy-groups"].GetPlayerGroup(cid);
 
     let model = runningContracts[group.id].model;
     let coords = runningContracts[group.id].location.carLocation;

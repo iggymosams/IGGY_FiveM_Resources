@@ -51,11 +51,3 @@ export interface RunningContract {
     hacksFailed: number;
     dropoff: DropOffLocation;
 }
-
-export interface Group {
-    id: number;
-    leaderCid: string;
-    leaderName: string;
-    players: string[];
-    maxSlots: number;
-}

@@ -3,7 +3,6 @@ import { Client } from "qbcore.js";
 import { CalcDist, Delay, RandomNumber } from "../shared/utils";
 import {
     Contract,
-    Group,
     Rep,
     RunningContract,
     Vector3,
@@ -26,15 +25,7 @@ interface ActiveContract extends RunningContract {
     blip?: number;
 }
 let runningContract: ActiveContract;
-let inGroup = false;
 let isReady = false;
-
-let request:
-    | {
-          cid: string;
-          name: string;
-      }
-    | undefined;
 
 let blips: { [key: number]: number } = {};
 
@@ -69,6 +60,16 @@ RegisterCommand(
         emitNet("iggy-boosting:server:getRep");
     },
     false
+);
+
+global.exports["iggy-laptop"].RegisterLaptopCallback(
+    "boosting:getInGroup",
+    () => {
+        return {
+            inGroup: global.exports["iggy-groups"].IsInGroup(),
+            isReady: isReady,
+        };
+    }
 );
 
 onNet("iggy-boosting:client:newContract", (contract: Contract) => {
@@ -221,34 +222,6 @@ onNet("lockpicks:UseLockpick", () => {
     }
 });
 
-onNet("iggy-boosting:client:refreshGroups", (groups: Group[]) => {
-    global.exports["iggy-laptop"].SendAppMessage(
-        "boosting",
-        "updateGroups",
-        groups
-    );
-});
-
-onNet("iggy-boosting:client:acceptedRequest", () => {
-    global.exports["iggy-laptop"].SendAppMessage("boosting", "joinedGroup");
-    inGroup = true;
-});
-
-onNet("iggy-boosting:client:requestAccepted", () => {
-    request = undefined;
-});
-
-onNet("iggy-boosting:client:requestGroup", (cid: string, name: string) => {
-    request = {
-        cid: cid,
-        name: name,
-    };
-    global.exports["iggy-laptop"].SendAppMessage("boosting", "requestJoin", {
-        cid: cid,
-        name: name,
-    });
-});
-
 onNet("iggy-boosting:client:started", () => {
     RemoveBlip(runningContract.blip);
 });
@@ -294,6 +267,14 @@ onNet("iggy-boosting:client:emptyVehicle", () => {
         message: "Well done, get out the vehicle and leave the area",
         button: {},
     });
+});
+
+onNet("iggy-groups:updateGroup", () => {
+    global.exports["iggy-laptop"].SendAppMessage(
+        "boosting",
+        "updateInGroup",
+        global.exports["iggy-groups"].IsInGroup()
+    );
 });
 
 global.exports["iggy-laptop"].RegisterLaptopCallback("boosting:getRep", () => {
@@ -355,74 +336,6 @@ global.exports["iggy-laptop"].RegisterLaptopCallback(
                 runningContract.vehicle
             );
         }
-    }
-);
-
-// boosting:createGroup
-global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "boosting:createGroup",
-    () => {
-        emitNet(
-            "iggy-boosting:server:createGroup",
-            QBCore.Functions.GetPlayerData().citizenid,
-            QBCore.Functions.GetPlayerData().charinfo.firstname +
-                " " +
-                QBCore.Functions.GetPlayerData().charinfo.lastname
-        );
-        inGroup = true;
-    }
-);
-
-// boosting:requestGroup
-global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "boosting:requestGroup",
-    (groupId: number) => {
-        emitNet(
-            "iggy-boosting:server:requestGroup",
-            groupId,
-            QBCore.Functions.GetPlayerData().citizenid,
-            QBCore.Functions.GetPlayerData().charinfo.firstname +
-                " " +
-                QBCore.Functions.GetPlayerData().charinfo.lastname
-        );
-    }
-);
-
-// boosting:acceptRequest
-global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "boosting:acceptRequest",
-    (citizenid: string) => {
-        emitNet(
-            "iggy-boosting:server:acceptRequest",
-            citizenid,
-            QBCore.Functions.GetPlayerData().citizenid
-        );
-    }
-);
-
-// boosting:denyRequest
-global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "boosting:denyRequest",
-    () => {
-        request = undefined;
-    }
-);
-
-// boosting:getGroups
-global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "boosting:getGroups",
-    () => {
-        emitNet("iggy-boosting:server:getGroups");
-        return { inGroup: inGroup, request: request, isReady: isReady };
-    }
-);
-
-// boosting:leaveGroup
-global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "boosting:leaveGroup",
-    () => {
-        inGroup = false;
-        emitNet("iggy-boosting:server:leaveGroup");
     }
 );
 

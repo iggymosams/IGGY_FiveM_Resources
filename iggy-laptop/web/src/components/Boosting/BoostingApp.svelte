@@ -4,22 +4,11 @@
     import ContractCard from "./ContractCard.svelte";
     import { debugData } from "../../utils/debugData";
     import { fetchNui } from "../../utils/fetchNui";
-    import type {
-        Contract,
-        Group,
-        JoinRequest,
-        Rep,
-        RunningContract,
-    } from "./types";
-    import { slide } from "svelte/transition";
-
+    import type { Contract, Rep, RunningContract } from "./types";
     let rep: Rep;
     let contracts: Contract[] = [];
 
-    let inGroup: boolean = true;
-    let groups: Group[] = [];
-    let request: JoinRequest | undefined;
-
+    let inGroup: boolean = false;
     let isReady: boolean = false;
 
     let activeContract: RunningContract;
@@ -38,15 +27,14 @@
             };
         });
 
+    fetchNui("boosting:getInGroup").then((data) => {
+        inGroup = data.inGroup;
+        isReady = data.isReady;
+    });
+
     fetchNui("boosting:getContracts").then((data) => {
         contracts = data.contracts;
         activeContract = data.active;
-    });
-
-    fetchNui("boosting:getGroups").then((data) => {
-        inGroup = data.inGroup;
-        request = data.request;
-        isReady = data.isReady;
     });
 
     useNuiEvent<Rep>("boosting", "updateRep", (newRep) => {
@@ -71,16 +59,9 @@
         }
     );
 
-    useNuiEvent<Group[]>("boosting", "updateGroups", (newGroups) => {
-        groups = newGroups;
-    });
-
-    useNuiEvent<JoinRequest>("boosting", "requestJoin", (newRequest) => {
-        request = newRequest;
-    });
-
-    useNuiEvent("boosting", "joinedGroup", () => {
-        inGroup = true;
+    useNuiEvent<boolean>("boosting", "updateInGroup", (data) => {
+        inGroup = data;
+        console.log(inGroup, data);
     });
 
     debugData([
@@ -99,10 +80,17 @@
         [
             {
                 app: "boosting",
-                action: "requestJoin",
+                action: "newContract",
                 data: {
-                    name: "oliver",
-                    cid: "abc",
+                    class: "A",
+                    model: "adder",
+                    name: "Adder",
+                    rewardRep: 1,
+                    cost: 1,
+                    rewardCrypto: 1,
+                    time: generateFutureTimestamp(0, 30),
+                    playerCid: "A",
+                    id: 1,
                 },
             },
         ],
@@ -118,30 +106,6 @@
         futureTime.setMinutes(futureTime.getMinutes() + minutesFromNow);
 
         return Math.floor(futureTime.getTime() / 1000);
-    }
-
-    function createGroup() {
-        fetchNui("boosting:createGroup");
-        inGroup = true;
-    }
-
-    function joinGroup(id: number) {
-        fetchNui("boosting:requestGroup", id);
-    }
-
-    function acceptRequest() {
-        fetchNui("boosting:acceptRequest", request?.cid);
-        request = undefined;
-    }
-
-    function denyRequest() {
-        fetchNui("boosting:denyRequest", request?.cid);
-        request = undefined;
-    }
-
-    function leaveGroup() {
-        fetchNui("boosting:leaveGroup");
-        inGroup = false;
     }
 
     function toggleReady() {
@@ -170,105 +134,57 @@
                 id="bar"
             />
         </div>
-        {#if inGroup}
-            <div class="w-full flex flex-col flex-auto overflow-y-auto gap-1">
-                {#if isReady}
-                    {#if contracts.length !== 0 || activeContract}
-                        {#if activeContract}
-                            <ContractCard
-                                vehClass={activeContract.class}
-                                name={activeContract.contract.name}
-                                cost={activeContract.contract.cost}
-                                reward={activeContract.contract.rewardCrypto}
-                                time={activeContract.contract.time}
-                                id={activeContract.id}
-                                active
-                                plate={activeContract.plate}
-                            />
-                        {/if}
-                        {#each contracts as contract}
-                            <ContractCard
-                                vehClass={contract.class}
-                                name={contract.name}
-                                cost={contract.cost}
-                                reward={contract.rewardCrypto}
-                                time={contract.time}
-                                id={contract.id}
-                            />
-                        {/each}
-                    {:else}
-                        <h1
-                            class="w-full h-full text-4xl font-bold text-center content-center"
-                        >
-                            Waiting For Contracts
-                        </h1>
+
+        <div class="w-full flex flex-col flex-auto overflow-y-auto gap-1">
+            {#if isReady}
+                {#if contracts.length !== 0 || activeContract}
+                    {#if activeContract}
+                        <ContractCard
+                            vehClass={activeContract.class}
+                            name={activeContract.contract.name}
+                            cost={activeContract.contract.cost}
+                            reward={activeContract.contract.rewardCrypto}
+                            time={activeContract.contract.time}
+                            id={activeContract.id}
+                            active
+                            plate={activeContract.plate}
+                        />
                     {/if}
+                    {#each contracts as contract}
+                        <ContractCard
+                            vehClass={contract.class}
+                            name={contract.name}
+                            cost={contract.cost}
+                            reward={contract.rewardCrypto}
+                            time={contract.time}
+                            id={contract.id}
+                            disabled={!inGroup}
+                        />
+                    {/each}
                 {:else}
-                    <button
-                        class="bg-neutral-400 p-3 w-1/3 rounded-lg hover:bg-neutral-500 text-black self-center"
-                        on:click|preventDefault={toggleReady}
-                        >Join Contract Queue</button
+                    <h1
+                        class="w-full h-full text-4xl font-bold text-center content-center"
                     >
+                        Waiting For Contracts
+                    </h1>
                 {/if}
-            </div>
-            {#if request}
-                <div
-                    transition:slide={{ duration: 150 }}
-                    class="w-1/3 absolute bottom-0 right-0 h-16 p-2 bg-neutral-400 text-black flex items-center gap-2 justify-evenly z-10 rounded-tl-lg"
+            {:else}
+                <button
+                    class="bg-neutral-400 p-3 w-1/3 rounded-lg hover:bg-neutral-500 text-black self-center"
+                    on:click|preventDefault={toggleReady}
+                    >Join Contract Queue</button
                 >
-                    <span> {request.name} would like to join your group </span>
-                    <button
-                        class="aspect-square p-2 text-green-600 hover:text-green-500"
-                        on:click|preventDefault={acceptRequest}
-                    >
-                        <Icon
-                            icon="ep:success-filled"
-                            class="text-4xl  w-full"
-                        />
-                    </button>
-                    <button
-                        class="aspect-square p-2 text-red-500 hover:text-red-400"
-                        on:click|preventDefault={denyRequest}
-                    >
-                        <Icon
-                            icon="ep:circle-close-filled"
-                            class="text-4xl  w-full"
-                        />
-                    </button>
-                </div>
             {/if}
-            <div class="w-full flex justify-center gap-2">
-                {#if isReady}
-                    <button
-                        class="bg-neutral-400 py-1 w-1/6 self-center text-black"
-                        on:click|preventDefault={toggleReady}
-                        >Leave Queue</button
-                    >
-                {/if}
+        </div>
+
+        <div class="w-full flex justify-center gap-2">
+            {#if isReady}
                 <button
                     class="bg-neutral-400 py-1 w-1/6 self-center text-black"
-                    on:click|preventDefault={leaveGroup}>Leave Group</button
+                    on:click|preventDefault={toggleReady}>Leave Queue</button
                 >
-            </div>
-        {:else}
-            <div
-                class="flex-auto w-1/2 flex flex-col overflow-y-auto gap-1 self-center text-black text-lg"
-            >
-                <button
-                    class="bg-neutral-400 p-3 w-full rounded-lg hover:bg-neutral-500"
-                    on:click|preventDefault={createGroup}>Create Group</button
-                >
-                {#each groups as group}
-                    <button
-                        class="bg-neutral-400 p-3 w-full rounded-lg hover:bg-neutral-500"
-                        on:click|preventDefault={() => joinGroup(group.id)}
-                    >
-                        {group.leaderName} ({1 +
-                            group.players.length}/{group.maxSlots})
-                    </button>
-                {/each}
-            </div>
-        {/if}
+            {/if}
+        </div>
     </div>
 </div>
 
