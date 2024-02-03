@@ -240,10 +240,9 @@ function startLoops() {
 
 startLoops();
 
-function getGodmode() {
+function getGodmode(): boolean {
     return godmode;
 }
-
 global.exports("getGodmode", getGodmode);
 
 async function ToggleSpectate(targetPed: number, targetPlayerId: number) {
