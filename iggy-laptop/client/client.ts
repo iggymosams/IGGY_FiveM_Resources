@@ -24,6 +24,7 @@ RegisterCommand(
     () => {
         SetFocus(false, false);
         SendAppMessage("base", "restart");
+        CloseLaptop();
     },
     false
 );
