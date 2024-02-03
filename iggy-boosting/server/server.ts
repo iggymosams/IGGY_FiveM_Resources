@@ -13,6 +13,7 @@ import {
     Rep,
     RunningContract,
     VehicleClass,
+    vehicleList,
 } from "./../shared/types";
 import { CalcDist, Delay, RandomNumber } from "./../shared/utils";
 import { GetRep, GiveRep } from "./exports";
@@ -405,3 +406,10 @@ QBCore.Functions.CreateUseableItem("electronickit", (src, item) => {
 onNet("coords", (coords: any) => {
     console.log(JSON.stringify(coords), "\n\n\n\n\n\n");
 });
+
+QBCore.Functions.CreateCallback(
+    "iggy-boosting:cb:getBoostVehicles",
+    (src, cb: (data: vehicleList) => void) => {
+        cb(VEHICLES);
+    }
+);

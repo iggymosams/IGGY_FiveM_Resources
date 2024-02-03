@@ -166,7 +166,7 @@ function getCommandFromId(id: string): Command {
     return;
 }
 
-function GetBoosts(): OptionChoice[] {
+async function GetBoosts(): Promise<OptionChoice[]> {
     let boosts: OptionChoice[] = [];
     let config: {
         [key: string]: {
@@ -174,7 +174,7 @@ function GetBoosts(): OptionChoice[] {
             name: string;
             class: "A" | "B" | "C";
         };
-    } = global.exports["iggy-boosting"].GetBoostVehicles();
+    } = await RegisterQBCallBack("iggy-boosting:cb:getBoostVehicles");
     Object.keys(config).forEach((v) => {
         let boost = config[v];
         let choice: OptionChoice = {

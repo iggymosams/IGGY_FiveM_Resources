@@ -614,8 +614,3 @@ RegisterCommand(
     },
     false
 );
-
-function GetBoostVehicles() {
-    return VEHICLES;
-}
-global.exports("GetBoostVehicles", GetBoostVehicles);

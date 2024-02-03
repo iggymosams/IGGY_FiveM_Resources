@@ -232,7 +232,7 @@ export let Commands: CommandGroup[] = [
                         id: "boost",
                         name: "Boost",
                         type: "INPUT_SELECT",
-                        choices: GetBoosts(),
+                        choices: await GetBoosts(),
                     },
                     {
                         id: "rewardRep",
