@@ -1,6 +1,7 @@
 import { Commands, SelectionMenuCommands } from "./../shared/Commands";
 import {
     Command,
+    CommandData,
     CommandGroup,
     Log,
     RunCommandData,
@@ -135,6 +136,25 @@ RegisterNuiCallback("iggy-admin:toggleFocus", async () => {
         await Delay(0);
     }
 });
+
+RegisterNuiCallback("iggy-admin:getPlayersData", async () => {
+    let data = await RegisterQBCallBack("iggy-admin:cb:getPlayersData");
+    console.log(data);
+    return data;
+});
+
+RegisterNuiCallback("iggy-admin:getPlayersData", async () => {
+    let data = await RegisterQBCallBack("iggy-admin:cb:getPlayersData");
+    console.log(data);
+    return data;
+});
+
+RegisterNuiCallback(
+    "iggy-admin:spawnPlayerVehicle",
+    (command: { data: CommandData }) => {
+        emitNet("iggy-admin:server:spawnPlayerVehicle", command.data);
+    }
+);
 
 async function RunCommand(command: RunCommandData) {
     let cmd: Command = getCommandFromId(command.id);

@@ -2,6 +2,9 @@ import { ToggleNoClipMode } from "./noclip";
 import { Delay } from "../shared/utils";
 import { SelectedEntity } from "./client";
 import { isDoor, PerformanceUpgradeVehicle, SendMenuMessage } from "./cl_utils";
+import { Client } from "qbcore.js";
+
+const QBCore: Client = global.exports["qb-core"].GetCoreObject();
 
 let SpawnedVehicle: number;
 
@@ -79,6 +82,51 @@ onNet("iggy-admin:client:copyVec4", () => {
     let h = GetEntityHeading(PlayerPedId());
     SendMenuMessage("copyText", `vector4(${c[0]}, ${c[1]}, ${c[2]}, ${h})`);
 });
+
+onNet(
+    "iggy-admin:client:spawnPlayerVehicle",
+    async (model: string, mods: any, plate: string, fuel: number) => {
+        console.log(model);
+        let hash = GetHashKey(model);
+        RequestModel(hash);
+        let waiting = 0;
+        while (!HasModelLoaded(hash)) {
+            waiting = waiting + 100;
+            await Delay(100);
+            if (waiting > 5000) {
+                TriggerEvent(
+                    "QBCore:Notify",
+                    "Could not load the vehicle model in time, a crash was prevented.",
+                    "error",
+                    5000
+                );
+                break;
+            }
+        }
+        let coords = GetOffsetFromEntityInWorldCoords(
+            PlayerPedId(),
+            0.0,
+            5.0,
+            0.0
+        );
+        let veh = CreateVehicle(
+            hash,
+            coords[0],
+            coords[1],
+            coords[2],
+            GetEntityHeading(PlayerPedId()),
+            true,
+            true
+        );
+        SetModelAsNoLongerNeeded(hash);
+        QBCore.Functions.SetVehicleProperties(veh, JSON.parse(mods));
+        SetVehicleNumberPlateText(veh, plate);
+
+        exports["LegacyFuel"].SetFuel(veh, fuel);
+        emitNet("qb-garages:server:updateVehicleState", 0, plate);
+        emitNet("qb-vehiclekeys:server:AcquireVehicleKeys", plate);
+    }
+);
 
 onNet("iggy-admin:client:SM:killPlayer", () => {
     const id = SelectedEntity;

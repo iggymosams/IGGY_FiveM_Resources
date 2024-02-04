@@ -352,15 +352,17 @@ RegisterAdminCommand(
             if (result[0] !== undefined) {
                 return;
             }
+
             MySQL.insert(
-                "INSERT INTO player_vehicles (license, citizenid, vehicle, hash, plate, garage, state) VALUES( ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, garage, state) VALUES( ?, ?, ?, ?, ?, ?, ?, ?)",
                 [
                     player.PlayerData.license,
                     player.PlayerData.citizenid,
                     model,
                     GetHashKey(model),
+                    JSON.stringify({}),
                     plate,
-                    "legionsquare",
+                    "pillboxgarage",
                     1,
                 ]
             );
@@ -505,6 +507,27 @@ RegisterAdminCommand(
             rewardRep,
             target,
             rewardQBit
+        );
+    }
+);
+
+RegisterAdminCommand(
+    "iggy-admin:server:spawnPlayerVehicle",
+    async (src: number, data: CommandData) => {
+        let vehicle = await MySQL.query(
+            "SELECT * FROM player_vehicles where plate = ?",
+            [data.values["plate"]]
+        );
+        if (vehicle[0] === undefined) return;
+        let vehData = vehicle[0];
+
+        emitNet(
+            "iggy-admin:client:spawnPlayerVehicle",
+            src,
+            vehData.vehicle,
+            vehData.mods,
+            vehData.plate,
+            vehData.fuel
         );
     }
 );

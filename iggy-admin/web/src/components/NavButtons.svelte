@@ -18,6 +18,14 @@
 </button>
 <button
     class={`h-full flex-auto ${
+        selected === "PLAYERS" ? "bg-neutral-300" : "bg-rose-600"
+    } ${selected === "PLAYERS" ? "hover:bg-neutral-400" : "hover:bg-rose-700"}`}
+    on:click|preventDefault={() => updateSelected("PLAYERS")}
+>
+    Players
+</button>
+<button
+    class={`h-full flex-auto ${
         selected === "LOGS" ? "bg-neutral-300" : "bg-rose-600"
     } ${selected === "LOGS" ? "hover:bg-neutral-400" : "hover:bg-rose-700"}`}
     on:click|preventDefault={() => updateSelected("LOGS")}

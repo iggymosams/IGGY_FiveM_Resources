@@ -9,6 +9,7 @@
     import Icon from "@iconify/svelte";
     import { onMount } from "svelte";
     import { fetchNui } from "../utils/fetchNui";
+    import Players from "./Players.svelte";
 
     let open: boolean = false;
     let dev: boolean = false;
@@ -107,6 +108,8 @@
     <div class="bg-rose-600 h-full flex flex-col flex-auto">
         {#if tab === "COMMANDS"}
             <Commands {commands} />
+        {:else if tab === "PLAYERS"}
+            <Players />
         {:else if tab === "LOGS"}
             <Logs {expanded} />
         {:else if tab === "OPTIONS"}

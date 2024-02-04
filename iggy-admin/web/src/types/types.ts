@@ -73,3 +73,29 @@ export interface SMOpenData {
     commands: SMCommand[];
     type: string;
 }
+export interface AdminPlayerData {
+    serverId: number;
+    username: string;
+    steam: string;
+    loggedIn: boolean;
+    identifiers: string[];
+    charInfo: CharInfo;
+    vehicles: Vehicle[];
+}
+
+export interface CharInfo {
+    cid: string;
+    name: string;
+    job: string;
+    gang: string;
+    phone: number;
+    bank: number;
+    cash: number;
+    crypto: number;
+}
+
+export interface Vehicle {
+    vehicle: string;
+    plate: string;
+    state: number;
+}
