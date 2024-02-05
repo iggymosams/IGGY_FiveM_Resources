@@ -10,19 +10,22 @@ const resources = [
     "iggy-rental",
 ];
 
-resources.forEach((resource) => {
-    exec(`cd ${resource} && npm i && npm run build`, (error) => {
+resources.forEach(async (resource) => {
+    const resourcePath = path.resolve(__dirname, resource);
+    exec(`cd ${resourcePath} && npm i && npm run build`, (error) => {
         if (error) {
             console.error(error);
         }
-        const web = path.join(resource, "web");
+        const web = path.join(resourcePath, "web");
         if (fs.existsSync(web)) {
             exec(`cd ${web} && npm i && npm run build`, (viteError) => {
                 if (viteError) {
                     console.log(viteError);
                 }
             });
+            console.log(`Built resource and NUI ${resource}`);
+        } else {
+            console.log(`Built resource ${resource}`);
         }
-        console.log(`Built resource ${resource}`);
     });
 });
