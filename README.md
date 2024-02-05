@@ -22,6 +22,13 @@ A alternative admin menu for QBCore built with typescript and svelte.
 -   Logs page intergated with qb-logs
 -   Customizable keybinds.
 
+### TODO
+
+-   [ ] Rework UI
+-   [ ] Add entity stats/info to selection menu
+-   [ ] Set Job/Gang Command
+-   [ ] Add/Remove Money Command
+
 ### Exports
 
 #### Client
