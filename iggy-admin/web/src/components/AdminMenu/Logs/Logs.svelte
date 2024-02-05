@@ -65,8 +65,12 @@
             bind:value={messageFilter}
         />
     </div>
-    <div class={`w-full grid grid-cols-${expanded ? 6 : 3} bg-neutral-700`}>
-        <di class="col-span-1">Source</di>
+    <div
+        class={`w-full grid  ${
+            expanded ? "grid-cols-6" : "grid-cols-3"
+        } bg-neutral-700`}
+    >
+        <span class="col-span-1">Source</span>
         <span class="col-span-1">Type</span>
         {#if expanded}
             <span class="col-span-3">Message</span>
