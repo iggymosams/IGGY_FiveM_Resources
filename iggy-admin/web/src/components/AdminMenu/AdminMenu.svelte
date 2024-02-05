@@ -3,11 +3,11 @@
     import Commands from "./Commands/Commands.svelte";
     import { useNuiEvent } from "../../utils/useNuiEvent";
     import type { CommandGroup, OpenData } from "../../types/types";
-    import Logs from "../Logs.svelte";
+    import Logs from "./Logs/Logs.svelte";
     import Options from "./Options.svelte";
     import { onMount } from "svelte";
     import { fetchNui } from "../../utils/fetchNui";
-    import Players from "../Players.svelte";
+    import Players from "./Players/Players.svelte";
     import SideBar from "./SideBar.svelte";
 
     let open: boolean = false;
