@@ -24,10 +24,11 @@ A alternative admin menu for QBCore built with typescript and svelte.
 
 ### TODO
 
--   [ ] Rework UI
+-   [x] Rework UI
 -   [ ] Add entity stats/info to selection menu
 -   [ ] Set Job/Gang Command
 -   [ ] Add/Remove Money Command
+-   [ ] Open Outfits
 
 ### Exports
 
