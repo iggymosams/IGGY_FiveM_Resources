@@ -381,6 +381,52 @@ RegisterAdminCommand(
         );
     }
 );
+
+RegisterAdminCommand(
+    "iggy-admin:server:giveMoney",
+    (src: number, data: CommandData) => {
+        let plr = QBCore.Functions.GetPlayer(+data.target.serverId);
+        let amount = +data.values["amount"];
+        if (amount > 0) {
+            plr.Functions.AddMoney(
+                data.values["type"].value,
+                amount,
+                "Admin Menu"
+            );
+            emitNet(
+                "QBCore:Notify",
+                src,
+                "Successfully set player (" +
+                    data.target.display +
+                    ") gang to " +
+                    data.values["gang"].value +
+                    " " +
+                    data.values["rank"].value,
+                "success",
+                5000
+            );
+        } else {
+            plr.Functions.RemoveMoney(
+                data.values["type"].value,
+                Math.abs(amount),
+                "Admin Menu"
+            );
+            emitNet(
+                "QBCore:Notify",
+                src,
+                "Successfully set player (" +
+                    data.target.display +
+                    ") gang to " +
+                    data.values["gang"].value +
+                    " " +
+                    data.values["rank"].value,
+                "success",
+                5000
+            );
+        }
+    }
+);
+
 onNet("iggy-admin:server:SM:deleteEntity", (netId: number) => {
     DeleteEntity(NetworkGetEntityFromNetworkId(netId));
 });

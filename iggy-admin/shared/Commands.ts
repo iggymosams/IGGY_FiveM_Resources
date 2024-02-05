@@ -314,6 +314,35 @@ export let Commands: CommandGroup[] = [
                     },
                 ],
             },
+            {
+                id: "giveMoney",
+                name: "Give Money",
+                type: "SERVER",
+                event: "iggy-admin:server:giveMoney",
+                commandType: "COLLAPSE",
+                options: [
+                    {
+                        id: "player",
+                        name: "Player",
+                        type: "PLAYER_LIST",
+                    },
+                    {
+                        id: "type",
+                        name: "Type",
+                        type: "INPUT_SELECT",
+                        choices: [
+                            { label: "Cash", value: "cash" },
+                            { label: "Bank", value: "bank" },
+                            { label: "Crypto", value: "crypto" },
+                        ],
+                    },
+                    {
+                        id: "amount",
+                        name: "Amount",
+                        type: "NUMBER",
+                    },
+                ],
+            },
         ],
     },
     {
