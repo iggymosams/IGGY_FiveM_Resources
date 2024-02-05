@@ -3,7 +3,7 @@
     import "./app.css";
 
     import AdminMenu from "./components/AdminMenu/AdminMenu.svelte";
-    import SelectionMenu from "./components/SelectionMenu.svelte";
+    import SelectionMenu from "./components/SelectionMenu/SelectionMenu.svelte";
     import ObjectTransformer from "./components/ObjectTransformer.svelte";
     import { fetchNui } from "./utils/fetchNui";
     import { useNuiEvent } from "./utils/useNuiEvent";
