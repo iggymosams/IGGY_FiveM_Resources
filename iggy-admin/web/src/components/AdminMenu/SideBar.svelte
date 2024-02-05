@@ -17,7 +17,7 @@
     }
 </script>
 
-<div class="w-10 h-full bg-neutral-800 p-1 flex flex-col yy flex-none">
+<div class="w-10 h-full bg-neutral-700 p-1 flex flex-col yy flex-none">
     <button
         class="w-full rounded-md border border-white text-white"
         on:click|preventDefault={toggleExpanded}
