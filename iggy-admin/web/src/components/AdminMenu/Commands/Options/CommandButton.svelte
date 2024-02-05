@@ -1,6 +1,6 @@
 <script lang="ts">
-    import type { CommandType, EventType, Player } from "../../types/types";
-    import { fetchNui } from "../../utils/fetchNui";
+    import type { EventType, Player } from "../../../../types/types";
+    import { fetchNui } from "../../../../utils/fetchNui";
 
     export let text: string;
 

@@ -1,7 +1,6 @@
 <script lang="ts">
     import type { AdminPlayerData } from "../types/types";
     import { fetchNui } from "../utils/fetchNui";
-    import CommandButton from "./Options/CommandButton.svelte";
     import PlayerAccordian from "./PlayerAccordian.svelte";
 
     let players: AdminPlayerData[] = [];

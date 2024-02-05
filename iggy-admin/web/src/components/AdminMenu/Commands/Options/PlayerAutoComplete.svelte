@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { fetchNui } from "../../utils/fetchNui";
-    import { target } from "../../store/stores";
-    import type { Player } from "../../types/types";
+    import { fetchNui } from "../../../../utils/fetchNui";
+    import { target } from "../../../../store/stores";
+    import type { Player } from "../../../../types/types";
     import AutoComplete from "./AutoComplete.svelte";
     let players: Player[] = [];
     let targetPlayer: Player;

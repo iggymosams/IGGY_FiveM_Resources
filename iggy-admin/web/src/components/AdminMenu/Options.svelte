@@ -1,5 +1,4 @@
 <script lang="ts">
-    import AutoComplete from "simple-svelte-autocomplete";
     import { fetchNui } from "../../utils/fetchNui";
     import type { Command } from "../../types/types";
 
