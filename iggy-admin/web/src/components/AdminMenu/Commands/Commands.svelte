@@ -76,7 +76,7 @@
     <div class="w-full text-center text-white">
         Current Target: {targetPlayer ? targetPlayer.display : ""}
     </div>
-    <div class="h-full w-full flex flex-col flex-grow overflow-auto" id="list">
+    <div class="h-full w-full flex flex-col flex-grow overflow-auto">
         {#each sortedCommands as command}{#if command.commandType === "COLLAPSE"}
                 <Accordian
                     id={command.id}
