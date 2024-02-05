@@ -1,7 +1,7 @@
 <script lang="ts">
     import AutoComplete from "simple-svelte-autocomplete";
-    import { fetchNui } from "../utils/fetchNui";
-    import type { Command } from "../types/types";
+    import { fetchNui } from "../../utils/fetchNui";
+    import type { Command } from "../../types/types";
 
     let options: Command[] = [];
     let binds: {
@@ -16,7 +16,24 @@
             options = [...options];
             binds = [...binds];
         } catch (error) {
-            options = [];
+            options = [
+                {
+                    id: "noclip",
+                    name: "NoClip",
+                    type: "CLIENT",
+                    event: "iggy-admin:client:toggleNoClip",
+                    commandType: "TOGGLE",
+                    favourite: false,
+                },
+                {
+                    id: "reviveSelf",
+                    name: "Revive Self",
+                    type: "SERVER",
+                    event: "iggy-admin:server:reviveSelf",
+                    commandType: "BUTTON",
+                    favourite: false,
+                },
+            ];
             binds = [
                 { name: "Bind 1", cmd: undefined },
                 { name: "Bind 2", cmd: undefined },
@@ -24,6 +41,7 @@
                 { name: "Bind 4", cmd: undefined },
                 { name: "Bind 5", cmd: undefined },
             ];
+            console.log(binds, options);
         }
     }
 
@@ -49,13 +67,13 @@
     }
 </script>
 
-<div class="w-full h-1/6 flex-auto bg-white p-3 overflow-auto">
+<div class="w-full h-full flex-auto p-3 overflow-auto text-white">
     {#each options as option}
         <div class="w-full">
             <span>{option.name}</span>
             {#if binds !== undefined}
                 <select
-                    class="w-full p-2"
+                    class="w-full p-2 bg-neutral-700"
                     on:change={(event) => handleSelectChange(option, event)}
                     value={binds.find((b) => b.cmd?.id === option.id)?.name ||
                         "none"}

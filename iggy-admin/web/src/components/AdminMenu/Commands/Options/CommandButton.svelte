@@ -22,7 +22,7 @@
 </script>
 
 <button
-    class="p-2 bg-rose-600 rounded-sm my-1 text-neutral-950 hover:bg-rose-700 active:bg-rose-800"
+    class="p-2 bg-rose-600 rounded-sm my-2 hover:bg-rose-700 active:bg-rose-800 text-white"
     on:click|preventDefault={onClick}
 >
     {text}

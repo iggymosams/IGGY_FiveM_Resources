@@ -1,18 +1,15 @@
 <script lang="ts">
-    import AutoComplete from "simple-svelte-autocomplete";
+    import type { OptionChoice } from "../../types/types";
     import { fetchNui } from "../../utils/fetchNui";
     import { target } from "../../store/stores";
-    import type { Player } from "../../types/types";
-    let players: Player[] = [];
-    let targetPlayer: Player;
-    target.subscribe((newTarget) => {
-        targetPlayer = newTarget;
-    });
 
-    async function getPlayers() {
+    let items: OptionChoice[] = [];
+    export let selected: string;
+    export let callback: string;
+    async function getItems() {
         try {
-            let resp = await fetchNui("iggy-admin:getPlayers");
-            players = resp;
+            let resp = await fetchNui(callback, $target);
+            items = resp;
         } catch (error) {
             return [
                 {
@@ -31,18 +28,13 @@
         }
     }
 
-    $: getPlayers();
-    function updateTarget(newTarget: Player) {
-        target.set(newTarget);
-    }
+    $: getItems();
 </script>
 
 <AutoComplete
-    items={players}
-    labelFieldName="display"
-    valueFieldName="serverId"
-    onChange={updateTarget}
-    bind:selectedItem={targetPlayer}
+    {items}
+    labelFieldName={"label"}
+    bind:selectedItem={selected}
     className="w-full"
     placeholder="Target"
 />
