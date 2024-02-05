@@ -116,7 +116,9 @@
                     {#if option.asyncCallback}
                         <AsyncAutoComplete
                             callback={option.asyncCallback}
-                            selected={optionValues[option.id]}
+                            bind:selected={optionValues[option.id]}
+                            name={option.name}
+                            data={optionValues}
                         />
                     {/if}
                 {/if}

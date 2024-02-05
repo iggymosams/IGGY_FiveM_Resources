@@ -2,39 +2,32 @@
     import type { OptionChoice } from "../../../../types/types";
     import { fetchNui } from "../../../../utils/fetchNui";
     import { target } from "../../../../store/stores";
+    import AutoComplete from "./AutoComplete.svelte";
 
     let items: OptionChoice[] = [];
     export let selected: string;
     export let callback: string;
-    async function getItems() {
+    export let name: string;
+    export let data: { [key: string]: string };
+
+    async function getItems(fetchData: { [key: string]: string }) {
         try {
-            let resp = await fetchNui(callback, $target);
+            let resp = await fetchNui(callback, {
+                target: $target,
+                values: data,
+            });
             items = resp;
         } catch (error) {
-            return [
-                {
-                    display: "[1] iggymosams [steam:1100001123a30f6]",
-                    serverId: "1",
-                    name: "iggymosams",
-                    id: "steam:1100001123a30f6",
-                },
-                {
-                    display: "[2] iggymosams [steam:1100001123a30f6]",
-                    serverId: "2",
-                    name: "iggymosams",
-                    id: "steam:1100001123a30f6",
-                },
-            ];
+            return [];
         }
     }
 
-    $: getItems();
+    $: getItems(data);
 </script>
 
-<!-- <AutoComplete
+<AutoComplete
     {items}
     labelFieldName={"label"}
     bind:selectedItem={selected}
-    className="w-full"
-    placeholder="Target"
-/> -->
+    placeholder={name}
+/>
