@@ -343,6 +343,21 @@ export let Commands: CommandGroup[] = [
                     },
                 ],
             },
+            {
+                id: "openOutfits",
+                name: "Open Outfits",
+                type: "SERVER",
+                event: "iggy-admin:server:openOutfits",
+                commandType: "COLLAPSE",
+                closeMenu: true,
+                options: [
+                    {
+                        id: "player",
+                        name: "Player",
+                        type: "PLAYER_LIST",
+                    },
+                ],
+            },
         ],
     },
     {

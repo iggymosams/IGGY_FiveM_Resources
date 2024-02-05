@@ -623,3 +623,10 @@ RegisterAdminCommand(
         );
     }
 );
+
+RegisterAdminCommand(
+    "iggy-admin:server:openOutfits",
+    (src: number, data: CommandData) => {
+        emitNet("qb-clothing:client:openOutfitMenu", data.target.serverId);
+    }
+);
