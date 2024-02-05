@@ -23,9 +23,9 @@
         on:click|preventDefault={toggleExpanded}
     >
         {#if expanded}
-            <Icon icon="mingcute:right-fill" class="w-full h-full" />
-        {:else}
             <Icon icon="mingcute:left-fill" class="w-full h-full" />
+        {:else}
+            <Icon icon="mingcute:right-fill" class="w-full h-full" />
         {/if}
     </button>
     <div class="my-auto flex gap-1 flex-col">

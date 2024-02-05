@@ -456,11 +456,10 @@
 </script>
 
 <div
-    class={`${expanded ? "w-2/3 left-1/2" : "w-1/5 left-[87%]"} h-[90%] ${
+    class={`${expanded ? "w-2/3 left-1/2" : "w-1/5 left-[13%]"} h-[90%] ${
         open ? "flex" : "hidden"
     } bg-neutral-900 absolute top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-300`}
 >
-    <SideBar bind:tab bind:expanded bind:dev />
     <div class="w-full h-full overflow-hidden">
         {#if tab === "COMMANDS"}
             <Commands {commands} />
@@ -472,4 +471,5 @@
             <Options />
         {/if}
     </div>
+    <SideBar bind:tab bind:expanded bind:dev />
 </div>
