@@ -1,12 +1,7 @@
 <script lang="ts">
     import Accordian from "./Accordian.svelte";
     import AccordianButton from "./AccordianButton.svelte";
-    import type {
-        Command,
-        CommandGroup,
-        OpenData,
-        Player,
-    } from "../../../types/types";
+    import type { Command, CommandGroup, Player } from "../../../types/types";
     import { target } from "../../../store/stores";
     import TopButtonGroup from "./TopButtonGroup.svelte";
 
@@ -103,20 +98,7 @@
                     cmdType={command.commandType}
                     on:favouriteChange={onFavouriteChange}
                 />
-            {/if}{/each}
+            {/if}
+        {/each}
     </div>
 </div>
-
-<style>
-    ::-webkit-scrollbar {
-        width: 5px;
-    }
-    ::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-        background-color: rgba(155, 155, 155, 0.5);
-        border-radius: 20px;
-        border: transparent;
-    }
-</style>
