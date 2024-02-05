@@ -28,7 +28,7 @@ A alternative admin menu for QBCore built with typescript and svelte.
 -   [ ] Add entity stats/info to selection menu
 -   [x] Set Job/Gang Command
 -   [x] Add/Remove Money Command
--   [ ] Open Outfits
+-   [x] Open Outfits
 
 ### Exports
 
