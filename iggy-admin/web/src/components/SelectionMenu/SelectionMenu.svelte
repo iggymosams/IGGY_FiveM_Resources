@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { SMCommand, SMOpenData } from "../../types/types";
-    import SelectionMenuButton from "../SelectionMenuButton.svelte";
+    import SelectionMenuButton from "./SelectionMenuButton.svelte";
     import { useNuiEvent } from "../../utils/useNuiEvent";
     import { fetchNui } from "../../utils/fetchNui";
     import { onMount } from "svelte";

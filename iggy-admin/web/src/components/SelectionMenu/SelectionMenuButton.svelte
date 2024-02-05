@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { fetchNui } from "../utils/fetchNui";
+    import { fetchNui } from "../../utils/fetchNui";
 
     export let name: string;
     export let event: string;
