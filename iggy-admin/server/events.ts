@@ -538,7 +538,6 @@ RegisterAdminCommand(
     "iggy-admin:server:createBoost",
     (src: number, data: CommandData) => {
         let target = data.target.serverId;
-        console.log(data);
         let boost = data.values["boost"].value;
         let rewardRep = data.values["rewardRep"];
         let cost = data.values["cost"];

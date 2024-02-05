@@ -40,7 +40,6 @@
                 { name: "Bind 4", cmd: undefined },
                 { name: "Bind 5", cmd: undefined },
             ];
-            console.log(binds, options);
         }
     }
 

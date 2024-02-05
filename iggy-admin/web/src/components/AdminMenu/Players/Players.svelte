@@ -93,7 +93,6 @@
         sid: string,
         steam: string
     ) {
-        console.log(1);
         filteredPlayers = plrs.filter(
             (plr) =>
                 plr.serverId.toString().includes(sid) &&

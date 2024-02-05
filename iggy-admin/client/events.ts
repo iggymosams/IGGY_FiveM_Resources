@@ -86,7 +86,6 @@ onNet("iggy-admin:client:copyVec4", () => {
 onNet(
     "iggy-admin:client:spawnPlayerVehicle",
     async (model: string, mods: any, plate: string, fuel: number) => {
-        console.log(model);
         let hash = GetHashKey(model);
         RequestModel(hash);
         let waiting = 0;

@@ -14,7 +14,6 @@
             let resp = await fetchNui("iggy-admin:getPlayers");
             players = resp;
         } catch (error) {
-            console.log(players);
             players = [
                 {
                     display: "[1] iggymosams [steam:1100001123a30f6]",
@@ -30,7 +29,6 @@
                 },
             ];
         }
-        console.log(players);
     }
 
     $: getPlayers();

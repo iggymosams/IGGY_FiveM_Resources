@@ -21,27 +21,16 @@ export async function openTransformControls(obj: number): Promise<{
     SetEntityCollision(obj, false, false);
     let pos = GetEntityCoords(obj, false);
     let rot = GetEntityRotation(obj, order);
-    console.log(pos);
     SendMenuMessage("setTransformEntity", {
         object: obj,
         position: { x: pos[0], y: pos[1], z: pos[2] },
         rotation: { x: rot[0], y: rot[1], z: rot[2] },
     });
-    console.log({
-        object: obj,
-        position: { x: pos[0], y: pos[1], z: pos[2] },
-        rotation: { x: rot[0], y: rot[1], z: rot[2] },
-    });
+
     creatingObj = true;
     SetNuiFocus(true, true);
     setOpen(true);
 
-    const cpos = GetFinalRenderedCamCoord();
-    const crot = GetFinalRenderedCamRot(order);
-    console.log({
-        position: { x: cpos[0], y: cpos[1], z: cpos[2] },
-        rotation: { x: crot[0], y: crot[1], z: crot[2] },
-    });
     while (creatingObj) {
         const cpos = GetFinalRenderedCamCoord();
         const crot = GetFinalRenderedCamRot(order);

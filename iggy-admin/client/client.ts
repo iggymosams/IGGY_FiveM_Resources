@@ -143,13 +143,11 @@ RegisterNuiCallback("iggy-admin:toggleFocus", async () => {
 
 RegisterNuiCallback("iggy-admin:getPlayersData", async () => {
     let data = await RegisterQBCallBack("iggy-admin:cb:getPlayersData");
-    console.log(data);
     return data;
 });
 
 RegisterNuiCallback("iggy-admin:getPlayersData", async () => {
     let data = await RegisterQBCallBack("iggy-admin:cb:getPlayersData");
-    console.log(data);
     return data;
 });
 
