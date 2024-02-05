@@ -6,6 +6,7 @@ A Collection of FiveM Resources made using Typescript and Svelte.
 
 -   [Admin Menu](#admin-menu)
 -   [Laptop](#laptop)
+-   [Boosting](#boosting)
 -   [Rental](#rental)
 -   [Groups](#groups)
 
@@ -142,6 +143,42 @@ Plays a sound within a set distance of the provided location
 
 TODO: Add screenshots
 
+## Boosting
+
+A car boosting system for QBCore
+
+### Features
+
+-   A contract teir system
+-   A player reputation system
+-   Intergrates with [groups](#groups) for multiplayer jobs
+-   Intergrates with [admin](#admin) for contract creation
+-   Easy location/car customization
+
+### TODO
+
+-   [ ] Rework contract system
+
+### Exports
+
+#### Server
+
+```typescript
+GetRep(cid: string): Promise<Rep>
+```
+
+Returns the players rep
+
+```typescript
+GiveRep(cid: string, amount: number)
+```
+
+Add/Remove rep
+
+### Screen Shots
+
+-   TODO
+
 ## Rental
 
 A Rental system for QBCore
@@ -203,27 +240,5 @@ GroupEmitNet(groupId: number, eventName: string, ...args: any[])
 ```
 
 Triggers an event for every player in a group
-
-### Screen Shots
-
-## Boosting
-
-### Features
-
-### Exports
-
-#### Server
-
-```typescript
-GetRep(cid:string): Promise<Rep>
-```
-
-Returns a player boosting rep
-
-```typescript
-GiveRep(cid: string, amount: number)
-```
-
-Gives a player boosting rep
 
 ### Screen Shots
