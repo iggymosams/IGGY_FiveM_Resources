@@ -19,7 +19,7 @@
     <button
         class={`w-full rounded-md border border-white text-white flex items-center ${
             selected === tab.id ? "bg-rose-700" : "bg-transparent"
-        } transition-colors duration-50`}
+        } transition-colors duration-150`}
         on:click|preventDefault={() => updateSelected(tab.id)}
     >
         <Icon icon={tab.icon} class="w-full h-full p-0.5" />
