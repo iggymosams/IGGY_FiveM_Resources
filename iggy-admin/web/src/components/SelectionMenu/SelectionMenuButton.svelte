@@ -13,7 +13,7 @@
 
 <div class="w-full">
     <button
-        class={`w-full p-1 bg-white hover:bg-gray-300 active:bg-gray-400 transition-colors duration-150 text-center`}
+        class={`w-full p-1  hover:bg-neutral-800 active:bg-neutral-700 transition-colors duration-150 text-center`}
         on:click|preventDefault={onClick}
     >
         {name}
