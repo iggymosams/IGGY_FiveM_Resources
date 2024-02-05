@@ -1,7 +1,7 @@
 <script lang="ts">
     import { slide } from "svelte/transition";
-    import type { AdminPlayerData } from "../types/types";
-    import { fetchNui } from "../utils/fetchNui";
+    import type { AdminPlayerData } from "../../../types/types";
+    import { fetchNui } from "../../../utils/fetchNui";
 
     export let open = false;
 
