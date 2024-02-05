@@ -186,6 +186,32 @@ async function GetBoosts(): Promise<OptionChoice[]> {
     return boosts;
 }
 
+function GetJobs(): OptionChoice[] {
+    let jobs: OptionChoice[] = [];
+    Object.keys(QBCore.Shared.Jobs).forEach((v) => {
+        let job = QBCore.Shared.Jobs[v];
+        let data = {
+            value: v,
+            label: job.label,
+        };
+        jobs.push(data);
+    });
+    return jobs.sort((a, b) => a.label.localeCompare(b.label));
+}
+
+function GetGangs(): OptionChoice[] {
+    let gangs: OptionChoice[] = [];
+    Object.keys(QBCore.Shared.Gangs).forEach((v) => {
+        let gang = QBCore.Shared.Gangs[v];
+        let data = {
+            value: v,
+            label: gang.label,
+        };
+        gangs.push(data);
+    });
+    return gangs.sort((a, b) => a.label.localeCompare(b.label));
+}
+
 export {
     SendMenuMessage,
     RegisterNuiCallback,
@@ -197,4 +223,6 @@ export {
     isDoor,
     getCommandFromId,
     GetBoosts,
+    GetJobs,
+    GetGangs,
 };

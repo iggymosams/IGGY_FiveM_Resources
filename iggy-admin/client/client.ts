@@ -4,6 +4,7 @@ import {
     CommandData,
     CommandGroup,
     Log,
+    OptionChoice,
     RunCommandData,
     SelectionMenuType,
 } from "./../shared/types";
@@ -20,10 +21,13 @@ import "./binds";
 import "./handlers";
 import "./obj_creator";
 import { Delay } from "../shared/utils";
+import { Client } from "qbcore.js";
 export let open = false;
-export let DevMode: boolean = false;
+export let DevMode: boolean = true;
 export let holdingSM: boolean = false;
 export let SelectedEntity: number = 0;
+
+const QBCore: Client = global.exports["qb-core"].GetCoreObject();
 
 let favourites: string[];
 
@@ -156,6 +160,38 @@ RegisterNuiCallback(
     }
 );
 
+RegisterNuiCallback("iggy-admin:getJobRanks", (data: CommandData) => {
+    if (data.values["job"]) {
+        let job = QBCore.Shared.Jobs[data.values["job"].value];
+        let jobs: OptionChoice[] = [];
+        Object.keys(job.grades).forEach((v) => {
+            let grade = job.grades[v];
+            let data = {
+                value: v,
+                label: grade.name,
+            };
+            jobs.push(data);
+        });
+        return jobs;
+    }
+});
+
+RegisterNuiCallback("iggy-admin:getGangRanks", (data: CommandData) => {
+    if (data.values["gang"]) {
+        let gang = QBCore.Shared.Gangs[data.values["gang"].value];
+        let gangs: OptionChoice[] = [];
+        Object.keys(gang.grades).forEach((v) => {
+            let grade = gang.grades[v];
+            let data = {
+                value: v,
+                label: grade.name,
+            };
+            gangs.push(data);
+        });
+        return gangs;
+    }
+});
+
 async function RunCommand(command: RunCommandData) {
     let cmd: Command = getCommandFromId(command.id);
 
@@ -212,10 +248,6 @@ async function ToggleSelectionMenu() {
     let found = false;
     let entityFound;
 
-    let isVehicle = false;
-    let isPed = false;
-    let isObject = false;
-    let isPlayer = false;
     let menuType: SelectionMenuType;
     SetEntityDrawOutline(SelectedEntity, false);
 

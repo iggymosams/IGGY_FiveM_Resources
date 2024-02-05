@@ -1,4 +1,10 @@
-import { GetBoosts, GetItems, GetVehicles } from "../client/cl_utils";
+import {
+    GetBoosts,
+    GetGangs,
+    GetItems,
+    GetJobs,
+    GetVehicles,
+} from "../client/cl_utils";
 import { CommandGroup, SelectionMenuCommandGroups } from "./types";
 
 export let Commands: CommandGroup[] = [
@@ -253,6 +259,58 @@ export let Commands: CommandGroup[] = [
                         id: "time",
                         name: "Duration (in mins)",
                         type: "NUMBER",
+                    },
+                ],
+            },
+            {
+                id: "setJob",
+                name: "Set Job",
+                type: "SERVER",
+                event: "iggy-admin:server:setJob",
+                commandType: "COLLAPSE",
+                options: [
+                    {
+                        id: "player",
+                        name: "Player",
+                        type: "PLAYER_LIST",
+                    },
+                    {
+                        id: "job",
+                        name: "Job",
+                        type: "INPUT_SELECT",
+                        choices: GetJobs(),
+                    },
+                    {
+                        id: "rank",
+                        name: "Rank",
+                        type: "INPUT_ASYNC",
+                        asyncCallback: "iggy-admin:getJobRanks",
+                    },
+                ],
+            },
+            {
+                id: "setGang",
+                name: "Set Gang",
+                type: "SERVER",
+                event: "iggy-admin:server:setGang",
+                commandType: "COLLAPSE",
+                options: [
+                    {
+                        id: "player",
+                        name: "Player",
+                        type: "PLAYER_LIST",
+                    },
+                    {
+                        id: "gang",
+                        name: "Gang",
+                        type: "INPUT_SELECT",
+                        choices: GetGangs(),
+                    },
+                    {
+                        id: "rank",
+                        name: "Rank",
+                        type: "INPUT_ASYNC",
+                        asyncCallback: "iggy-admin:getGangRanks",
                     },
                 ],
             },
