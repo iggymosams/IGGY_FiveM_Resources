@@ -1,8 +1,7 @@
 <script lang="ts">
-    import AutoComplete from "simple-svelte-autocomplete";
-    import type { OptionChoice } from "../../types/types";
-    import { fetchNui } from "../../utils/fetchNui";
-    import { target } from "../../store/stores";
+    import type { OptionChoice } from "../../../../types/types";
+    import { fetchNui } from "../../../../utils/fetchNui";
+    import { target } from "../../../../store/stores";
 
     let items: OptionChoice[] = [];
     export let selected: string;
@@ -32,10 +31,10 @@
     $: getItems();
 </script>
 
-<AutoComplete
+<!-- <AutoComplete
     {items}
     labelFieldName={"label"}
     bind:selectedItem={selected}
     className="w-full"
     placeholder="Target"
-/>
+/> -->

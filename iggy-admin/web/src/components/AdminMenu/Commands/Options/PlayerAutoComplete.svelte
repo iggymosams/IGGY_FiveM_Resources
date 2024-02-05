@@ -1,8 +1,8 @@
 <script lang="ts">
-    import AutoComplete from "simple-svelte-autocomplete";
-    import { fetchNui } from "../../utils/fetchNui";
-    import { target } from "../../store/stores";
-    import type { Player } from "../../types/types";
+    import { fetchNui } from "../../../../utils/fetchNui";
+    import { target } from "../../../../store/stores";
+    import type { Player } from "../../../../types/types";
+    import AutoComplete from "./AutoComplete.svelte";
     let players: Player[] = [];
     let targetPlayer: Player;
     target.subscribe((newTarget) => {
@@ -14,7 +14,8 @@
             let resp = await fetchNui("iggy-admin:getPlayers");
             players = resp;
         } catch (error) {
-            return [
+            console.log(players);
+            players = [
                 {
                     display: "[1] iggymosams [steam:1100001123a30f6]",
                     serverId: "1",
@@ -29,6 +30,7 @@
                 },
             ];
         }
+        console.log(players);
     }
 
     $: getPlayers();
@@ -43,6 +45,5 @@
     valueFieldName="serverId"
     onChange={updateTarget}
     bind:selectedItem={targetPlayer}
-    className="w-full"
     placeholder="Target"
 />

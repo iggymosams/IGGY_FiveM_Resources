@@ -1,7 +1,7 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
     import type { CommandType, EventType } from "src/types/types";
-    import { fetchNui } from "../utils/fetchNui";
+    import { fetchNui } from "../../../utils/fetchNui";
     import { createEventDispatcher } from "svelte";
 
     export let active: boolean = false;
@@ -31,12 +31,12 @@
     $: dispatch("favouriteChange", { id, favourite });
 </script>
 
-<div class="w-full">
+<div class="w-full text-white">
     <button
         class={`w-full p-1 flex items-center  ${
             active
-                ? "bg-green-300 hover:bg-green-400"
-                : "bg-white hover:bg-gray-300"
+                ? "bg-green-600 hover:bg-green-400"
+                : "bg-neutral-900 hover:bg-neutral-700"
         } transition-colors duration-150`}
         on:click|preventDefault={toggle}
     >
