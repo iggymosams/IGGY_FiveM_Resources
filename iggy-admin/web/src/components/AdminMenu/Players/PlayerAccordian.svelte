@@ -12,29 +12,33 @@
     }
 </script>
 
-<div class="w-full text-neutral-100">
+<div class="w-full text-neutral-100 flex-none">
     <button
-        class={`w-full text-left grid grid-cols-5 hover:bg-neutral-700 ${
+        class={`w-full p-1  grid grid-cols-7 hover:bg-neutral-700 ${
             open ? "bg-neutral-800" : "bg-neutral-900"
-        } transition-colors duration-15`}
+        } transition-colors duration-150 text-left`}
         on:click|preventDefault={toggle}
     >
         <div class="col-span-1">{player.serverId}</div>
-        <div class="col-span-2">{player.username}</div>
-        <div class="col-span-2 overflow-hidden overflow-ellipsis">
+        <div class="col-span-3">{player.username}</div>
+        <div class="col-span-3 overflow-hidden overflow-ellipsis">
             {player.steam}
         </div>
     </button>
     {#if open}
         <div
-            class="w-full bg-neutral-900 flex flex-col gap-1 flex-none p-1"
+            class="w-full px-1 py-1 bg-neutral-900 flex flex-col gap-1"
             transition:slide={{ duration: 150 }}
         >
-            <div class="bg-neutral-800 p-1 rounded-md w-full">
+            <div class="bg-neutral-800 p-1 rounded-md w-full overflow-hidden">
                 <h1 class="text-lg font-semibold">Identifiers</h1>
-                <div class="flex flex-col">
+                <div
+                    class="flex flex-col overflow-hidden overflow-ellipsis flex-none"
+                >
                     {#each player.identifiers as id}
-                        <span>{id}</span>
+                        <div class="overflow-hidden overflow-ellipsis">
+                            {id}
+                        </div>
                     {/each}
                 </div>
             </div>
@@ -59,7 +63,7 @@
                     {:else}
                         {#each player.vehicles as vehicle}
                             <div
-                                class="p-3 bg-gray-400 rounded-md w-full flex gap-3 items-center h-full"
+                                class="p-3 bg-neutral-700 rounded-md w-full flex gap-3 items-center h-full text-sm"
                             >
                                 <span class="text-lg">{vehicle.vehicle}</span>
                                 <span>Plate: {vehicle.plate}</span>
@@ -67,7 +71,7 @@
                                     State: {vehicle.state == 1 ? "IN" : "OUT"}
                                 </span>
                                 <button
-                                    class="ml-auto bg-gray-300 p-1 rounded-md hover:bg-gray-200 active:bg-gray-500 transition-colors duration-150"
+                                    class="ml-auto bg-neutral-600 p-1 rounded-md hover:bg-neutral-400 active:bg-neutral-500 transition-colors duration-150"
                                     on:click={() =>
                                         fetchNui(
                                             "iggy-admin:spawnPlayerVehicle",

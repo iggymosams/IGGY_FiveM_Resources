@@ -14,7 +14,7 @@
     let dev: boolean = false;
     let expanded: boolean = false;
 
-    let tab = "OPTIONS";
+    let tab = "COMMANDS";
 
     let commands: CommandGroup[] = [];
 
@@ -461,7 +461,7 @@
     } bg-neutral-900 absolute top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-300`}
 >
     <SideBar bind:tab bind:expanded bind:dev />
-    <div class="w-full h-full">
+    <div class="w-full h-full overflow-hidden">
         {#if tab === "COMMANDS"}
             <Commands {commands} />
         {:else if tab === "PLAYERS"}
@@ -473,17 +473,3 @@
         {/if}
     </div>
 </div>
-
-<style>
-    ::-webkit-scrollbar {
-        width: 5px;
-    }
-    ::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-        background-color: rgba(155, 155, 155, 0.5);
-        border-radius: 20px;
-        border: transparent;
-    }
-</style>

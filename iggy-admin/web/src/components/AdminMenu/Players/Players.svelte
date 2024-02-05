@@ -104,8 +104,8 @@
     $: filterPlayers(players, serverIdFilter, steamFilter);
 </script>
 
-<div class="w-full h-full text-white text-sm flex flex-col">
-    <div class="flex">
+<div class="w-full h-full text-white flex flex-col">
+    <div class="flex w-full">
         <input
             class="w-1/2 bg-neutral-700"
             placeholder="Search Server Id"
@@ -117,10 +117,11 @@
             bind:value={steamFilter}
         />
     </div>
-    <div class="w-full grid grid-cols-5 bg-neutral-700">
-        <di class="col-span-1">Server</di>
-        <span class="col-span-2">Username</span>
-        <span class="col-span-2">Steam</span>
+    <div class="w-full grid grid-cols-7 bg-neutral-700">
+        <span class="col-span-1">Source</span>
+        <span class="col-span-3">Name</span>
+
+        <span class="col-span-3">Steam</span>
     </div>
     <div class="flex-grow w-full overflow-auto">
         {#each filteredPlayers as player}
