@@ -118,7 +118,7 @@ onNet("iggy-admin:client:createObject", async (obj: string) => {
         if (waiting > 5000) {
             TriggerEvent(
                 "QBCore:Notify",
-                "Could not load the vehicle model in time, a crash was prevented.",
+                "Could not load the model in time, a crash was prevented.",
                 "error",
                 5000
             );

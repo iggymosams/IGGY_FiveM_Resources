@@ -72,6 +72,7 @@ export interface SMOpenData {
     open: boolean;
     commands: SMCommand[];
     type: string;
+    data: string;
 }
 export interface AdminPlayerData {
     serverId: number;

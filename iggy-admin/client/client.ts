@@ -22,6 +22,7 @@ import "./handlers";
 import "./obj_creator";
 import { Delay } from "../shared/utils";
 import { Client } from "qbcore.js";
+import { entitys } from "../shared/entitys";
 export let open = false;
 export let DevMode: boolean = true;
 export let holdingSM: boolean = false;
@@ -369,10 +370,13 @@ async function ToggleSelectionMenu() {
 
 function OpenSelectionMenu(type: SelectionMenuType) {
     let cmds = SelectionMenuCommands[type];
+    let name = entitys[GetEntityModel(SelectedEntity)];
+    let data = `Model: ${name} (${GetEntityModel(SelectedEntity)})`;
     SendMenuMessage("openSelectionMenu", {
         open: true,
         commands: cmds,
         type: type,
+        data: data,
     });
     SetNuiFocus(true, true);
 }

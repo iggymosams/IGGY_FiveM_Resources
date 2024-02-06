@@ -7,11 +7,12 @@
     let open = false;
     let type = "";
     let commands: SMCommand[] = [];
-
+    let entData = "";
     useNuiEvent<SMOpenData>("openSelectionMenu", (data) => {
         open = data.open;
         commands = data.commands;
         type = data.type;
+        entData = data.data;
     });
 
     onMount(() => {
@@ -33,6 +34,7 @@
         class="absolute left-[55%] top-1/2 bg-neutral-900 w-1/6 rounded-md overflow-hidden text-white"
     >
         <div class="w-full text-center p-1">{type} MENU</div>
+        <div class="w-full text-center p-1">{entData}</div>
         {#each commands as command}
             <SelectionMenuButton name={command.name} event={command.event} />
         {/each}
