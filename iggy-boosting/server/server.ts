@@ -320,6 +320,17 @@ function getLocation(vehClass: VehicleClass, i: number): Location {
     return location;
 }
 
+async function awardContract(iteration: number) {
+    if (iteration > 5) return;
+    let player: Player = getRandomPlayer();
+
+    let success = await GenerateContract(
+        player.PlayerData.citizenid,
+        player.PlayerData.source
+    );
+    if (!success) awardContract(iteration + 1);
+}
+
 // TODO: ADD MAX CONTRACTS PER PLAYER AND ACTIVE PER CLASS AND RESTART
 async function ContractLoop() {
     while (true) {
@@ -330,13 +341,7 @@ async function ContractLoop() {
             if (chance >= Config.CONTRACT_CHANCE / 100) {
                 continue;
             }
-
-            let player: Player = getRandomPlayer();
-
-            GenerateContract(
-                player.PlayerData.citizenid,
-                player.PlayerData.source
-            );
+            awardContract(0);
         }
     }
 }

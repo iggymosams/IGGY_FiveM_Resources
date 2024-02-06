@@ -25,4 +25,9 @@ export const Config = {
         ["B"]: { min: 1, max: 3 },
         ["A"]: { min: 2, max: 4 },
     },
+    MAX_CONTRACTS_PER_CLASS_PER_RESTART: {
+        ["C"]: -1,
+        ["B"]: 15,
+        ["A"]: 1,
+    },
 };

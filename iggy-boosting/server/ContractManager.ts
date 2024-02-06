@@ -8,9 +8,15 @@ import {
     generateTime,
     filterVehiclesByClass,
 } from "./ContractUtils";
+import { Config } from "../shared/Config";
 
 let currentId = 1;
 let contracts: Contract[] = [];
+let contractsPerClass = {
+    A: 0,
+    B: 0,
+    C: 0,
+};
 
 function CreateContract(
     vehClass: VehicleClass,
@@ -37,7 +43,7 @@ function CreateContract(
     emitNet("iggy-boosting:client:newContract", target, contract);
 }
 
-async function GenerateContract(cid: string, target: number) {
+async function GenerateContract(cid: string, target: number): Promise<boolean> {
     let rep = await GetRep(cid);
 
     let filteredVeh = filterVehiclesByClass(VEHICLES, rep.level);
@@ -48,6 +54,14 @@ async function GenerateContract(cid: string, target: number) {
     let vehicle = vehicles[randomIndex];
     let cost = getCostFromClass(vehicle.class);
     let reward = Math.floor((cost === 0 ? 1 : cost) * RandomNumber(1, 3));
+    const maxContracts =
+        Config.MAX_CONTRACTS_PER_CLASS_PER_RESTART[vehicle.class];
+    if (
+        maxContracts !== -1 &&
+        contractsPerClass[vehicle.class] >= maxContracts
+    ) {
+        return false;
+    }
     CreateContract(
         vehicle.class,
         vehicle.name,
@@ -58,6 +72,11 @@ async function GenerateContract(cid: string, target: number) {
         generateTime(1, 0),
         target
     );
+    contractsPerClass[vehicle.class]++;
+    console.log(
+        `Awarded Contract (${vehicle.class}) ${vehicle.name} to ${cid} (${target})`
+    );
+    return true;
 }
 
 function DeleteContract(source: number, id: number) {
