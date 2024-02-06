@@ -103,6 +103,14 @@ onNet("iggy-boosting:client:refuel", (netid: number) => {
     );
 });
 
+onNet("iggy-boosting:client:err-plr-count", () => {
+    console.log("test");
+    global.exports["iggy-laptop"].SendAppMessage("base", "notification", {
+        type: "ERROR",
+        message: "You dont have enough players in your group.",
+    });
+});
+
 onNet("iggy-boosting:client:error-price", () => {
     global.exports["iggy-laptop"].SendAppMessage("base", "notification", {
         type: "ERROR",

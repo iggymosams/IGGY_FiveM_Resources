@@ -81,9 +81,15 @@ onNet("iggy-boosting:server:acceptContract", async (id: number) => {
     let player = QBCore.Functions.GetPlayer(src);
     let cid = player.PlayerData.citizenid;
     let group: Group = global.exports["iggy-groups"].GetPlayerGroup(cid);
+
     if (Date.now() / 1000 > contract.time) {
         emitNet("iggy-boosting:client:error-expired", src);
         DeleteContract(src, id);
+        return;
+    }
+
+    if (group.players.length < 1) {
+        emitNet("iggy-boosting:client:err-plr-count", src);
         return;
     }
 
