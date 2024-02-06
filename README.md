@@ -31,6 +31,10 @@ A alternative admin menu for QBCore built with typescript and svelte.
 -   [x] Add/Remove Money Command
 -   [x] Open Outfits
 
+### Commands
+
+-   `/menu` opens the menu
+
 ### Exports
 
 #### Client
@@ -181,7 +185,7 @@ Add/Remove rep
 
 ## Rental
 
-A Rental system for QBCore
+A Rental system for QBCore. Kinda Broken and needs to be reworked
 
 ### Features
 
