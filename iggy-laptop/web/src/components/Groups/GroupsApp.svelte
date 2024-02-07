@@ -40,57 +40,53 @@
         currentGroup = data;
     });
 
-    debugData([
-        {
-            app: "groups",
-            action: "joinGroup",
-            data: {
-                group: {
-                    players: [
-                        {
-                            PlayerData: {
-                                charinfo: {
-                                    firstname: "CL1",
-                                    lastname: "CL1",
-                                },
-                                source: 1,
-                                name: "iggymosams",
-                                id: 1,
-                            },
-                            cid: 1,
-                            citizenid: "VQI16707",
-                            optin: true,
-                        },
-                    ],
-                    leader: {
-                        PlayerData: {
-                            charinfo: {
-                                firstname: "CL1",
-                                lastname: "CL1",
-                            },
-                            source: 1,
-                            name: "iggymosams",
-                            id: 1,
-                        },
-                        cid: 1,
-                        citizenid: "VQI16707",
-                        optin: true,
-                    },
-                    requests: [],
-                    id: 1,
-                },
-                isHost: true,
-            },
-        },
-    ]);
-
-    function createGroup() {
-        fetchNui("groups:createGroup");
-    }
+    // debugData([
+    //     {
+    //         app: "groups",
+    //         action: "joinGroup",
+    //         data: {
+    //             group: {
+    //                 players: [
+    //                     {
+    //                         PlayerData: {
+    //                             charinfo: {
+    //                                 firstname: "CL1",
+    //                                 lastname: "CL1",
+    //                             },
+    //                             source: 1,
+    //                             name: "iggymosams",
+    //                             id: 1,
+    //                         },
+    //                         cid: 1,
+    //                         citizenid: "VQI16707",
+    //                         optin: true,
+    //                     },
+    //                 ],
+    //                 leader: {
+    //                     PlayerData: {
+    //                         charinfo: {
+    //                             firstname: "CL1",
+    //                             lastname: "CL1",
+    //                         },
+    //                         source: 1,
+    //                         name: "iggymosams",
+    //                         id: 1,
+    //                     },
+    //                     cid: 1,
+    //                     citizenid: "VQI16707",
+    //                     optin: true,
+    //                 },
+    //                 requests: [],
+    //                 id: 1,
+    //             },
+    //             isHost: true,
+    //         },
+    //     },
+    // ]);
 </script>
 
 {#if !inGroup}
-    <GroupList {groups} {createGroup} />
+    <GroupList {groups} />
 {:else if currentGroup !== undefined}
     <GroupManagement group={currentGroup} {isHost} />
 {/if}

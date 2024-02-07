@@ -2,9 +2,13 @@
     import Icon from "@iconify/svelte";
     import type { Group } from "./types";
     import GroupCard from "./GroupCard.svelte";
+    import { fetchNui } from "../../utils/fetchNui";
 
     export let groups: Group[];
-    export let createGroup: () => void;
+
+    function createGroup() {
+        fetchNui("groups:createGroup");
+    }
 </script>
 
 <div class="w-full h-full flex flex-col p-3 gap-3">
