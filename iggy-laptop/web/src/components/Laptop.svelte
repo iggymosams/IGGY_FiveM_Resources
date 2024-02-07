@@ -135,6 +135,7 @@
             action: "setVisible",
             data: {
                 open: true,
+                hasVPN: true,
                 backgroundURL: "https://i.imgur.com/9w3jC08.jpeg",
             },
         },
@@ -187,7 +188,7 @@
                                 appName={app.name}
                             />
                             <div
-                                class="w-full flex-auto overflow-hidden"
+                                class="w-full flex-auto overflow-hidden relative"
                                 id="appContainer"
                             >
                                 {#if app.id === "rental"}
