@@ -237,7 +237,6 @@ function startLoops() {
     CloakLoop();
     NameBlipLoop();
 }
-
 startLoops();
 
 function getGodmode(): boolean {
@@ -247,21 +246,14 @@ global.exports("getGodmode", getGodmode);
 
 async function ToggleSpectate(targetPed: number, targetPlayerId: number) {
     const playerPed = PlayerPedId();
-
     if (SpectateEnabled) {
         SpectateEnabled = false;
         NetworkSetInSpectatorModeExtended(false, targetPed, false);
         ClearPedSecondaryTask(playerPed);
         DetachEntity(playerPed, true, false);
         FreezeEntityPosition(playerPed, false);
-        emit(
-            "chatMessage",
-            "SYSTEM",
-            [0, 255, 0],
-            `Stopped spectating ${GetPlayerName(
-                StoredTargetPlayerId
-            )} (${GetPlayerServerId(StoredTargetPlayerId)})`
-        );
+        emit("QBCore:Notify", "Stopped spectating", "error", 5000);
+
         StoredTargetPed = null;
     } else {
         StoredTargetPed = targetPed;
@@ -283,7 +275,7 @@ async function ToggleSpectate(targetPed: number, targetPlayerId: number) {
             GetPedBoneIndex(targetPed, 0x8711),
             //POS
             0.0,
-            -2.0,
+            0.0,
             2.0,
             //ROT
             0.0,
@@ -299,14 +291,7 @@ async function ToggleSpectate(targetPed: number, targetPlayerId: number) {
 
         NetworkSetInSpectatorModeExtended(true, targetPed, false);
         DoScreenFadeIn(500);
-        emit(
-            "chatMessage",
-            "SYSTEM",
-            [0, 255, 0],
-            `Started spectating ${GetPlayerName(
-                StoredTargetPlayerId
-            )} (${GetPlayerServerId(StoredTargetPlayerId)})`
-        );
+        emit("QBCore:Notify", "Started spectating", "success", 5000);
         SpectateEnabled = true;
     }
 }
