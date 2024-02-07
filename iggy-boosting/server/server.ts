@@ -16,7 +16,7 @@ import {
     vehicleList,
 } from "./../shared/types";
 import { CalcDist, Delay, RandomNumber } from "./../shared/utils";
-import { GetRep, GiveRep } from "./exports";
+import { GetHandle, GetRep, GiveRep, SetHandle } from "./exports";
 import {
     CreateContract,
     DeleteContract,
@@ -289,6 +289,31 @@ onNet("iggy-boosting:server:toggleReady", (ready: boolean) => {
     }
 });
 
+onNet("iggy-boosting:server:getHandle", async () => {
+    let src = source;
+    let player = QBCore.Functions.GetPlayer(src);
+    let handle: string | undefined = await GetHandle(
+        player.PlayerData.citizenid
+    );
+    console.log(handle);
+    if (handle === undefined) {
+        emitNet("iggy-boosting:client:createHandle", src);
+    } else {
+        emitNet("iggy-boosting:client:updateHandle", src, handle);
+    }
+});
+
+onNet("iggy-boosting:server:createHandle", async (handle: string) => {
+    let src = source;
+    let player = QBCore.Functions.GetPlayer(src);
+    let success = await SetHandle(player.PlayerData.citizenid, handle);
+    console.log(success);
+    if (success) {
+        emitNet("iggy-boosting:client:updateHandle", src, handle);
+    } else {
+        emitNet("iggy-boosting:client:failedCreatingHandle", src, handle);
+    }
+});
 function getDropOff(i: number): DropOffLocation {
     if (i >= 10) {
         return null;
@@ -331,7 +356,7 @@ async function awardContract(iteration: number) {
     if (!success) awardContract(iteration + 1);
 }
 
-// TODO: ADD MAX CONTRACTS PER PLAYER AND ACTIVE PER CLASS AND RESTART
+// TODO: ADD MAX CONTRACTS PER PLAYER AND ACTIVE PER CLASS
 async function ContractLoop() {
     while (true) {
         await Delay(Config.TIME_BETWEEN_CONTRACTS * 1000);

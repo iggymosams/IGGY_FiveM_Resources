@@ -2,6 +2,7 @@ import { Rep } from "../shared/types";
 import { oxmysql as MySQL } from "@overextended/oxmysql";
 
 let RepDatabase: { [key: string]: number } = {};
+let HandleDatabase: { [key: string]: string } = {};
 
 function getRepFromNumber(amount: number): Rep {
     if (amount < 50) {
@@ -43,4 +44,39 @@ async function GiveRep(cid: string, amount: number) {
 }
 global.exports("GiveRep", GiveRep);
 
-export { GetRep, GiveRep };
+async function GetHandle(cid: string): Promise<string | undefined> {
+    if (HandleDatabase[cid]) {
+        return HandleDatabase[cid];
+    }
+    let response = await MySQL.query(
+        "select handle FROM `iggy_player_boosting_handle` WHERE `citizenid` = ?",
+        [cid]
+    );
+    if (response[0] !== undefined) {
+        HandleDatabase[cid] = response[0].handle;
+        return response[0].handle;
+    } else {
+        return undefined;
+    }
+}
+global.exports("GetHandle", GetHandle);
+
+async function SetHandle(cid: string, handle: string): Promise<boolean> {
+    let response = await MySQL.query(
+        "select citizenid FROM `iggy_player_boosting_handle` WHERE `handle` = ?",
+        [handle]
+    );
+
+    if (response[0] !== undefined) {
+        return false;
+    }
+    await MySQL.insert(
+        "INSERT INTO `iggy_player_boosting_handle` (citizenid, handle) VALUES (?, ?)",
+        [cid, handle]
+    );
+    HandleDatabase[cid] = handle;
+    return true;
+}
+global.exports("SetHandle", SetHandle);
+
+export { GetRep, GiveRep, GetHandle, SetHandle };
