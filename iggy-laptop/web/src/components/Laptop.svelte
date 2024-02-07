@@ -215,16 +215,26 @@
                     />
                 {/each}
             </div>
-            {#each apps as app}
-                {#if (hasVPN && app.requiresVPN) || !app.requiresVPN}
-                    <AppIcon
-                        name={app.name}
-                        icon={app.icon}
-                        colour={app.colour}
-                        onClick={() => openApp(app)}
-                    />
-                {/if}
-            {/each}
+            <div
+                class="absolute top-0 left-0 flex flex-col h-full flex-wrap gap-1 items-center p-3"
+            >
+                <AppIcon name={"Bin"} icon={"mdi:bin"} colour={"text-white"} />
+                <AppIcon
+                    name={"Documents"}
+                    icon={"material-symbols:folder"}
+                    colour={"text-yellow-600"}
+                />
+                {#each apps as app}
+                    {#if (hasVPN && app.requiresVPN) || !app.requiresVPN}
+                        <AppIcon
+                            name={app.name}
+                            icon={app.icon}
+                            colour={app.colour}
+                            onClick={() => openApp(app)}
+                        />
+                    {/if}
+                {/each}
+            </div>
         </div>
         <TaskBar
             bind:this={taskBar}
