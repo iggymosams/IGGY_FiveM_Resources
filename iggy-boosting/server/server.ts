@@ -314,6 +314,7 @@ onNet("iggy-boosting:server:createHandle", async (handle: string) => {
         emitNet("iggy-boosting:client:failedCreatingHandle", src, handle);
     }
 });
+
 function getDropOff(i: number): DropOffLocation {
     if (i >= 10) {
         return null;
@@ -345,7 +346,7 @@ function getLocation(vehClass: VehicleClass, i: number): Location {
     return location;
 }
 
-async function awardContract(iteration: number) {
+async function awardContract(iteration = 0) {
     if (iteration > 5) return;
     let player: Player = getRandomPlayer();
 
@@ -366,7 +367,7 @@ async function ContractLoop() {
             if (chance >= Config.CONTRACT_CHANCE / 100) {
                 continue;
             }
-            awardContract(0);
+            awardContract();
         }
     }
 }

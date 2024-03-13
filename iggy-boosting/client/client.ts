@@ -208,7 +208,7 @@ onNet("iggy-boosting:client:openHack", () => {
     }
     global.exports["iggy-laptop"].SendAppMessage("hack", "setVisible", {
         open: true,
-        difficulty: 1,
+        difficulty: getDifficulty(runningContract.class),
     });
 
     global.exports["iggy-laptop"].SetFocus(true, true);
@@ -467,3 +467,14 @@ onNet("iggy-boosting:client:failedCreatingHandle", (handle: string) => {
         handle
     );
 });
+
+function getDifficulty(vehClass: VehicleClass): number {
+    switch (vehClass) {
+        case "A":
+            return 3;
+        case "B":
+            return 2;
+        case "C":
+            return 1;
+    }
+}
