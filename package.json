@@ -1,0 +1,19 @@
+{
+    "name": "iggy-fivem",
+    "version": "1.0.0",
+    "description": "<h1 align=\"center\"> IGGY FiveM Resources </h1> <br>",
+    "main": "build.js",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "dev": "concurrently \"npm run dev:laptop\" \"npm run dev:laptop:ui\"",
+        "dev:laptop": "cd iggy-laptop && npm i && npm run watch",
+        "dev:laptop:ui": "cd iggy-laptop/web && npm i && npm run dev:game"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "concurrently": "^8.2.2"
+    }
+}
