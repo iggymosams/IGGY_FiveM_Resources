@@ -4,7 +4,6 @@
     import { getApps } from "../../../utils/apps";
 
     const { apps } = getApps();
-    console.log(apps);
 </script>
 
 <AppBase class="text-white">
