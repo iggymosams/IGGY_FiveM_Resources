@@ -5,7 +5,7 @@
     import WallPaperProvider from "../providers/WallPaperProvider.svelte";
     import Home from "../apps/home/components/Home.svelte";
 
-    const url = "";
+    const url = "/";
 </script>
 
 <LaptopVisibilityProvider>
