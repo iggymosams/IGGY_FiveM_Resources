@@ -12,13 +12,13 @@
     >
         <span class="font-bold">{name}</span>
         <div class="flex gap-1 ml-auto">
-            <div class="p-0.5 bg-green-500 rounded-md">
+            <div class="p-0.5 bg-green-500 hover:bg-green-400 rounded-md">
                 <Minimize size={17} />
             </div>
-            <div class="p-0.5 bg-orange-500 rounded-md">
+            <div class="p-0.5 bg-orange-500 hover:bg-orange-400 rounded-md">
                 <Square size={17} />
             </div>
-            <Link to="/" class="p-0.5 bg-red-500 rounded-md">
+            <Link to="/" class="p-0.5 bg-red-500 hover:bg-red-400 rounded-md">
                 <X size={17} />
             </Link>
         </div>
