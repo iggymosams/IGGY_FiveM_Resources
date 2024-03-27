@@ -16,7 +16,6 @@ function getLocalStorage() {
     const localSettings = localStorage.getItem(storageKey);
 
     if (localSettings === "undefined" || !localSettings) {
-        console.log("No Settings");
         return defaultConfig();
     }
 
