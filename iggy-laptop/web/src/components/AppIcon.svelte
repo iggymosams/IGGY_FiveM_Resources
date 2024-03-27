@@ -7,7 +7,7 @@
 
 <Link to={app.path}>
     <div
-        class={`aspect-square ${app.backgroundColor} ${app.color} rounded-md flex items-center justify-center flex-col`}
+        class={`aspect-square backdrop-blur-sm bg-opacity-50 ${app.backgroundColor} ${app.color} rounded-md flex items-center justify-center flex-col hover:bg-opacity-75 transition-colors`}
     >
         <svelte:component this={app.icon} />
         <span class={app.color}>{app.name}</span>
