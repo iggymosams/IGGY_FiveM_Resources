@@ -1,10 +1,7 @@
 <script lang="ts">
-    import { Route, Router } from "svelte-routing";
-    import LaptopVisibilityProvider from "./providers/LaptopVisibilityProvider.svelte";
     import { debugData } from "./utils/debugData";
     import "./app.pcss";
     import Laptop from "./components/Laptop.svelte";
-    import { settings } from "./store/settingsStore";
 
     debugData([
         {
