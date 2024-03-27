@@ -18,7 +18,7 @@
     onMount(() => {
         const keyHandler = (e: KeyboardEvent) => {
             if (isVisible && ["Escape"].includes(e.code)) {
-                fetchNui("hideUI");
+                fetchNui("closeLaptop");
                 visibility.set(false);
             }
         };
@@ -32,7 +32,7 @@
 {#if isVisible}
     <div
         transition:fly={{ duration: 200, y: 200 }}
-        class="aspect-video rounded-md w-5/6 relative overflow-hidden flex flex-col"
+        class="aspect-video w-5/6 relative overflow-hidden flex flex-col"
     >
         <slot />
     </div>
