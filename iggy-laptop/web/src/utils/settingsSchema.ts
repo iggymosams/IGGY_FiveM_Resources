@@ -1,17 +1,20 @@
-import { Validator, type Schema } from "jsonschema";
+import Ajv from "ajv";
 
-const validator = new Validator();
+const ajv = new Ajv();
 
-const settingsSchema: Schema = {
+const settingsSchema = {
     type: "object",
     properties: {
-        wallpaper: { type: "string", required: true },
+        wallpaper: { type: "string" },
     },
+    required: ["wallpaper"],
 };
 
 export function isValid(data: string): boolean {
     const parsedData = JSON.parse(data);
-    const response = validator.validate(parsedData, settingsSchema);
-    console.log(response);
-    return response.valid;
+
+    const validate = ajv.compile(settingsSchema);
+    const valid = validate(parsedData);
+
+    return valid;
 }
