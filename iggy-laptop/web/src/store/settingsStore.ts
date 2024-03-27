@@ -22,14 +22,15 @@ function getLocalStorage() {
 
     try {
         const valid = isValid(localSettings);
-        console.log(valid);
+
         const settingsValue: LaptopSettings = valid
             ? JSON.parse(localSettings)
             : defaultConfig();
-        console.log(settingsValue);
+
         if (!valid) {
             console.error("Error loading settings. Reseting to default.");
         }
+
         //TODO: NUI FETCH SETTINGS UPDATE
         return settingsValue;
     } catch (error) {
@@ -42,5 +43,11 @@ export const settings = writable<LaptopSettings>(getLocalStorage());
 
 settings.subscribe((value) => {
     //TODO: NUI FETCH SETTINGS UPDATE
-    localStorage.setItem(storageKey, JSON.stringify(value));
+    const isDefaultValue =
+        JSON.stringify(value) === JSON.stringify(defaultConfig());
+    if (isDefaultValue) {
+        localStorage.removeItem(storageKey);
+    } else {
+        localStorage.setItem(storageKey, JSON.stringify(value));
+    }
 });
