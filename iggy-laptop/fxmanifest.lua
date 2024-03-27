@@ -1,18 +1,14 @@
-fx_version 'cerulean'
+fx_version("cerulean")
 
-games {"gta5", "rdr3"}
+game("gta5")
 
-author "Project Error"
-version '1.0.0'
+ui_page("web/build/index.html")
 
-lua54 'yes'
+client_script("dist/client/*.client.js")
 
-ui_page 'web/build/index.html'
+server_script("dist/server/*.server.js")
 
-client_script "client/**/*"
-server_script "server/**/*"
-
-files {
-  'web/build/index.html',
-  'web/build/**/*'
-}
+files({
+	"web/build/index.html",
+	"web/build/**/*",
+})
