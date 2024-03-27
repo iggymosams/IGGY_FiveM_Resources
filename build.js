@@ -2,13 +2,7 @@ const { exec } = require("child_process");
 const path = require("path");
 const fs = require("fs");
 
-const resources = [
-    "iggy-admin",
-    "iggy-boosting",
-    "iggy-groups",
-    "iggy-laptop",
-    "iggy-rental",
-];
+const resources = ["iggy-admin"];
 
 resources.forEach(async (resource) => {
     const resourcePath = path.resolve(__dirname, resource);
