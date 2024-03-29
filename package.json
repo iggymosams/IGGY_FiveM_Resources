@@ -9,7 +9,8 @@
     "scripts": {
         "dev": "concurrently \"npm run dev:laptop\" \"npm run dev:laptop:ui\"",
         "dev:laptop": "cd iggy-laptop && npm i && npm run watch",
-        "dev:laptop:ui": "cd iggy-laptop/web && npm i && npm run dev:game"
+        "dev:laptop:ui": "cd iggy-laptop/web && npm i && npm run dev:game",
+        "dev:ui": "cd iggy-laptop/web && yarn dev"
     },
     "author": "",
     "license": "ISC",
