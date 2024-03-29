@@ -1,5 +1,5 @@
 import { oxmysql as MySQL } from "@overextended/oxmysql";
-import { Server, Item } from "@zerio2/qbcore.js";
+import { Server, Item, Player } from "@zerio2/qbcore.js";
 
 const QBCore: Server = global.exports["qb-core"].GetCoreObject();
 
@@ -40,22 +40,23 @@ QBCore.Functions.CreateCallback(
     }
 );
 
-// async function GetHandle(cid: string): Promise<string | undefined> {
-//     if (database[cid]) return database[cid];
+QBCore.Functions.CreateCallback(
+    "iggy-laptop:cb:getHandle",
+    async (src, cb: (data: string) => void, args: any[]) => {
+        cb(await GetHandle(src));
+    }
+);
 
-//     let response = await MySQL.query(
-//         "select handle FROM `iggy_laptop_handle` WHERE `citizenid` = ?",
-//         [cid]
-//     );
-
-//     if (response[0] !== undefined) {
-//         database[cid] = response[0].handle;
-//         return response[0].handle;
-//     } else {
-//         return undefined;
-//     }
-// }
-// global.exports("GetHandle", GetHandle);
+async function GetHandle(src: string | number): Promise<string | undefined> {
+    let player: Player = QBCore.Functions.GetPlayer(src);
+    let vpn = player.Functions.GetItemByName("vpn");
+    let handle = undefined;
+    if (vpn !== undefined) {
+        handle = vpn.info.handle;
+    }
+    return handle;
+}
+global.exports("GetHandle", GetHandle);
 
 async function SetHandle(handle: string, replace?: string): Promise<boolean> {
     let response = await MySQL.query(
@@ -81,4 +82,4 @@ async function SetHandle(handle: string, replace?: string): Promise<boolean> {
 }
 global.exports("SetHandle", SetHandle);
 
-export { SetHandle };
+export { GetHandle, SetHandle };
