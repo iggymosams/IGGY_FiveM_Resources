@@ -4,6 +4,8 @@
     import { Minimize, Square, X } from "lucide-svelte";
 
     export let name: string;
+    let pClass = "";
+    export { pClass as class };
 </script>
 
 <AppBase>
@@ -23,5 +25,7 @@
             </Link>
         </div>
     </div>
-    <slot />
+    <div class={`flex-auto ${pClass}`}>
+        <slot />
+    </div>
 </AppBase>
