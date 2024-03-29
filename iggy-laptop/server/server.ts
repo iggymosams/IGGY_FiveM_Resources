@@ -1,4 +1,5 @@
 import { Server } from "@zerio2/qbcore.js";
+import "./sv_handle";
 
 const QBCore: Server = global.exports["qb-core"].GetCoreObject();
 
