@@ -11,3 +11,7 @@ RegisterCommand(
 RegisterLaptopCallback("closeLaptop", () => {
     CloseLaptop();
 });
+
+onNet("iggy-laptop:client:open", () => {
+    OpenLaptop(true, true, false);
+});
