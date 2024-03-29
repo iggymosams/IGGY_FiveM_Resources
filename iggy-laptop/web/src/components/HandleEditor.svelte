@@ -44,7 +44,7 @@
         {
             app: "handle",
             action: "toggleEdit",
-            data: true,
+            data: { visible: false, editing: "" },
         },
     ]);
 </script>

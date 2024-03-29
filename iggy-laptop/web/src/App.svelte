@@ -8,7 +8,11 @@
         {
             app: "base",
             action: "toggleLaptop",
-            data: false,
+            data: {
+                open: true,
+                hasVPN: true,
+                handle: "Handle",
+            },
         },
     ]);
 </script>
