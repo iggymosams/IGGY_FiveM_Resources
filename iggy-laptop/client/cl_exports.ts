@@ -28,11 +28,16 @@ global.exports("SendAppMessage", SendAppMessage);
 async function OpenLaptop(
     hasFocus: boolean,
     hasCursor: boolean,
-    hasVPN?: boolean
+    hasVPN?: boolean,
+    handle?: string
 ) {
     isOpen = true;
     // await Delay(300); TODO: Make iggy-utils
-    SendAppMessage("base", "toggleLaptop", true);
+    SendAppMessage("base", "toggleLaptop", {
+        open: true,
+        hasVPN: hasVPN,
+        handle: handle,
+    });
     SetFocus(hasFocus, hasCursor);
 }
 global.exports("OpenLaptop", OpenLaptop);
