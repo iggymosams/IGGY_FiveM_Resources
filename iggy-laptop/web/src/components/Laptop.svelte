@@ -5,6 +5,7 @@
     import WallPaperProvider from "../providers/WallPaperProvider.svelte";
     import Home from "../apps/home/components/Home.svelte";
     import { getApps } from "../utils/apps";
+    import Notifications from "./Notifications.svelte";
 
     const url = "/";
 
@@ -24,6 +25,7 @@
             {/each}
         </div>
     </Router>
+    <Notifications />
     <TaskBar />
     <WallPaperProvider />
 </LaptopVisibilityProvider>
