@@ -1,22 +1,18 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "*": ["types/*"]
+    "compilerOptions": {
+        "outDir": "./",
+        "noImplicitAny": true,
+        "module": "commonjs",
+        "target": "es6",
+        "allowJs": false,
+        "lib": ["es2015", "DOM"],
+        "types": ["@citizenfx/server", "@types/node"],
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true
     },
-    "outDir": "./",
-    "noImplicitAny": true,
-    "module": "commonjs",
-    "target": "es6",
-    "allowJs": false,
-    "lib": ["es2015", "DOM"],
-    "types": ["@citizenfx/server", "@types/node"],
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true
-  },
-  "include": ["./**/*"],
-  "exclude": ["**/node_modules", "**/__tests__/*"]
+    "include": ["./**/*"],
+    "exclude": ["**/node_modules", "**/__tests__/*"]
 }
