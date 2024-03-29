@@ -2,7 +2,7 @@
     import { useNuiEvent } from "../utils/useNuiEvent";
     import { fetchNui } from "../utils/fetchNui";
     import { onMount } from "svelte";
-    import { visibility } from "../store/stores";
+    import { handle, hasVPN, visibility } from "../store/stores";
     import { fly } from "svelte/transition";
 
     let isVisible: boolean;
@@ -11,8 +11,15 @@
         isVisible = visible;
     });
 
-    useNuiEvent<boolean>("base", "toggleLaptop", (visible) => {
-        visibility.set(visible);
+    interface toggleLaptopData {
+        open: boolean;
+        hasVPN: boolean;
+        handle: string;
+    }
+    useNuiEvent<toggleLaptopData>("base", "toggleLaptop", (data) => {
+        visibility.set(data.open);
+        hasVPN.set(data.hasVPN);
+        handle.set(data.handle);
     });
 
     onMount(() => {
