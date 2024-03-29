@@ -1,7 +1,6 @@
 export let isOpen = false;
 let HasFocus = false;
 let HasCursor = false;
-let laptopObj;
 
 function RegisterLaptopCallback(name: string, callback: Function) {
     RegisterNuiCallbackType(`iggy-laptop:ui:${name}`);

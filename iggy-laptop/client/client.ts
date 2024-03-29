@@ -1,4 +1,4 @@
-import { CloseLaptop, OpenLaptop, RegisterLaptopCallback } from "./exports";
+import { CloseLaptop, OpenLaptop, RegisterLaptopCallback } from "./cl_exports";
 
 RegisterCommand(
     "iggy-laptop:open",
