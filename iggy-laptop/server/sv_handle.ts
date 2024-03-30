@@ -7,10 +7,6 @@ QBCore.Functions.CreateUseableItem("vpn", (src, item: Item) => {
     emitNet("iggy-laptop:client:openHandle", src, item);
 });
 
-onNet("iggy-laptop:server:updateHandle", (handle: string, item: Item) => {
-    console.log(handle, item);
-});
-
 QBCore.Functions.CreateCallback(
     "iggy-laptop:cb:updateHandle",
     async (src, cb: (data: boolean) => void, args: any[]) => {
@@ -42,7 +38,7 @@ QBCore.Functions.CreateCallback(
 
 QBCore.Functions.CreateCallback(
     "iggy-laptop:cb:getHandle",
-    async (src, cb: (data: string) => void, args: any[]) => {
+    async (src, cb: (data: string) => void) => {
         cb(await GetHandle(src));
     }
 );
@@ -63,7 +59,7 @@ async function SetHandle(handle: string, replace?: string): Promise<boolean> {
         "SELECT handle FROM `iggy_laptop_handle` WHERE `handle` = ?",
         [handle]
     );
-    console.log(response[0] !== undefined, replace);
+
     if (response[0] !== undefined) {
         return false;
     }

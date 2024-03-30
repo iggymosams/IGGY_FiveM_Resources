@@ -20,7 +20,6 @@ RegisterLaptopCallback("closeHandleEdit", () => {
 RegisterLaptopCallback(
     "updateHandle",
     async ({ value, editing }: { value: string; editing: boolean }) => {
-        console.log(value, editing);
         let ok = await TriggerQBCallBack(
             "iggy-laptop:cb:updateHandle",
             value,
