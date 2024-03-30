@@ -56,10 +56,25 @@ function SetFocus(hasFocus: boolean, hasCursor: boolean) {
 }
 global.exports("SetFocus", SetFocus);
 
+type NotificationType = "SUCCESS" | "ERROR";
+function SendNotification(
+    message: string,
+    type: NotificationType,
+    duration?: number
+) {
+    SendAppMessage("base", "notification", {
+        message: message,
+        type: type,
+        duration: duration,
+    });
+}
+global.exports("SendNotification", SendNotification);
+
 export {
     RegisterLaptopCallback,
     SendAppMessage,
     OpenLaptop,
     SetFocus,
     CloseLaptop,
+    SendNotification,
 };
