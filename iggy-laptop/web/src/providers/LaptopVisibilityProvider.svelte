@@ -39,7 +39,7 @@
 {#if isVisible}
     <div
         transition:fly={{ duration: 200, y: 200 }}
-        class="aspect-video w-5/6 relative overflow-hidden flex flex-col"
+        class="aspect-video w-5/6 relative overflow-hidden flex flex-col rounded-md border-8 border-black"
     >
         <slot />
     </div>
