@@ -1,9 +1,18 @@
 <script lang="ts">
     import { flip } from "svelte/animate";
     import { fly } from "svelte/transition";
-    import { notifications } from "../store/notififcations";
+    import {
+        notifications,
+        type notification,
+        sendNotification,
+    } from "../store/notififcations";
     import { cubicIn, cubicOut, quadInOut } from "svelte/easing";
     import { CircleCheck, CircleX } from "lucide-svelte";
+    import { useNuiEvent } from "../utils/useNuiEvent";
+
+    useNuiEvent<notification>("base", "notification", (data) => {
+        sendNotification(data.message, data.type, data.duration);
+    });
 </script>
 
 <div class="absolute bottom-10 right-0">
