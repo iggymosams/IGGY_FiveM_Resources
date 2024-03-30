@@ -10,7 +10,7 @@
 
 <AppBase>
     <div
-        class="w-full h-7 m-0 px-1 bg-neutral-700 text-white flex items-center gap-1"
+        class="w-full h-7 bg-neutral-900 text-white flex items-center gap-1 px-2"
     >
         <span class="font-bold">{name}</span>
         <div class="flex gap-1 ml-auto">
