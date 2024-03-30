@@ -24,7 +24,7 @@ export const APPS: ConfigApp[] = [
     {
         id: "GROUPS",
         name: "Groups",
-        backgroundColor: "bg-red-500",
+        backgroundColor: "bg-purple-400",
         color: "text-white",
         path: "/groups",
         route: { id: "GROUPS", path: "/groups", component: Groups },
