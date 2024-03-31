@@ -1,5 +1,4 @@
 <script lang="ts">
-    import AppBase from "../../../components/AppBase.svelte";
     import AppIcon from "../../../components/AppIcon.svelte";
     import { getApps } from "../../../utils/apps";
 
