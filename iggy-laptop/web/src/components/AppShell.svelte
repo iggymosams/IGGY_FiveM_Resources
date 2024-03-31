@@ -75,7 +75,7 @@
         role="button"
         tabindex="0"
     >
-        <span class="font-bold">{name}</span>
+        <span class="font-bold">{app.name}</span>
         <div class="flex gap-1 ml-auto">
             <div class="p-0.5 bg-green-500 hover:bg-green-400 rounded-md">
                 <Minimize size={17} />
@@ -94,7 +94,7 @@
             </button>
         </div>
     </div>
-    <div class={`${pClass}  w-full h-full`}>
+    <div class={`${pClass} h-full w-full`}>
         <slot />
     </div>
 </button>
