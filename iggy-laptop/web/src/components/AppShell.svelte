@@ -1,23 +1,25 @@
 <script lang="ts">
     import { Minimize, Square, X } from "lucide-svelte";
     import { openedApps } from "../store/stores";
+    import type { LaptopApp } from "../utils/apps";
 
-    export let name: string;
+    export let app: LaptopApp;
+
     let pClass = "";
     export { pClass as class };
 
-    let minimized = false;
+    let minimized = app.minimized;
 
     let laptop = document.getElementById("laptop");
     let laptopRect: DOMRect;
 
     let moving = false;
-    let top = 0;
-    let left = 0;
+    let top = app.top;
+    let left = app.left;
 
     function closeApp() {
         openedApps.update((apps) => {
-            const newApps = apps.filter((a) => a.name !== name);
+            const newApps = apps.filter((a) => a.name !== app.name);
             return [...newApps];
         });
     }
@@ -25,17 +27,18 @@
     function onMouseMove(e: MouseEvent) {
         if (moving && laptop) {
             laptopRect = laptop.getBoundingClientRect();
-            if (top + e.movementY > laptopRect.height - laptopRect.height / 4)
+            if ($top + e.movementY > laptopRect.height - laptopRect.height / 4)
                 return;
 
-            if (top + e.movementY < 0) return;
+            if ($top + e.movementY < 0) return;
 
-            if (left + e.movementX > laptopRect.width - laptopRect.width / 4)
+            if ($left + e.movementX > laptopRect.width - laptopRect.width / 4)
                 return;
-            if (left + e.movementX < -laptopRect.width / 2) return;
+            if ($left + e.movementX < -laptopRect.width / 2) return;
 
-            top += e.movementY;
-            left += e.movementX;
+            $top += e.movementY;
+            $left += e.movementX;
+            console.log($top, $left);
         }
     }
 </script>
@@ -48,12 +51,12 @@
 />
 
 <button
-    class={`absolute ${minimized ? `w-2/3 h-2/3 app left-[${left}px] rounded-md` : "w-full h-full top-0 left-0"} flex flex-col cursor-default`}
-    style="--left: {left}px; --top: {top}px"
+    class={`absolute ${$minimized ? `w-2/3 h-2/3 app rounded-md` : "w-full h-full top-0 left-0"} flex flex-col cursor-default`}
+    style="--left: {$left}px; --top: {$top}px"
     on:click={() => {
         $openedApps.push(
             $openedApps.splice(
-                $openedApps.findIndex((a) => a.name === name),
+                $openedApps.findIndex((a) => a.name === app.name),
                 1
             )[0]
         );
@@ -63,7 +66,7 @@
     <div
         class="w-full h-7 bg-neutral-900 text-white flex items-center gap-1 px-2 cursor-move"
         on:mousedown={() => {
-            if (minimized) moving = true;
+            if ($minimized) moving = true;
         }}
         role="button"
         tabindex="0"
@@ -75,7 +78,7 @@
             </div>
             <button
                 class="p-0.5 bg-orange-500 hover:bg-orange-400 rounded-md"
-                on:click={() => (minimized = !minimized)}
+                on:click={() => ($minimized = !$minimized)}
             >
                 <Square size={17} />
             </button>

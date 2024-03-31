@@ -1,13 +1,15 @@
 <script lang="ts">
-    import type { ConfigApp } from "../utils/apps";
+    import type { LaptopApp } from "../utils/apps";
     import { openedApps } from "../store/stores";
 
-    export let app: ConfigApp;
+    export let app: LaptopApp;
 
     function openApp() {
-        openedApps.update((apps) => {
-            return [...apps, app];
-        });
+        if (!$openedApps.includes(app)) {
+            openedApps.update((apps) => {
+                return [...apps, app];
+            });
+        }
     }
 </script>
 

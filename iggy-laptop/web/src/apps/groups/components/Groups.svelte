@@ -1,6 +1,6 @@
 <script lang="ts">
     import AppShell from "../../../components/AppShell.svelte";
-    import type { ConfigApp } from "../../../utils/apps";
+    import type { LaptopApp } from "../../../utils/apps";
     import { debugData } from "../../../utils/debugData";
     import { useNuiEvent } from "../../../utils/useNuiEvent";
     import type { Group } from "../types";
@@ -10,7 +10,7 @@
     import { group, isGroupHost, groups } from "../../../store/groups";
     import { onMount } from "svelte";
 
-    export let app: ConfigApp;
+    export let app: LaptopApp;
 
     interface joinGroupData {
         group: Group;
@@ -72,7 +72,7 @@
     ]);
 </script>
 
-<AppShell name={app.name} class="bg-neutral-800 p-3 text-white  h-full">
+<AppShell {app} class="bg-neutral-800 p-3 text-white  h-full">
     {#if $group}
         <GroupManagement />
     {:else}

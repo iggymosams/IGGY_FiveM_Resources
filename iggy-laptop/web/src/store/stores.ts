@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
-import { type ConfigApp } from "../utils/apps";
+import { type LaptopApp } from "../utils/apps";
 
-export const openedApps = writable<ConfigApp[]>([]);
+export const openedApps = writable<LaptopApp[]>([]);
 
 export const visibility = writable(false);
 
