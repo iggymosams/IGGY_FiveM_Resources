@@ -6,10 +6,8 @@
     const { apps } = getApps();
 </script>
 
-<AppBase class="text-white">
-    <div class="grid grid-cols-12 gap-2 p-2">
-        {#each apps as app}
-            <AppIcon {app} />
-        {/each}
-    </div>
-</AppBase>
+<div class="grid grid-cols-12 gap-2 p-2">
+    {#each apps as app}
+        <AppIcon {app} />
+    {/each}
+</div>
