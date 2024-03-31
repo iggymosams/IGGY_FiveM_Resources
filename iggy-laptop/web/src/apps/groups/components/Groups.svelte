@@ -72,7 +72,7 @@
     ]);
 </script>
 
-<AppShell {app} class="bg-neutral-800 p-3 text-white  h-full">
+<AppShell {app} class="bg-neutral-800 p-3 text-white h-full">
     {#if $group}
         <GroupManagement />
     {:else}
