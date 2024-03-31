@@ -1,16 +1,23 @@
 import { Item } from "@zerio2/qbcore.js";
-import { SendAppMessage, SetFocus, RegisterLaptopCallback } from "./cl_exports";
+import {
+    SendAppMessage,
+    SetFocus,
+    RegisterLaptopCallback,
+    isOpen,
+} from "./cl_exports";
 import { TriggerQBCallBack } from "./cl_utils";
 
 let vpn: Item;
 
 onNet("iggy-laptop:client:openHandle", (item: Item) => {
-    SendAppMessage("handle", "toggleEdit", {
-        visible: true,
-        editValue: item.info.handle,
-    });
-    SetFocus(true, true);
-    vpn = item;
+    if (!isOpen) {
+        SendAppMessage("handle", "toggleEdit", {
+            visible: true,
+            editValue: item.info.handle,
+        });
+        SetFocus(true, true);
+        vpn = item;
+    }
 });
 
 RegisterLaptopCallback("closeHandleEdit", () => {
