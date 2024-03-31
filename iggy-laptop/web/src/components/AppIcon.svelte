@@ -14,7 +14,7 @@
 </script>
 
 <button
-    class={`aspect-square backdrop-blur-sm bg-opacity-50 ${app.backgroundColor} ${app.color} rounded-md flex items-center justify-center flex-col hover:bg-opacity-75 transition-colors`}
+    class={`aspect-square backdrop-blur-sm bg-opacity-50 ${app.backgroundColor} ${app.color} rounded-md flex items-center justify-center flex-col hover:bg-opacity-75 transition-colors h-20`}
     on:click={openApp}
 >
     <svelte:component this={app.icon} />
