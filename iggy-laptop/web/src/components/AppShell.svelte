@@ -2,6 +2,7 @@
     import { Minimize, Square, X } from "lucide-svelte";
     import { openedApps } from "../store/stores";
     import type { LaptopApp } from "../utils/apps";
+    import { onMount } from "svelte";
 
     export let app: LaptopApp;
 
@@ -38,9 +39,12 @@
 
             $top += e.movementY;
             $left += e.movementX;
-            console.log($top, $left);
         }
     }
+
+    onMount(() => {
+        laptop = document.getElementById("laptop");
+    });
 </script>
 
 <svelte:window
