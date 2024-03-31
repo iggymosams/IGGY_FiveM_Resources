@@ -1,22 +1,16 @@
 import type { SvelteComponent } from "svelte";
 import Groups from "../apps/groups/components/Groups.svelte";
 import type { ComponentType } from "svelte";
-import { UsersRound, type Icon } from "lucide-svelte";
-
-export interface RouteConfig {
-    id: string;
-    path: string;
-    component: typeof SvelteComponent<any>;
-}
+import { UsersRound, type Icon, SettingsIcon } from "lucide-svelte";
+import Settings from "../apps/settings/comonents/Settings.svelte";
 
 export interface ConfigApp {
     id: string;
     name: string;
     backgroundColor: string;
     color: string;
-    path: string;
     disable?: boolean;
-    route: RouteConfig;
+    component: typeof SvelteComponent<any>;
     icon: ComponentType<Icon>;
 }
 
@@ -26,8 +20,7 @@ export const APPS: ConfigApp[] = [
         name: "Groups",
         backgroundColor: "bg-purple-400",
         color: "text-white",
-        path: "/groups",
-        route: { id: "GROUPS", path: "/groups", component: Groups },
+        component: Groups,
         icon: UsersRound,
     },
 ];

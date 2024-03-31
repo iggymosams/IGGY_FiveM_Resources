@@ -1,31 +1,100 @@
 <script lang="ts">
-    import { Link } from "svelte-routing";
-    import AppBase from "./AppBase.svelte";
     import { Minimize, Square, X } from "lucide-svelte";
+    import { openedApps } from "../store/stores";
 
     export let name: string;
     let pClass = "";
     export { pClass as class };
+
+    let minimized = false;
+
+    let laptop = document.getElementById("laptop");
+    let laptopRect: DOMRect;
+
+    let moving = false;
+    let top = 0;
+    let left = 0;
+
+    function closeApp() {
+        openedApps.update((apps) => {
+            const newApps = apps.filter((a) => a.name !== name);
+            return [...newApps];
+        });
+    }
+
+    function onMouseMove(e: MouseEvent) {
+        if (moving && laptop) {
+            laptopRect = laptop.getBoundingClientRect();
+            if (top + e.movementY > laptopRect.height - laptopRect.height / 4)
+                return;
+
+            if (top + e.movementY < 0) return;
+
+            if (left + e.movementX > laptopRect.width - laptopRect.width / 4)
+                return;
+            if (left + e.movementX < -laptopRect.width / 2) return;
+
+            top += e.movementY;
+            left += e.movementX;
+        }
+    }
 </script>
 
-<AppBase>
+<svelte:window
+    on:mousemove={onMouseMove}
+    on:mouseup={() => {
+        if (moving) moving = false;
+    }}
+/>
+
+<button
+    class={`absolute ${minimized ? `w-2/3 h-2/3 app left-[${left}px] rounded-md` : "w-full h-full top-0 left-0"} flex flex-col cursor-default`}
+    style="--left: {left}px; --top: {top}px"
+    on:click={() => {
+        $openedApps.push(
+            $openedApps.splice(
+                $openedApps.findIndex((a) => a.name === name),
+                1
+            )[0]
+        );
+        openedApps.set($openedApps);
+    }}
+>
     <div
-        class="w-full h-7 bg-neutral-900 text-white flex items-center gap-1 px-2"
+        class="w-full h-7 bg-neutral-900 text-white flex items-center gap-1 px-2 cursor-move"
+        on:mousedown={() => {
+            if (minimized) moving = true;
+        }}
+        role="button"
+        tabindex="0"
     >
         <span class="font-bold">{name}</span>
         <div class="flex gap-1 ml-auto">
             <div class="p-0.5 bg-green-500 hover:bg-green-400 rounded-md">
                 <Minimize size={17} />
             </div>
-            <div class="p-0.5 bg-orange-500 hover:bg-orange-400 rounded-md">
+            <button
+                class="p-0.5 bg-orange-500 hover:bg-orange-400 rounded-md"
+                on:click={() => (minimized = !minimized)}
+            >
                 <Square size={17} />
-            </div>
-            <Link to="/" class="p-0.5 bg-red-500 hover:bg-red-400 rounded-md">
+            </button>
+            <button
+                class="p-0.5 bg-red-500 hover:bg-red-400 rounded-md"
+                on:click={closeApp}
+            >
                 <X size={17} />
-            </Link>
+            </button>
         </div>
     </div>
-    <div class={`flex-auto ${pClass}`}>
+    <div class={`${pClass}  w-full h-full`}>
         <slot />
     </div>
-</AppBase>
+</button>
+
+<style>
+    .app {
+        top: var(--top);
+        left: var(--left);
+    }
+</style>

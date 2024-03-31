@@ -1,30 +1,20 @@
 <script lang="ts">
-    import { Router, Route } from "svelte-routing";
     import LaptopVisibilityProvider from "../providers/LaptopVisibilityProvider.svelte";
     import TaskBar from "./TaskBar.svelte";
     import WallPaperProvider from "../providers/WallPaperProvider.svelte";
     import Home from "../apps/home/components/Home.svelte";
     import { getApps } from "../utils/apps";
     import Notifications from "./Notifications.svelte";
-
-    const url = "/";
-
-    const { apps } = getApps();
+    import { openedApps } from "../store/stores";
 </script>
 
 <LaptopVisibilityProvider>
-    <Router {url}>
-        <div class="flex-auto">
-            <Route path="/">
-                <Home />
-            </Route>
-            {#each apps as app}
-                <Route path={app.path}>
-                    <svelte:component this={app.route.component} {app} />
-                </Route>
-            {/each}
-        </div>
-    </Router>
+    <div class="flex-auto relative">
+        <Home />
+        {#each $openedApps as app (app.name)}
+            <svelte:component this={app.route.component} {app} />
+        {/each}
+    </div>
     <Notifications />
     <TaskBar />
     <WallPaperProvider />
