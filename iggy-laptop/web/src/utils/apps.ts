@@ -13,6 +13,7 @@ export interface ConfigApp {
     disable?: boolean;
     component: typeof SvelteComponent<any>;
     icon: ComponentType<Icon>;
+    requiresVPN?: boolean;
 }
 
 export type LaptopApp = ConfigApp & {
