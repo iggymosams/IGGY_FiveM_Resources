@@ -7,11 +7,12 @@
         "test": "test"
     },
     "scripts": {
-        "dev": "concurrently \"yarn dev:laptop\" \"yarn dev:laptop:ui\" \"yarn dev:groups\"",
+        "dev": "concurrently \"yarn dev:laptop\" \"yarn dev:laptop:ui\" \"yarn dev:groups\" \"yarn dev:boosting\"",
         "dev:laptop": "cd iggy-laptop && yarn && yarn watch",
         "dev:laptop:ui": "cd iggy-laptop/web && yarn && yarn dev:game",
         "dev:ui": "cd iggy-laptop/web && yarn dev",
-        "dev:groups": "cd iggy-groups && yarn && yarn watch"
+        "dev:groups": "cd iggy-groups && yarn && yarn watch",
+        "dev:boosting": "cd iggy-boosting && yarn && yarn watch"
     },
     "author": "",
     "license": "ISC",
