@@ -1,9 +1,10 @@
 import type { SvelteComponent } from "svelte";
 import Groups from "../apps/groups/components/Groups.svelte";
 import type { ComponentType } from "svelte";
-import { UsersRound, type Icon, SettingsIcon } from "lucide-svelte";
+import { UsersRound, type Icon, SettingsIcon, CarFront } from "lucide-svelte";
 import Settings from "../apps/settings/comonents/Settings.svelte";
 import { writable, type Writable } from "svelte/store";
+import Boosting from "../apps/boosting/components/Boosting.svelte";
 
 export interface ConfigApp {
     id: string;
@@ -30,6 +31,15 @@ export const APPS: ConfigApp[] = [
         color: "text-white",
         component: Groups,
         icon: UsersRound,
+    },
+    {
+        id: "BOOSTING",
+        name: "Boosting",
+        backgroundColor: "bg-sky-500",
+        color: "text-white",
+        component: Boosting,
+        icon: CarFront,
+        requiresVPN: true,
     },
 ];
 
