@@ -159,6 +159,21 @@ async function spawnVehicle(
     return { netid, plate };
 }
 
+function getPlayerContract(src: number): ActiveContract {
+    let player = QBCore.Functions.GetPlayer(src);
+    let cid = player.PlayerData.citizenid;
+    let group: Group = global.exports["iggy-groups"].GetPlayerGroup(cid);
+
+    let active: ActiveContract;
+
+    if (group !== null) {
+        active = activeGroupContracts.get(group.id);
+    } else {
+        active = activeSoloContracts.get(cid);
+    }
+    return active;
+}
+
 async function beginDropOff(src: number) {
     let player = QBCore.Functions.GetPlayer(src);
     let cid = player.PlayerData.citizenid;
