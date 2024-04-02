@@ -396,9 +396,8 @@ onNet("iggy-boosting:server:startContract", async (id: number) => {
 
 onNet("iggy-boosting:server:started", () => {
     let src: number = source;
-    let player = QBCore.Functions.GetPlayer(src);
-    let cid = player.PlayerData.citizenid;
-    let group: Group = global.exports["iggy-groups"].GetPlayerGroup(cid);
+    let group: Group =
+        global.exports["iggy-groups"].GetPlayerGroupFromSource(src);
     global.exports["iggy-groups"].GroupEmitNet(
         group.id,
         "iggy-boosting:client:started"
@@ -407,7 +406,15 @@ onNet("iggy-boosting:server:started", () => {
 
 onNet("iggy-boosting:server:startDropOff", () => {
     let src: number = source;
-
+    let contract = getPlayerContract(src);
+    if (contract.group) {
+        let group: Group =
+            global.exports["iggy-groups"].GetPlayerGroupFromSource(src);
+        global.exports["iggy-groups"].GroupEmitNet(
+            group.id,
+            "iggy-boosting:client:started"
+        );
+    }
     beginDropOff(src);
 });
 
