@@ -223,8 +223,8 @@ onNet("iggy-boosting:client:finishContract", () => {
 
 RegisterCommand(
     "iggy-boosting:create",
-    () => {
-        emitNet("boost:create");
+    (src: number, args: string[]) => {
+        emitNet("boost:create", args[0]);
     },
     false
 );

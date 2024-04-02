@@ -300,8 +300,8 @@ onNet("iggy-boosting:server:startContract", async (id: number) => {
     let req = getMinMaxPlayers(contract.class);
 
     if (!inGroup && req.min !== -1) {
-            emitNet("iggy-boosting:client:error-no-group", src);
-            return;
+        emitNet("iggy-boosting:client:error-no-group", src);
+        return;
     } else if (req.min !== -1) {
         if (group.players.length + 1 < req.min) {
             emitNet("iggy-boosting:client:error-min-players", src);
@@ -419,6 +419,8 @@ onNet("iggy-boosting:server:startDropOff", () => {
 });
 
 //TODO: DELETE
-onNet("boost:create", () => {
-    CreateContract("C", "Adder", "adder", 1, 1, 1, 1711986233, 1);
+onNet("boost:create", (veh: string) => {
+    let src = source;
+    let v: VehicleClass = veh ? (veh as VehicleClass) : "C";
+    CreateContract(v, "Adder", "adder", 1, 1, 1, 1712326762, src);
 });
