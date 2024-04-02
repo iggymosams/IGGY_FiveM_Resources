@@ -287,7 +287,7 @@ RegisterAdminCommand(
     (src: number, data: CommandData) => {
         let weather: string;
         if (data.values["weather"] !== undefined) {
-            data.values["weather"].value;
+            weather = data.values["weather"].value;
         }
         let time: number | undefined = data.values["time"] || undefined;
         if (weather !== undefined) {

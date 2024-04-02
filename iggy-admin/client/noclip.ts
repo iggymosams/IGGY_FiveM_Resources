@@ -10,7 +10,7 @@ const maxY: number = 89.0;
 
 let inputRotEnabled: boolean = false;
 
-async function toggleNoclip(): Promise<void> {
+async function toggleNoclip() {
     const ped: number = PlayerPedId();
     let veh: number = GetVehiclePedIsIn(ped, false);
     let inVehicle: boolean = false;
@@ -291,7 +291,7 @@ async function toggleNoclip(): Promise<void> {
     }
 }
 
-async function checkInputRotation(): Promise<void> {
+async function checkInputRotation() {
     let rotz;
     let rotx;
     while (inputRotEnabled) {
@@ -321,10 +321,10 @@ async function checkInputRotation(): Promise<void> {
     }
 }
 
-export function ToggleNoClipMode(): void {
-    const pIsEnabled: boolean = !noClipEnabled;
-    noClipEnabled = pIsEnabled;
-    inputRotEnabled = pIsEnabled;
+export function ToggleNoClipMode() {
+    const isEnabled: boolean = !noClipEnabled;
+    noClipEnabled = isEnabled;
+    inputRotEnabled = isEnabled;
 
     if (noClipEnabled && inputRotEnabled) {
         toggleNoclip();
