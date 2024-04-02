@@ -35,8 +35,11 @@ async function GetRep(cid: string): Promise<Rep> {
 global.exports("GetRep", GetRep);
 
 async function GiveRep(cid: string, amount: number) {
+    if (RepDatabase[cid] === undefined) {
+        await GetRep(cid);
+    }
     RepDatabase[cid] += amount;
-    let response = await MySQL.update(
+    await MySQL.update(
         "UPDATE `iggy_player_boosting_rep` SET `rep` = ? WHERE `citizenid` = ?",
         [RepDatabase[cid], cid]
     );
