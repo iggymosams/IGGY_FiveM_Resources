@@ -8,9 +8,15 @@ let blip: number;
 const QBCore: Client = global.exports["qb-core"].GetCoreObject();
 
 global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "boosting:getRep",
+    "boosting:getInfo",
     async () => {
-        emitNet("iggy-boosting:server:getRep");
+        emitNet("iggy-boosting:server:getInfo");
+
+        global.exports["iggy-laptop"].SendAppMessage(
+            "boosting",
+            "updateActiveContract",
+            active
+        );
     }
 );
 

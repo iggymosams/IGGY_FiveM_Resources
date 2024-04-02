@@ -239,11 +239,17 @@ async function beginDropOff(src: number) {
     }
 }
 
-onNet("iggy-boosting:server:getRep", async () => {
+onNet("iggy-boosting:server:getInfo", async () => {
     let src = source;
     let player = QBCore.Functions.GetPlayer(src);
-    let rep: Rep = await GetRep(player.PlayerData.citizenid);
+    let cid = player.PlayerData.citizenid;
+    let rep: Rep = await GetRep(cid);
     emitNet("iggy-boosting:client:updateRep", src, rep);
+    emitNet(
+        "iggy-boosting:client:updateContracts",
+        src,
+        contracts[cid] === undefined ? [] : contracts[cid]
+    );
 });
 
 onNet("iggy-boosting:server:toggleQueue", async () => {

@@ -35,7 +35,7 @@
     });
 
     onMount(() => {
-        fetchNui("boosting:getRep");
+        fetchNui("boosting:getInfo");
     });
 
     debugData([
