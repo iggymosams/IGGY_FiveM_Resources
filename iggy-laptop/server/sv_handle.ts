@@ -43,7 +43,7 @@ QBCore.Functions.CreateCallback(
     }
 );
 
-async function GetHandle(src: string | number): Promise<string | undefined> {
+function GetHandle(src: string | number): string | undefined {
     let player: Player = QBCore.Functions.GetPlayer(src);
     let vpn = player.Functions.GetItemByName("vpn");
     let handle = undefined;

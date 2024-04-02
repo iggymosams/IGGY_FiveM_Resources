@@ -7,5 +7,11 @@ import { HasVPN } from "./sv_exports";
 export const QBCore: Server = global.exports["qb-core"].GetCoreObject();
 
 QBCore.Functions.CreateUseableItem("laptop", async (src, item) => {
-    emitNet("iggy-laptop:client:open", src, HasVPN(src), await GetHandle(src));
+    let handle = GetHandle(src);
+    emitNet(
+        "iggy-laptop:client:open",
+        src,
+        HasVPN(src) && handle !== undefined,
+        handle
+    );
 });
