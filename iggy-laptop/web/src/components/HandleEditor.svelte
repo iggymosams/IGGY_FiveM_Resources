@@ -60,6 +60,7 @@
                 class="w-full bg-transparent outline outline-1 focus:outline-blue-500 rounded-md p-2 transition-[outline]"
                 bind:value
                 maxlength={25}
+                minlength={3}
             />
         </div>
         <div class="flex items-center">
@@ -71,14 +72,15 @@
             <button
                 class="rounded-md p-2 bg-blue-500 ml-auto hover:bg-blue-400"
                 on:click={async () => {
-                    fetchNui("updateHandle", {
-                        value: value,
-                        editing: editing,
-                    }).then((resp) => {
-                        if (!resp.ok) {
-                            error = true;
-                        }
-                    });
+                    if (value.length > 3 && value.length <= 25)
+                        fetchNui("updateHandle", {
+                            value: value,
+                            editing: editing,
+                        }).then((resp) => {
+                            if (!resp.ok) {
+                                error = true;
+                            }
+                        });
                 }}
             >
                 Submit
