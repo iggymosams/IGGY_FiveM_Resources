@@ -239,6 +239,13 @@ function GetPlayerGroupFromName(name: string): Group | undefined {
 }
 global.exports("GetPlayerGroupFromName", GetPlayerGroupFromName);
 
+function GetPlayerGroupFromSource(src: string | number): Group | undefined {
+    return groups.find(
+        (g) => g.leader.src === src || g.players.find((p) => p.src === src)
+    );
+}
+global.exports("GetPlayerGroupFromSource", GetPlayerGroupFromSource);
+
 function GroupEmitNet(id: number, eventName: string, ...args: unknown[]) {
     let group = GetGroupById(id);
 
