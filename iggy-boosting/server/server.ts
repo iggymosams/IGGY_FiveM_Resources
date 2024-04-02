@@ -280,14 +280,14 @@ onNet("iggy-boosting:server:startContract", async (id: number) => {
         return;
     }
     let group: Group = global.exports["iggy-groups"].GetPlayerGroup(cid);
-    let inGroup = false;
+
+    let inGroup = group !== null ? true : false;
     let req = getMinMaxPlayers(contract.class);
-    if (req.min !== -1) {
-        if (group === null) {
-            //NO group
+
+    if (!inGroup && req.min !== -1) {
             emitNet("iggy-boosting:client:error-no-group", src);
             return;
-        }
+    } else if (req.min !== -1) {
         if (group.players.length + 1 < req.min) {
             emitNet("iggy-boosting:client:error-min-players", src);
             return;
@@ -296,11 +296,13 @@ onNet("iggy-boosting:server:startContract", async (id: number) => {
             emitNet("iggy-boosting:client:error-max-players", src);
             return;
         }
+    }
+
+    if (inGroup) {
         if (activeGroupContracts.get(group.id)) {
             emitNet("iggy-boosting:client:error-active", src);
             return;
         }
-        inGroup = true;
     } else {
         if (activeSoloContracts.has(cid)) {
             emitNet("iggy-boosting:client:error-active", src);
@@ -333,6 +335,7 @@ onNet("iggy-boosting:server:startContract", async (id: number) => {
         hacksFailed: 0,
         plate: plate,
         netId: netid,
+        group: inGroup,
     };
 
     let paid = player.Functions.RemoveMoney(

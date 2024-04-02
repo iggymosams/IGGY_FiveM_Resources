@@ -24,6 +24,7 @@ export type ActiveContract = Omit<Contract, "time"> & {
     spawn: SpawnLocation;
     dropoff: DropOffLocation;
     hacksFailed: number;
+    group: boolean;
 };
 
 export interface Vector3 {
