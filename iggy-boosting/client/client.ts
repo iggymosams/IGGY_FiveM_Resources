@@ -50,7 +50,7 @@ global.exports["iggy-laptop"].RegisterLaptopCallback(
     "boosting:hackFailed",
     async () => {
         global.exports["iggy-laptop"].SetFocus(false, false);
-        emitNet("iggy-boosting:server:hackFailed", active.netId);
+        emitNet("iggy-boosting:server:hackFailed", active.netId, active.class);
     }
 );
 

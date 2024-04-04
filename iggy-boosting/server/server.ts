@@ -119,6 +119,19 @@ function getHacksFromClass(vehClass: VehicleClass): number {
     }
 }
 
+function getFailsFromClass(vehClass: VehicleClass): number {
+    switch (vehClass) {
+        case "A":
+            return 3;
+        case "B":
+            return 7;
+        case "C":
+            return 0;
+        default:
+            break;
+    }
+}
+
 async function spawnVehicle(
     model: string,
     vector4: Vector4,
@@ -440,25 +453,28 @@ onNet("iggy-boosting:server:startDropOff", () => {
     beginDropOff(src);
 });
 
-onNet("iggy-boosting:server:hackFailed", (netId: number) => {
-    let ent = Entity(NetworkGetEntityFromNetworkId(netId));
-    let state = ent.state.hacks;
-    let date = new Date();
-    date.setSeconds(date.getSeconds() + 1);
-    ent.state.set(
-        "hacks",
-        {
-            failed: state.failed + 1,
-            remaining: state.remaining,
-            cooldown: Math.floor(date.getTime() / 1000),
-        },
-        true
-    );
-    // TODO: Failed per class
-    if (state.failed + 1 === 1) {
-        emitNet("iggy-boosting:client:disableVehicle", -1, netId);
+onNet(
+    "iggy-boosting:server:hackFailed",
+    (netId: number, vehClass: VehicleClass) => {
+        let ent = Entity(NetworkGetEntityFromNetworkId(netId));
+        let state = ent.state.hacks;
+        let date = new Date();
+        date.setSeconds(date.getSeconds() + 1);
+        ent.state.set(
+            "hacks",
+            {
+                failed: state.failed + 1,
+                remaining: state.remaining,
+                cooldown: Math.floor(date.getTime() / 1000),
+            },
+            true
+        );
+
+        if (state.failed + 1 === getFailsFromClass(vehClass)) {
+            emitNet("iggy-boosting:client:disableVehicle", -1, netId);
+        }
     }
-});
+);
 
 onNet("iggy-boosting:server:hackComplete", (netId: number) => {
     let src = source;
