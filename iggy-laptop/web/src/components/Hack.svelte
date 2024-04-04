@@ -144,42 +144,46 @@
     ]);
 </script>
 
-<div class="bg-gray-900 w-9/12 aspect-video rounded-lg flex overflow-hidden">
+{#if visible}
     <div
-        class="h-full w-4/6 grid grid-cols-5 justify-evenly gap-2 items-center justify-items-center p-2"
+        class="bg-gray-900 w-9/12 aspect-video rounded-lg flex overflow-hidden"
     >
-        {#each Array(25) as _, index (index)}
-            <HackButton
-                {index}
-                {active}
-                {onClick}
-                {wrong}
-                {disabled}
-                highlight={highlight.includes(index)}
-                green={green.includes(index)}
-            />
-        {/each}
-    </div>
-    <div class="h-full w-2/6 p-3 flex flex-col justify-evenly">
-        <div class="w-full text-center text-white text-2xl">
-            <HackCountdown bind:this={countdown} {onTimerComplete} />
-        </div>
-        <div class="grid grid-cols-5 gap-3">
-            {#each password as value, i (i)}
-                <div
-                    class="aspect-square outline outline-2 outline-slate-500 flex justify-center items-center text-green-500 text-2xl font-bold"
-                >
-                    <span>{value === undefined ? "" : value}</span>
-                </div>
+        <div
+            class="h-full w-4/6 grid grid-cols-5 justify-evenly gap-2 items-center justify-items-center p-2"
+        >
+            {#each Array(25) as _, index (index)}
+                <HackButton
+                    {index}
+                    {active}
+                    {onClick}
+                    {wrong}
+                    {disabled}
+                    highlight={highlight.includes(index)}
+                    green={green.includes(index)}
+                />
             {/each}
         </div>
-        <div class="grid grid-cols-3 gap-3">
-            {#each Array.from({ length: 3 }, (_, i) => i * 3) as group}
-                {#each Array.from({ length: 3 }, (_, j) => 7 - group + j) as value (value)}
-                    <HackKeypad number={value} />
+        <div class="h-full w-2/6 p-3 flex flex-col justify-evenly">
+            <div class="w-full text-center text-white text-2xl">
+                <HackCountdown bind:this={countdown} {onTimerComplete} />
+            </div>
+            <div class="grid grid-cols-5 gap-3">
+                {#each password as value, i (i)}
+                    <div
+                        class="aspect-square outline outline-2 outline-slate-500 flex justify-center items-center text-green-500 text-2xl font-bold"
+                    >
+                        <span>{value === undefined ? "" : value}</span>
+                    </div>
                 {/each}
-            {/each}
-            <HackKeypad number={0} />
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+                {#each Array.from({ length: 3 }, (_, i) => i * 3) as group}
+                    {#each Array.from({ length: 3 }, (_, j) => 7 - group + j) as value (value)}
+                        <HackKeypad number={value} />
+                    {/each}
+                {/each}
+                <HackKeypad number={0} />
+            </div>
         </div>
     </div>
-</div>
+{/if}
