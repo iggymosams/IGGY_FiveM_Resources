@@ -4,6 +4,7 @@ import { CalcDist, Delay } from "../shared/utils";
 
 let active: ActiveContract;
 let blip: number;
+let pdTrackers: { [key: number]: number } = {};
 
 const QBCore: Client = global.exports["qb-core"].GetCoreObject();
 
@@ -301,4 +302,45 @@ onNet("iggy-boosting:client:refuel", (netid: number) => {
         NetworkGetEntityFromNetworkId(netid),
         100
     );
+});
+
+onNet("iggy-boosting:client:createBlip", (coords: number[], netId: number) => {
+    let name = QBCore.Functions.GetPlayerData().job.name;
+    let duty = QBCore.Functions.GetPlayerData().job.onduty;
+
+    if (name !== "police") {
+        return;
+    }
+
+    if (!duty) {
+        return;
+    }
+
+    if (pdTrackers[netId]) RemoveBlip(pdTrackers[netId]);
+
+    let blip = AddBlipForCoord(coords[0], coords[1], coords[2]);
+    SetBlipSprite(blip, 326);
+    SetBlipColour(blip, 1);
+    SetBlipFlashes(blip, true);
+    SetBlipScale(blip, 2);
+
+    BeginTextCommandSetBlipName("STRING");
+    AddTextComponentSubstringPlayerName("Grand Theft Auto Tracker");
+    EndTextCommandSetBlipName(blip);
+
+    pdTrackers[netId] = blip;
+});
+
+onNet("iggy-boosting:client:removeBlip", (netId: number) => {
+    let name = QBCore.Functions.GetPlayerData().job.name;
+    let duty = QBCore.Functions.GetPlayerData().job.onduty;
+
+    if (name !== "police") {
+        return;
+    }
+    if (!duty) {
+        return;
+    }
+
+    if (pdTrackers[netId]) RemoveBlip(pdTrackers[netId]);
 });

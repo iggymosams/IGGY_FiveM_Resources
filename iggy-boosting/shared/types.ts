@@ -25,6 +25,7 @@ export type ActiveContract = Omit<Contract, "time"> & {
     dropoff: DropOffLocation;
     hacksFailed: number;
     group: boolean;
+    started: boolean;
 };
 
 export interface Vector3 {

@@ -351,6 +351,7 @@ onNet("iggy-boosting:server:startContract", async (id: number) => {
         plate: plate,
         netId: netid,
         group: inGroup,
+        started: false,
     };
 
     let paid = player.Functions.RemoveMoney(
@@ -394,7 +395,7 @@ onNet("iggy-boosting:server:startContract", async (id: number) => {
     }
 });
 
-onNet("iggy-boosting:server:started", () => {
+onNet("iggy-boosting:server:started", async () => {
     let src: number = source;
     let group: Group =
         global.exports["iggy-groups"].GetPlayerGroupFromSource(src);
@@ -402,6 +403,27 @@ onNet("iggy-boosting:server:started", () => {
         group.id,
         "iggy-boosting:client:started"
     );
+
+    let active = activeGroupContracts.get(group.id);
+
+    if (active.started) return;
+    active.started = true;
+
+    let veh = NetworkGetEntityFromNetworkId(active.netId);
+
+    let hacks = Entity(veh).state.hacks;
+    while (hacks.remaining > 0) {
+        if (!DoesEntityExist(veh)) {
+            break;
+        }
+
+        let coords = GetEntityCoords(veh);
+
+        emitNet("iggy-boosting:client:createBlip", -1, coords, active.netId);
+        await Delay((10 * 1000) / hacks.remaining);
+        hacks = Entity(veh).state.hacks;
+    }
+    emitNet("iggy-boosting:client:removeBlip", -1, active.netId);
 });
 
 onNet("iggy-boosting:server:startDropOff", () => {
