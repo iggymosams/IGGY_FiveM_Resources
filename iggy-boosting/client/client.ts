@@ -56,7 +56,6 @@ global.exports["iggy-laptop"].RegisterLaptopCallback(
 global.exports["iggy-laptop"].RegisterLaptopCallback(
     "boosting:hackComplete",
     async () => {
-        console.log("your good");
         global.exports["iggy-laptop"].SetFocus(false, false);
         emitNet("iggy-boosting:server:hackComplete", active.netId);
         let ent = Entity(NetworkGetEntityFromNetworkId(active.netId));

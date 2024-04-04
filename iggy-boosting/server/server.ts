@@ -434,7 +434,6 @@ onNet("iggy-boosting:server:hackFailed", (netId: number) => {
     );
     // TODO: Failed per class
     if (state.failed + 1 === 1) {
-        console.log("Failed");
         emitNet("iggy-boosting:client:disableVehicle", -1, netId);
     }
 });
@@ -455,7 +454,6 @@ onNet("iggy-boosting:server:hackComplete", (netId: number) => {
         true
     );
     if (state.remaining - 1 === 0) {
-        console.log("test");
         beginDropOff(src);
     }
 });
