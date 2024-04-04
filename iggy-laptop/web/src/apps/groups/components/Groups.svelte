@@ -35,7 +35,7 @@
     });
 
     onMount(() => {
-        fetchNui("groups:getGroups");
+        fetchNui("groups:getInfo");
     });
 
     debugData([
