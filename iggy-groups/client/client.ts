@@ -8,9 +8,18 @@ const QBCore: Client = global.exports["qb-core"].GetCoreObject();
 let CurrentGroupId: number;
 
 global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "groups:getGroups",
+    "groups:getInfo",
     async () => {
-        await TriggerQBCallBack("iggy-groups:cb:getGroups");
+        emitNet("iggy-groups:server:getGroups");
+        if (CurrentGroupId) {
+            emitNet("iggy-groups:server:getRequests", CurrentGroupId);
+            emitNet("iggy-groups:server:getGroup", CurrentGroupId);
+        } else {
+            global.exports["iggy-laptop"].SendAppMessage(
+                "groups",
+                "leaveGroup"
+            );
+        }
     }
 );
 

@@ -60,17 +60,6 @@ function UpdateGroup(group: Group) {
 }
 
 QBCore.Functions.CreateCallback(
-    "iggy-groups:cb:getGroups",
-    (src, cb: (data: PublicGroup[]) => void) => {
-        emitNet(
-            "iggy-groups:client:updateGroups",
-            -1,
-            groups.map((group) => GroupToPublicGroup(group))
-        );
-    }
-);
-
-QBCore.Functions.CreateCallback(
     "iggy-groups:cb:createGroup",
     (src, cb: (data: Group) => void) => {
         let group: Group = CreateGroup(GetGroupPlayerFromPlayer(src), "PUBLIC");
@@ -208,6 +197,30 @@ onNet("iggy-groups:server:rejectRequest", (req: string, id: number) => {
         group.requests.map((r) => r.name)
     );
     UpdateGroups();
+});
+
+onNet("iggy-groups:server:getGroups", () => {
+    emitNet(
+        "iggy-groups:client:updateGroups",
+        -1,
+        groups.map((group) => GroupToPublicGroup(group))
+    );
+});
+
+onNet("iggy-groups:server:getRequests", (id: number) => {
+    let group = GetGroupById(id);
+
+    emitNet(
+        "iggy-groups:client:updateRequests",
+        group.leader.src,
+        group.requests.map((r) => r.name)
+    );
+});
+
+onNet("iggy-groups:server:getGroup", (id: number) => {
+    let group = GetGroupById(id);
+
+    UpdateGroup(group);
 });
 
 function GetGroupById(id: number): Group {
