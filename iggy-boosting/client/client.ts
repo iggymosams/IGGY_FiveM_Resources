@@ -45,6 +45,33 @@ global.exports["iggy-laptop"].RegisterLaptopCallback(
     }
 );
 
+global.exports["iggy-laptop"].RegisterLaptopCallback(
+    "boosting:hackFailed",
+    async () => {
+        global.exports["iggy-laptop"].SetFocus(false, false);
+        emitNet("iggy-boosting:server:hackFailed", active.netId);
+    }
+);
+
+global.exports["iggy-laptop"].RegisterLaptopCallback(
+    "boosting:hackComplete",
+    async () => {
+        console.log("your good");
+        global.exports["iggy-laptop"].SetFocus(false, false);
+        emitNet("iggy-boosting:server:hackComplete", active.netId);
+        let ent = Entity(NetworkGetEntityFromNetworkId(active.netId));
+        let state = ent.state.hacks;
+        if (state.remaining - 1 === 0) {
+            emitNet("qb-phone:server:sendNewMail", {
+                sender: "???",
+                subject: "Hacks Complete",
+                message: "Hacks Comeplete. Head to the drop off location",
+                button: {},
+            });
+        }
+    }
+);
+
 onNet("iggy-boosting:client:updateRep", (rep: Rep) => {
     global.exports["iggy-laptop"].SendAppMessage("boosting", "updateRep", rep);
 });
@@ -228,3 +255,51 @@ RegisterCommand(
     },
     false
 );
+
+onNet("iggy-boosting:client:openHack", () => {
+    if (!active) return;
+
+    let veh = NetworkGetEntityFromNetworkId(active.netId);
+    if (!DoesEntityExist(veh)) return;
+
+    let ped = PlayerPedId();
+
+    if (!IsPedInVehicle(ped, veh, false) && !GetIsVehicleEngineRunning(veh))
+        return;
+
+    if (GetPedInVehicleSeat(veh, -1) === ped) return;
+
+    let state = Entity(veh).state;
+    let cooldown = state.hacks.cooldown;
+    let remaining = state.hacks.remaining;
+    if (remaining === 0) return;
+    if (Date.now() / 1000 < cooldown) {
+        QBCore.Functions.Notify("You cant do this yet");
+        return;
+    }
+
+    global.exports["iggy-laptop"].SendAppMessage("hack", "setVisible", {
+        open: true,
+        difficulty: 1,
+    });
+
+    global.exports["iggy-laptop"].SetFocus(true, true);
+});
+
+onNet("iggy-boosting:client:disableVehicle", (netid: number) => {
+    let veh = NetworkGetEntityFromNetworkId(netid);
+    for (let i = 0; i < 7; i++) {
+        SetVehicleTyreBurst(veh, i, true, 1000.0);
+    }
+    global.exports["LegacyFuel"].SetFuel(
+        NetworkGetEntityFromNetworkId(netid),
+        0
+    );
+});
+
+onNet("iggy-boosting:client:refuel", (netid: number) => {
+    global.exports["LegacyFuel"].SetFuel(
+        NetworkGetEntityFromNetworkId(netid),
+        100
+    );
+});

@@ -418,9 +418,55 @@ onNet("iggy-boosting:server:startDropOff", () => {
     beginDropOff(src);
 });
 
+onNet("iggy-boosting:server:hackFailed", (netId: number) => {
+    let ent = Entity(NetworkGetEntityFromNetworkId(netId));
+    let state = ent.state.hacks;
+    let date = new Date();
+    date.setSeconds(date.getSeconds() + 1);
+    ent.state.set(
+        "hacks",
+        {
+            failed: state.failed + 1,
+            remaining: state.remaining,
+            cooldown: Math.floor(date.getTime() / 1000),
+        },
+        true
+    );
+    // TODO: Failed per class
+    if (state.failed + 1 === 1) {
+        console.log("Failed");
+        emitNet("iggy-boosting:client:disableVehicle", -1, netId);
+    }
+});
+
+onNet("iggy-boosting:server:hackComplete", (netId: number) => {
+    let src = source;
+    let ent = Entity(NetworkGetEntityFromNetworkId(netId));
+    let state = ent.state.hacks;
+    let date = new Date();
+    date.setSeconds(date.getSeconds() + 1);
+    ent.state.set(
+        "hacks",
+        {
+            failed: state.failed,
+            remaining: state.remaining - 1,
+            cooldown: Math.floor(date.getTime() / 1000),
+        },
+        true
+    );
+    if (state.remaining - 1 === 0) {
+        console.log("test");
+        beginDropOff(src);
+    }
+});
+
 //TODO: DELETE
 onNet("boost:create", (veh: string) => {
     let src = source;
     let v: VehicleClass = veh ? (veh as VehicleClass) : "C";
     CreateContract(v, "Adder", "adder", 1, 1, 1, 1712326762, src);
+});
+
+QBCore.Functions.CreateUseableItem("electronickit", async (src, item) => {
+    emitNet("iggy-boosting:client:openHack", src);
 });
