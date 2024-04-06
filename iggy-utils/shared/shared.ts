@@ -23,5 +23,3 @@ function RandomNumber(min: number, max: number) {
     return Math.random() * (max - min) + min;
 }
 global.exports("RandomNumber", RandomNumber);
-
-console.log("Shared Utils");
