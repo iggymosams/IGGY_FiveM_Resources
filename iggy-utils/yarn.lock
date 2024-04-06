@@ -269,6 +269,11 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
+"@zerio2/qbcore.js@^1.5.4":
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/@zerio2/qbcore.js/-/qbcore.js-1.5.4.tgz#b488d10e7e98ff840ff72cef152c157021a5cc67"
+  integrity sha512-6Vdsd6ijXtHsZcV5rtK/vkZoa0J+WmLAMpcBeRdm0Pa/cSKytOWhtJosNgE/6yjN13M7UE0ER/7sE+SEsCegDA==
+
 acorn-import-assertions@^1.9.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/acorn-import-assertions/-/acorn-import-assertions-1.9.0.tgz#507276249d684797c84e0734ef84860334cfb1ac"
