@@ -5,7 +5,6 @@ import {
     RegisterLaptopCallback,
     isOpen,
 } from "./cl_exports";
-import { TriggerQBCallBack } from "./cl_utils";
 
 let vpn: Item;
 
@@ -27,7 +26,7 @@ RegisterLaptopCallback("closeHandleEdit", () => {
 RegisterLaptopCallback(
     "updateHandle",
     async ({ value, editing }: { value: string; editing: boolean }) => {
-        let ok = await TriggerQBCallBack(
+        let ok = await global.exports["iggy-utils"].TriggerQBCallBack(
             "iggy-laptop:cb:updateHandle",
             value,
             editing,

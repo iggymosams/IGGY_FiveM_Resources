@@ -1,5 +1,4 @@
 import { Client } from "@zerio2/qbcore.js";
-import { TriggerQBCallBack } from "./cl_utils";
 import type { GroupPlayer, Group, PublicGroup } from "../shared/types";
 import { GroupToPublicGroup } from "../shared/utils";
 
@@ -26,7 +25,7 @@ global.exports["iggy-laptop"].RegisterLaptopCallback(
 global.exports["iggy-laptop"].RegisterLaptopCallback(
     "groups:createGroup",
     async () => {
-        let group: Group = await TriggerQBCallBack(
+        let group: Group = await global.exports["iggy-utils"].TriggerQBCallBack(
             "iggy-groups:cb:createGroup"
         );
         CurrentGroupId = group.id;
@@ -40,7 +39,7 @@ global.exports["iggy-laptop"].RegisterLaptopCallback(
 global.exports["iggy-laptop"].RegisterLaptopCallback(
     "groups:createPrivateGroup",
     async () => {
-        let group: Group = await TriggerQBCallBack(
+        let group: Group = await global.exports["iggy-utils"].TriggerQBCallBack(
             "iggy-groups:cb:createPrivateGroup"
         );
         CurrentGroupId = group.id;
