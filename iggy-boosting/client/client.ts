@@ -1,5 +1,6 @@
 import { Client } from "@zerio2/qbcore.js";
 import { ActiveContract, Contract, Rep, Vector3 } from "../shared/types";
+import { Config } from "../shared/Config";
 
 let active: ActiveContract;
 let blip: number;
@@ -307,7 +308,7 @@ onNet("iggy-boosting:client:createBlip", (coords: number[], netId: number) => {
     let name = QBCore.Functions.GetPlayerData().job.name;
     let duty = QBCore.Functions.GetPlayerData().job.onduty;
 
-    if (name !== "police") {
+    if (name !== Config.POLICE_JOB) {
         return;
     }
 
@@ -334,7 +335,7 @@ onNet("iggy-boosting:client:removeBlip", (netId: number) => {
     let name = QBCore.Functions.GetPlayerData().job.name;
     let duty = QBCore.Functions.GetPlayerData().job.onduty;
 
-    if (name !== "police") {
+    if (name !== Config.POLICE_JOB) {
         return;
     }
     if (!duty) {

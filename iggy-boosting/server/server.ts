@@ -13,6 +13,7 @@ import {
 import { DROP_OFF_LOCATIONS, SPAWN_LOCATIONS } from "../shared/locations";
 import { CalcDist, Delay } from "../shared/utils";
 import { Group } from "./../../iggy-groups/shared/types";
+import { Config } from "../shared/Config";
 
 const QBCore: Server = global.exports["qb-core"].GetCoreObject();
 
@@ -107,29 +108,11 @@ function getDropOff(i = 0): DropOffLocation {
 }
 
 function getHacksFromClass(vehClass: VehicleClass): number {
-    switch (vehClass) {
-        case "A":
-            return 20;
-        case "B":
-            return 10;
-        case "C":
-            return 0;
-        default:
-            break;
-    }
+    return Config.HACKS[vehClass];
 }
 
 function getFailsFromClass(vehClass: VehicleClass): number {
-    switch (vehClass) {
-        case "A":
-            return 3;
-        case "B":
-            return 7;
-        case "C":
-            return 0;
-        default:
-            break;
-    }
+    return Config.MAX_FAILED[vehClass];
 }
 
 async function spawnVehicle(
@@ -433,7 +416,9 @@ onNet("iggy-boosting:server:started", async () => {
         let coords = GetEntityCoords(veh);
 
         emitNet("iggy-boosting:client:createBlip", -1, coords, active.netId);
-        await global.exports["iggy-utils"].Delay((10 * 1000) / hacks.remaining);
+        await global.exports["iggy-utils"].Delay(
+            (Config.DEFAULT_BLIP_DELAY * 1000) / hacks.remaining
+        );
         hacks = Entity(veh).state.hacks;
     }
     emitNet("iggy-boosting:client:removeBlip", -1, active.netId);
@@ -459,7 +444,7 @@ onNet(
         let ent = Entity(NetworkGetEntityFromNetworkId(netId));
         let state = ent.state.hacks;
         let date = new Date();
-        date.setSeconds(date.getSeconds() + 1);
+        date.setSeconds(date.getSeconds() + Config.HACK_COOLDOWN);
         ent.state.set(
             "hacks",
             {
@@ -481,7 +466,7 @@ onNet("iggy-boosting:server:hackComplete", (netId: number) => {
     let ent = Entity(NetworkGetEntityFromNetworkId(netId));
     let state = ent.state.hacks;
     let date = new Date();
-    date.setSeconds(date.getSeconds() + 1);
+    date.setSeconds(date.getSeconds() + Config.HACK_COOLDOWN);
     ent.state.set(
         "hacks",
         {
