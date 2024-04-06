@@ -47,3 +47,13 @@ export interface DropOffLocation {
     vector3: Vector3;
     inUse: boolean;
 }
+
+export interface Vehicle {
+    model: string;
+    name: string;
+    class: VehicleClass;
+}
+
+export interface VehicleList {
+    [key: string]: Vehicle;
+}

@@ -1,4 +1,4 @@
-import { Server } from "@zerio2/qbcore.js";
+import { Player, Server } from "@zerio2/qbcore.js";
 import { GetRep, GiveRep } from "./RepDatabase";
 import {
     ActiveContract,
@@ -9,9 +9,10 @@ import {
     Vector3,
     Vector4,
     VehicleClass,
+    VehicleList,
 } from "../shared/types";
 import { DROP_OFF_LOCATIONS, SPAWN_LOCATIONS } from "../shared/locations";
-import { CalcDist, Delay } from "../shared/utils";
+import { VEHICLES } from "../shared/vehicles";
 import { Group } from "./../../iggy-groups/shared/types";
 import { Config } from "../shared/Config";
 
@@ -249,6 +250,97 @@ async function beginDropOff(src: number) {
         activeSoloContracts.set(cid, undefined);
     }
 }
+
+function generateTime(hoursFromNow: number, minutesFromNow: number): number {
+    const time = new Date();
+
+    time.setHours(time.getHours() + hoursFromNow);
+    time.setMinutes(time.getMinutes() + minutesFromNow);
+
+    return Math.floor(time.getTime() / 1000);
+}
+
+async function GenerateContract(src: number) {
+    let player: Player = QBCore.Functions.GetPlayer(src);
+
+    if (player === undefined) {
+        queue = queue.filter((p) => p !== src);
+        emitNet("iggy-boosting:client:toggleQueue", src, queue.includes(src));
+        return false;
+    }
+    let cid = player.PlayerData.citizenid;
+
+    let rep = await GetRep(cid);
+
+    let classVehicles: VehicleList = Object.fromEntries(
+        Object.entries(VEHICLES).filter(
+            ([model, veh]) => veh.class >= rep.level
+        )
+    );
+
+    const vehicles = Object.values(classVehicles);
+    const randomIndex = Math.floor(Math.random() * vehicles.length);
+
+    let vehicle = vehicles[randomIndex];
+
+    // TODO: RANDOM
+    let cost = Math.floor(
+        global.exports["iggy-utils"].RandomNumber(
+            Config.BOOST_PRICE[vehicle.class].min,
+            Config.BOOST_PRICE[vehicle.class].max
+        )
+    );
+    let reward = Math.floor(
+        (cost === 0 ? 1 : cost) *
+            global.exports["iggy-utils"].RandomNumber(1, 3)
+    );
+    let repReward = Math.floor(
+        global.exports["iggy-utils"].RandomNumber(
+            Config.REP_REWARD[vehicle.class].min,
+            Config.REP_REWARD[vehicle.class].max
+        )
+    );
+
+    CreateContract(
+        vehicle.class,
+        vehicle.name,
+        vehicle.model,
+        repReward,
+        cost,
+        reward,
+        generateTime(1, 0),
+        src
+    );
+
+    console.log(
+        `Awarded Contract [${vehicle.class}] ${vehicle.name} to ${cid} (${src})`
+    );
+    return true;
+}
+
+async function awardContract(iteration = 0) {
+    if (iteration > 5) return;
+    let i = Math.floor(Math.random() * queue.length);
+    let success = await GenerateContract(queue[i]);
+    if (!success) awardContract(iteration++);
+}
+
+async function ContractLoop() {
+    while (true) {
+        // TODO: Add Random noise
+        await global.exports["iggy-utils"].Delay(
+            Config.TIME_BETWEEN_CONTRACTS * 1000
+        );
+        if (queue.length <= 0) continue;
+        let chance = Math.random();
+
+        if (chance >= Config.CONTRACT_CHANCE / 100) {
+            continue;
+        }
+        await awardContract();
+    }
+}
+ContractLoop();
 
 onNet("iggy-boosting:server:getInfo", async () => {
     let src = source;

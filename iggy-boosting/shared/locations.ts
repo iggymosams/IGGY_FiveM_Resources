@@ -1,10 +1,21 @@
 import { DropOffLocation, SpawnLocation } from "./types";
 
-interface locationList {
+interface LocationList {
     [key: string]: SpawnLocation[];
 }
-export const SPAWN_LOCATIONS: locationList = {
+export const SPAWN_LOCATIONS: LocationList = {
     ["C"]: [
+        {
+            vector4: {
+                x: -1017.0287475585938,
+                y: -3328.005615234375,
+                z: 13.944490432739258,
+                w: 66.45962524414062,
+            },
+            inUse: false,
+        },
+    ],
+    ["B"]: [
         {
             vector4: {
                 x: -1017.0287475585938,
