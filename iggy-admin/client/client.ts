@@ -20,7 +20,6 @@ import "./events";
 import "./binds";
 import "./handlers";
 import "./obj_creator";
-import { Delay } from "../shared/utils";
 import { Client } from "qbcore.js";
 import { entitys } from "../shared/entitys";
 export let open = false;
@@ -131,14 +130,14 @@ RegisterNuiCallback("iggy-admin:getLogs", async () => {
 
 RegisterNuiCallback("iggy-admin:toggleFocus", async () => {
     SetNuiFocus(false, false);
-    await Delay(10);
+    await global.exports["iggy-utils"].Delay(10);
     while (true) {
         if (IsControlJustPressed(0, 25)) {
             SetNuiFocus(true, true);
             break;
         }
         if (!open) break;
-        await Delay(0);
+        await global.exports["iggy-utils"].Delay(0);
     }
 });
 
@@ -358,7 +357,7 @@ async function ToggleSelectionMenu() {
             }
         }
 
-        await Delay(0);
+        await global.exports["iggy-utils"].Delay(0);
         DeleteCheckpoint(checkpoint);
     }
 

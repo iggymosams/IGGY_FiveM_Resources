@@ -1,5 +1,3 @@
-import { Delay } from "../shared/utils";
-
 let noClipEnabled: boolean = false;
 let noClipCam: number | null = null;
 
@@ -267,7 +265,7 @@ async function toggleNoclip() {
         DisableControlAction(2, 17, true);
 
         DisablePlayerFiring(PlayerId(), true);
-        await Delay(0);
+        await global.exports["iggy-utils"].Delay(0);
     }
 
     DestroyCam(noClipCam, false);
@@ -296,7 +294,7 @@ async function checkInputRotation() {
     let rotx;
     while (inputRotEnabled) {
         while (noClipCam === null) {
-            await Delay(0);
+            await global.exports["iggy-utils"].Delay(0);
         }
 
         const rightAxisX: number = GetDisabledControlNormal(0, 220);
@@ -317,7 +315,7 @@ async function checkInputRotation() {
             SetCamRot(noClipCam, rotx, rotation[1], rotz, 2);
         }
 
-        await Delay(0);
+        await global.exports["iggy-utils"].Delay(0);
     }
 }
 

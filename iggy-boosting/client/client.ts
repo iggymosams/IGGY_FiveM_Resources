@@ -1,6 +1,5 @@
 import { Client } from "@zerio2/qbcore.js";
 import { ActiveContract, Contract, Rep, Vector3 } from "../shared/types";
-import { CalcDist, Delay } from "../shared/utils";
 
 let active: ActiveContract;
 let blip: number;
@@ -188,7 +187,7 @@ onNet("lockpicks:UseLockpick", () => {
     let vector4 = active.spawn.vector4;
     let pedCoords = GetEntityCoords(ped, false);
 
-    let dist = CalcDist(
+    let dist = global.exports["iggy-utils"].CalcDist(
         vector4.x,
         vector4.y,
         vector4.z,

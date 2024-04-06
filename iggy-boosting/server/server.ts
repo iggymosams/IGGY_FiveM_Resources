@@ -154,7 +154,7 @@ async function spawnVehicle(
         if (checks == 10) {
             break;
         }
-        await Delay(10);
+        await global.exports["iggy-utils"].Delay(10);
         checks++;
     }
     if (!DoesEntityExist(veh)) return {};
@@ -212,9 +212,9 @@ async function beginDropOff(src: number) {
     let dropped = false;
 
     while (!dropped) {
-        await Delay(500);
+        await global.exports["iggy-utils"].Delay(500);
         let coords = GetEntityCoords(veh);
-        let dist = CalcDist(
+        let dist = global.exports["iggy-utils"].CalcDist(
             coords[0],
             coords[1],
             coords[2],
@@ -240,10 +240,10 @@ async function beginDropOff(src: number) {
         if (emptySeats.length === seats) {
             empty = true;
         }
-        await Delay(50);
+        await global.exports["iggy-utils"].Delay(50);
     }
 
-    await Delay(5000);
+    await global.exports["iggy-utils"].Delay(5000);
     DeleteEntity(veh);
     if (group !== null) {
         let players = [group.leader, ...group.players.concat()];
@@ -433,7 +433,7 @@ onNet("iggy-boosting:server:started", async () => {
         let coords = GetEntityCoords(veh);
 
         emitNet("iggy-boosting:client:createBlip", -1, coords, active.netId);
-        await Delay((10 * 1000) / hacks.remaining);
+        await global.exports["iggy-utils"].Delay((10 * 1000) / hacks.remaining);
         hacks = Entity(veh).state.hacks;
     }
     emitNet("iggy-boosting:client:removeBlip", -1, active.netId);

@@ -1,5 +1,4 @@
 import { setOpen } from "./client";
-import { Delay } from "../shared/utils";
 import { RegisterNuiCallback, SendMenuMessage } from "./cl_utils";
 
 let creatingObj = false;
@@ -38,7 +37,7 @@ export async function openTransformControls(obj: number): Promise<{
             position: { x: cpos[0], y: cpos[1], z: cpos[2] },
             rotation: { x: crot[0], y: crot[1], z: crot[2] },
         });
-        await Delay(0);
+        await global.exports["iggy-utils"].Delay(0);
     }
     pos = GetEntityCoords(obj, false);
     rot = GetEntityRotation(obj, order);
@@ -114,7 +113,7 @@ onNet("iggy-admin:client:createObject", async (obj: string) => {
     let waiting = 0;
     while (!HasModelLoaded(hash)) {
         waiting = waiting + 100;
-        await Delay(100);
+        await global.exports["iggy-utils"].Delay(100);
         if (waiting > 5000) {
             TriggerEvent(
                 "QBCore:Notify",
