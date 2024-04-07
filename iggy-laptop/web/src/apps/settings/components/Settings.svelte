@@ -20,11 +20,6 @@
     let isCustom = !defaultWallpapers.includes($settings.wallpaper);
     let customValue = "";
     onMount(() => {
-        console.log(
-            isCustom,
-            defaultWallpapers.includes($settings.wallpaper),
-            $settings.wallpaper
-        );
         if (isCustom) {
             customValue = $settings.wallpaper;
         }
