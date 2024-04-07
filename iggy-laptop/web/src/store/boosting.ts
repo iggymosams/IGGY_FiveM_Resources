@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 import type { ActiveContract, Contract, Rep } from "../apps/boosting/types";
 
-export const rep = writable<Rep>();
+export const rep = writable<Rep | undefined>();
 
 export const inQueue = writable(false);
 
