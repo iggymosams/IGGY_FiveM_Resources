@@ -92,7 +92,7 @@
     }
 
     async function selectButtons() {
-        const gridSize = 1;
+        const gridSize = 5;
         selected = getRandomIndexPerColumn(gridSize);
 
         for (let index = 0; index < selected.length; index++) {
