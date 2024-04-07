@@ -361,5 +361,5 @@ onNet("iggy-boosting:client:playerLeft", () => {
         RemoveBlip(blip);
     });
     pdTrackers = {};
-    emitNet("iggy-boosting:server:toggleQueue");
+    emitNet("iggy-boosting:server:toggleQueue", true);
 });

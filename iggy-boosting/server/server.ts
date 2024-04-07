@@ -345,8 +345,13 @@ onNet("iggy-boosting:server:getInfo", async () => {
     );
 });
 
-onNet("iggy-boosting:server:toggleQueue", async () => {
+onNet("iggy-boosting:server:toggleQueue", async (force?: boolean) => {
     let src = source;
+    if (force) {
+        if (!queue.includes(src)) return;
+        queue = queue.filter((p) => p !== src);
+        return;
+    }
     if (queue.includes(src)) {
         queue = queue.filter((p) => p !== src);
     } else {
