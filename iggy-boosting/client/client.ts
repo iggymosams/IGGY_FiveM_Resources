@@ -344,3 +344,22 @@ onNet("iggy-boosting:client:removeBlip", (netId: number) => {
 
     if (pdTrackers[netId]) RemoveBlip(pdTrackers[netId]);
 });
+
+onNet("QBCore:Client:OnPlayerUnload", () => {
+    emit("iggy-boosting:client:playerLeft");
+});
+
+onNet("iggy-boosting:client:playerLeft", () => {
+    global.exports["iggy-laptop"].SendAppMessage("base", "restart");
+    global.exports["iggy-laptop"].SetFocus(false, false);
+
+    active = undefined;
+    if (blip) RemoveBlip(blip);
+    blip = undefined;
+
+    Object.values(pdTrackers).forEach((blip) => {
+        RemoveBlip(blip);
+    });
+    pdTrackers = {};
+    emitNet("iggy-boosting:server:toggleQueue");
+});

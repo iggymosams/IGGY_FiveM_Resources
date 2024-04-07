@@ -573,3 +573,8 @@ onNet("boost:create", (veh: string) => {
 QBCore.Functions.CreateUseableItem("electronickit", async (src, item) => {
     emitNet("iggy-boosting:client:openHack", src);
 });
+
+on("playerDropped", (reason: string) => {
+    let src = source;
+    emit("iggy-boosting:server:playerLeft", src);
+});
