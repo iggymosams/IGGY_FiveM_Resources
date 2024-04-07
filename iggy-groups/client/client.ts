@@ -146,3 +146,8 @@ function IsInGroup(): boolean {
     return CurrentGroupId === undefined ? false : true;
 }
 global.exports("IsInGroup", IsInGroup);
+
+onNet("QBCore:Client:OnPlayerUnload", () => {
+    if (CurrentGroupId)
+        emitNet("iggy-groups:server:leaveGroup", CurrentGroupId);
+});

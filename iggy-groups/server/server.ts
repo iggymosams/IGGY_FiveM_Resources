@@ -59,6 +59,35 @@ function UpdateGroup(group: Group) {
     UpdateGroups();
 }
 
+function leaveGroup(group: Group, src: number) {
+    let player: GroupPlayer;
+    let isLeader = false;
+    if (group.leader.src === src) {
+        player = group.leader;
+        isLeader = true;
+    } else {
+        player = group.players.find((p) => p.src === src);
+    }
+
+    if (isLeader) {
+        if (group.players.length === 0) {
+            groups = groups.filter((g) => g.id !== group.id);
+            emitNet("iggy-groups:client:leaveGroup", src);
+            UpdateGroups();
+            return;
+        } else {
+            let newLeader = group.players[0];
+            group.leader = newLeader;
+            group.players = group.players.filter((p) => p !== newLeader);
+        }
+    } else {
+        group.players = group.players.filter((p) => p !== player);
+    }
+
+    emitNet("iggy-groups:client:leaveGroup", src);
+    UpdateGroup(group);
+}
+
 QBCore.Functions.CreateCallback(
     "iggy-groups:cb:createGroup",
     (src, cb: (data: Group) => void) => {
@@ -131,33 +160,9 @@ onNet("iggy-groups:server:requestGroup", async (id: number) => {
 
 onNet("iggy-groups:server:leaveGroup", (id: number) => {
     let src = source;
+
     let group = GetGroupById(id);
-    let player: GroupPlayer;
-    let isLeader = false;
-    if (group.leader.src === src) {
-        player = group.leader;
-        isLeader = true;
-    } else {
-        player = group.players.find((p) => p.src === src);
-    }
-
-    if (isLeader) {
-        if (group.players.length === 0) {
-            groups = groups.filter((g) => g.id !== group.id);
-            emitNet("iggy-groups:client:leaveGroup", src);
-            UpdateGroups();
-            return;
-        } else {
-            let newLeader = group.players[0];
-            group.leader = newLeader;
-            group.players = group.players.filter((p) => p !== newLeader);
-        }
-    } else {
-        group.players = group.players.filter((p) => p !== player);
-    }
-
-    emitNet("iggy-groups:client:leaveGroup", src);
-    UpdateGroup(group);
+    leaveGroup(group, src);
 });
 
 onNet("iggy-groups:server:acceptRequest", (req: string, id: number) => {
@@ -268,3 +273,9 @@ function GroupEmitNet(id: number, eventName: string, ...args: unknown[]) {
     });
 }
 global.exports("GroupEmitNet", GroupEmitNet);
+
+on("playerDropped", (reason: string) => {
+    let src = source;
+    let group = GetPlayerGroupFromSource(src);
+    leaveGroup(group, src);
+});
