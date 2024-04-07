@@ -6,7 +6,7 @@ export const Config = {
     POLICE_JOB: "police",
     HACK_COOLDOWN: 1,
     MAX_FAILED: {
-        ["C"]: 5,
+        ["C"]: 0,
         ["B"]: 5,
         ["A"]: 3,
     },
@@ -23,6 +23,11 @@ export const Config = {
     REP_REWARD: {
         ["C"]: { min: 1, max: 2 },
         ["B"]: { min: 1, max: 3 },
+        ["A"]: { min: 2, max: 4 },
+    },
+    MAX_PLAYERS: {
+        ["C"]: { min: -1, max: -1 },
+        ["B"]: { min: 2, max: 2 },
         ["A"]: { min: 2, max: 4 },
     },
 };

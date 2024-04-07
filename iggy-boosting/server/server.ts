@@ -62,17 +62,7 @@ function DeleteContract(src: number, id: number) {
 }
 
 function getMinMaxPlayers(vehClass: VehicleClass) {
-    switch (vehClass) {
-        case "A":
-            return { min: 2, max: 4 };
-        case "B":
-            return { min: 2, max: 2 };
-        case "C":
-            return { min: -1, max: -1 };
-
-        default:
-            break;
-    }
+    return Config.MAX_PLAYERS[vehClass];
 }
 
 function getLocation(vehClass: VehicleClass, i = 0): SpawnLocation {
