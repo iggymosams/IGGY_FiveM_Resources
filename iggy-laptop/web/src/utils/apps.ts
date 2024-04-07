@@ -2,7 +2,7 @@ import type { SvelteComponent } from "svelte";
 import Groups from "../apps/groups/components/Groups.svelte";
 import type { ComponentType } from "svelte";
 import { UsersRound, type Icon, SettingsIcon, CarFront } from "lucide-svelte";
-import Settings from "../apps/settings/comonents/Settings.svelte";
+import Settings from "../apps/settings/components/Settings.svelte";
 import { writable, type Writable } from "svelte/store";
 import Boosting from "../apps/boosting/components/Boosting.svelte";
 

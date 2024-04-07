@@ -15,7 +15,7 @@
             app: "base",
             action: "toggleLaptop",
             data: {
-                open: false,
+                open: true,
                 hasVPN: true,
                 handle: "Handle",
             },
