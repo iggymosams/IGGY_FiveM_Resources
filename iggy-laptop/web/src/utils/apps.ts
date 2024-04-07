@@ -41,6 +41,14 @@ export const APPS: ConfigApp[] = [
         icon: CarFront,
         requiresVPN: true,
     },
+    {
+        id: "Settings",
+        name: "Settings",
+        backgroundColor: "bg-gray-600",
+        color: "text-white",
+        component: Settings,
+        icon: SettingsIcon,
+    },
 ];
 
 function configToApp(app: ConfigApp): LaptopApp {

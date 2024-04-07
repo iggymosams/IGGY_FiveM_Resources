@@ -6,5 +6,5 @@
 
 <AppShell
     {app}
-    class="backdrop-blur-xl bg-opacity-50 bg-neutral-700 text-white  "
+    class="backdrop-blur-xl bg-opacity-15 bg-neutral-700 text-white  "
 ></AppShell>
