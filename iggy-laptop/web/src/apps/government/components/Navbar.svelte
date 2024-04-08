@@ -19,7 +19,7 @@
         San Andreas Government
     </button>
 
-    <div class={`ml-auto flex gap-3  ${minimized ? "text-sm" : "text-base"}`}>
+    <div class={`ml-auto flex gap-3  ${minimized ? "text-sm" : "text-lg"}`}>
         <NavButton title={"Departments"} {navigate} page="DEPARTMENTS" />
         <NavButton title={"Leadership"} {navigate} page="LEADERSHIP" />
         <NavButton title={"Laws & Regulations"} {navigate} page="LAWS" />
