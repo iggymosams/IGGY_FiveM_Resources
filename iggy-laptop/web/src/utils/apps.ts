@@ -59,7 +59,7 @@ export const APPS: ConfigApp[] = [
     {
         id: "GOVERNMENT",
         name: "San Andreas",
-        backgroundColor: "bg-green-700",
+        backgroundColor: "bg-blue-400",
         color: "text-white",
         component: Government,
         icon: Scale,
