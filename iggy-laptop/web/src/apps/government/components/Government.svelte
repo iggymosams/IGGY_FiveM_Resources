@@ -2,6 +2,7 @@
     import AppShell from "../../../components/AppShell.svelte";
     import type { LaptopApp } from "../../../utils/apps";
     import DepartmentPage from "./DepartmentPage.svelte";
+    import FacilitesPage from "./FacilitesPage.svelte";
     import HomePage from "./HomePage.svelte";
     import LeadershipPage from "./LeadershipPage.svelte";
     import Navbar from "./Navbar.svelte";
