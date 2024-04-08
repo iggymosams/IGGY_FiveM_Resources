@@ -2,6 +2,7 @@
     import { writable } from "svelte/store";
     import TextEditor from "./TextEditor.svelte";
     import type { tab } from "../types";
+    import { canEdit } from "../../../store/government";
 
     function randomID() {
         return (
@@ -51,26 +52,28 @@
 <div
     class="text-left w-full h-full absolute top-0 left-0 px-16 overflow-auto py-3 flex flex-col"
 >
-    <div class="w-full grid grid-cols-12 gap-2 pb-3">
-        <input
-            class="col-start-3 col-span-5 font-bold text-lg bg-transparent"
-            bind:value={title}
-            disabled={!$editing}
-        />
+    {#if $canEdit}
+        <div class="w-full grid grid-cols-12 gap-2 pb-3">
+            <input
+                class="col-start-3 col-span-5 font-bold text-lg bg-transparent"
+                bind:value={title}
+                disabled={!$editing}
+            />
 
-        <button
-            class="py-1 px-2 rounded-md bg-blue-400 hover:bg-blue-500 col-start-11"
-            on:click={newTab}
-        >
-            New
-        </button>
-        <button
-            class="py-1 px-2 rounded-md bg-blue-400 hover:bg-blue-500"
-            on:click={toggleEditing}
-        >
-            {$editing ? "Save" : "Edit"}
-        </button>
-    </div>
+            <button
+                class="py-1 px-2 rounded-md bg-blue-400 hover:bg-blue-500 col-start-11"
+                on:click={newTab}
+            >
+                New
+            </button>
+            <button
+                class="py-1 px-2 rounded-md bg-blue-400 hover:bg-blue-500"
+                on:click={toggleEditing}
+            >
+                {$editing ? "Save" : "Edit"}
+            </button>
+        </div>
+    {/if}
     <div class="w-full h-full grid grid-cols-12 flex-auto">
         <div class="col-span-2 relative overflow-auto">
             <div class="divide-y divide-blue-400 px-1 overflow-hidden absolute">
