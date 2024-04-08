@@ -28,7 +28,7 @@
 
 <AppShell
     {app}
-    class="backdrop-blur-xl bg-opacity-15 bg-neutral-700 text-white px-52 "
+    class="backdrop-blur-xl bg-opacity-15 bg-neutral-700 text-white px-52"
 >
     <div class="flex py-2">
         <div
