@@ -3,6 +3,7 @@
     import type { LaptopApp } from "../../../utils/apps";
     import DepartmentPage from "./DepartmentPage.svelte";
     import HomePage from "./HomePage.svelte";
+    import LeadershipPage from "./LeadershipPage.svelte";
     import Navbar from "./Navbar.svelte";
 
     export let app: LaptopApp;
@@ -22,7 +23,7 @@
         {:else if page === "DEPARTMENTS"}
             <DepartmentPage />
         {:else if page === "LEADERSHIP"}
-            LEADERSHIP
+            <LeadershipPage />
         {:else if page === "LAWS"}
             LAWS
         {:else if page === "FACILITIES"}
