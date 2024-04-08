@@ -1,10 +1,17 @@
 import type { SvelteComponent } from "svelte";
 import Groups from "../apps/groups/components/Groups.svelte";
 import type { ComponentType } from "svelte";
-import { UsersRound, type Icon, SettingsIcon, CarFront } from "lucide-svelte";
+import {
+    UsersRound,
+    type Icon,
+    SettingsIcon,
+    CarFront,
+    Scale,
+} from "lucide-svelte";
 import Settings from "../apps/settings/components/Settings.svelte";
 import { writable, type Writable } from "svelte/store";
 import Boosting from "../apps/boosting/components/Boosting.svelte";
+import Government from "../apps/government/components/Government.svelte";
 
 export interface ConfigApp {
     id: string;
@@ -42,12 +49,20 @@ export const APPS: ConfigApp[] = [
         requiresVPN: true,
     },
     {
-        id: "Settings",
+        id: "SETTINGS",
         name: "Settings",
         backgroundColor: "bg-gray-600",
         color: "text-white",
         component: Settings,
         icon: SettingsIcon,
+    },
+    {
+        id: "GOVERNMENT",
+        name: "San Andreas",
+        backgroundColor: "bg-green-700",
+        color: "text-white",
+        component: Government,
+        icon: Scale,
     },
 ];
 
