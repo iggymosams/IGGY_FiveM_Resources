@@ -4,6 +4,7 @@
     import DepartmentPage from "./DepartmentPage.svelte";
     import FacilitesPage from "./FacilitesPage.svelte";
     import HomePage from "./HomePage.svelte";
+    import LawsPage from "./LawsPage.svelte";
     import LeadershipPage from "./LeadershipPage.svelte";
     import Navbar from "./Navbar.svelte";
 
@@ -26,7 +27,7 @@
         {:else if page === "LEADERSHIP"}
             <LeadershipPage />
         {:else if page === "LAWS"}
-            LAWS
+            <LawsPage />
         {:else if page === "FACILITIES"}
             <FacilitesPage />
         {/if}
