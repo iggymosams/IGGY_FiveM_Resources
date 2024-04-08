@@ -27,7 +27,7 @@
         {:else if page === "LAWS"}
             LAWS
         {:else if page === "FACILITIES"}
-            FACILITIES
+            <FacilitesPage />
         {/if}
     </div>
 </AppShell>
