@@ -1,5 +1,5 @@
 global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "government:getInfo",
+    "gov:getInfo",
     async () => {
         emitNet("iggy-gov:server:getAnnouncements");
         emitNet("iggy-gov:server:getCanEdit");
@@ -7,7 +7,7 @@ global.exports["iggy-laptop"].RegisterLaptopCallback(
 );
 
 global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "government:newStateAnnouncement",
+    "gov:newStateAnnouncement",
     async (data: { title: string; message: string }) => {
         emitNet("iggy-gov:server:newStateAnnouncement", data);
     }

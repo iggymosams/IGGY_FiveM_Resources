@@ -43,7 +43,7 @@
                 class="p-3 w-full bg-blue-400 rounded-md shadow-md hover:bg-blue-500"
                 on:click={() => {
                     if (title !== "" && message !== "") {
-                        fetchNui("government:newStateAnnouncement", {
+                        fetchNui("gov:newStateAnnouncement", {
                             title,
                             message,
                         });

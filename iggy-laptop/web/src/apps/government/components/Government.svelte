@@ -25,7 +25,7 @@
     });
 
     onMount(() => {
-        fetchNui("government:getInfo");
+        fetchNui("gov:getInfo");
     });
 </script>
 
