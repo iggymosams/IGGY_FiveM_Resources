@@ -1,6 +1,8 @@
 <script lang="ts">
     import QuickLink from "./QuickLink.svelte";
     import StateAnnouncements from "./StateAnnouncements.svelte";
+
+    export let navigate: (page: string) => void;
 </script>
 
 <div
@@ -20,18 +22,26 @@
                 title="Departments"
                 description="Discover the various departments and agencies that make up the
                     San Andreas Government."
+                page="DEPARTMENTS"
+                {navigate}
             />
             <QuickLink
                 title="Leadership"
                 description="Meet the elected officials and key figures leading our state to prosperity."
+                page="LEADERSHIP"
+                {navigate}
             />
             <QuickLink
                 title="Laws & Regulations"
                 description="Stay informed about the laws and regulations that govern San Andreas."
+                page="LAWS"
+                {navigate}
             />
             <QuickLink
                 title="Government Facilities"
                 description="Locate government facilities across San Andreas, including police stations, hospitals, and city hall."
+                page="FACILITIES"
+                {navigate}
             />
         </ul>
     </div>

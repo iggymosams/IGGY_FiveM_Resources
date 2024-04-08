@@ -17,8 +17,7 @@
     <Navbar minimized={$minimized} {navigate} />
     <div class="px-16 h-5/6 relative">
         {#if page === "HOME"}
-            <HomePage />
-            <!-- <StateAnnouncements /> -->
+            <HomePage {navigate} />
         {:else if page === "DEPARTMENTS"}
             DEPARTMENTS
         {:else if page === "LEADERSHIP"}
