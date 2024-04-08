@@ -1,8 +1,7 @@
 <script lang="ts">
     import AppShell from "../../../components/AppShell.svelte";
     import type { LaptopApp } from "../../../utils/apps";
-    import SAFlag from "../assets/SA_Flag.png";
-    import NavButton from "./NavButton.svelte";
+    import Navbar from "./Navbar.svelte";
     import QuickLink from "./QuickLink.svelte";
     import StateAnnouncements from "./StateAnnouncements.svelte";
 
@@ -17,30 +16,7 @@
 
 <!-- TODO: FIX OVERFLOW -->
 <AppShell {app} class="bg-slate-200 text-black ">
-    <div
-        class={`bg-blue-400  font-bold text-white flex items-center gap-3  h-[12%] ${$minimized ? "px-2 text-lg" : "px-16 text-2xl"}`}
-    >
-        <button
-            on:click={() => {
-                navigate("HOME");
-            }}
-            class="flex items-center gap-3 h-full"
-        >
-            <img src={SAFlag} class="h-3/4 rounded-md" />
-            State of San Andreas Government
-        </button>
-
-        <div class="ml-auto flex gap-3">
-            <NavButton title={"Departments"} {navigate} page="DEPARTMENTS" />
-            <NavButton title={"Leadership"} {navigate} page="LEADERSHIP" />
-            <NavButton title={"Laws & Regulations"} {navigate} page="LAWS" />
-            <NavButton
-                title={"Government Facilities"}
-                {navigate}
-                page="FACILITIES"
-            />
-        </div>
-    </div>
+    <Navbar minimized={$minimized} {navigate} />
     <div class="flex px-16 py-3 h-[88%]">
         {#if page === "HOME"}
             <div class="text-left w-full">
