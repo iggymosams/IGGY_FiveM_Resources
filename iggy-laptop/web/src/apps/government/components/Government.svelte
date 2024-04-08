@@ -1,6 +1,7 @@
 <script lang="ts">
     import AppShell from "../../../components/AppShell.svelte";
     import type { LaptopApp } from "../../../utils/apps";
+    import DepartmentPage from "./DepartmentPage.svelte";
     import HomePage from "./HomePage.svelte";
     import Navbar from "./Navbar.svelte";
 
@@ -19,7 +20,7 @@
         {#if page === "HOME"}
             <HomePage {navigate} />
         {:else if page === "DEPARTMENTS"}
-            DEPARTMENTS
+            <DepartmentPage />
         {:else if page === "LEADERSHIP"}
             LEADERSHIP
         {:else if page === "LAWS"}
