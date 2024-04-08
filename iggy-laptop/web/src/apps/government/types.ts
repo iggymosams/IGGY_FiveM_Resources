@@ -3,3 +3,9 @@ export interface tab {
     html?: string;
     uuid: string;
 }
+
+export interface Announcement {
+    title: string;
+    message: string;
+    date: number;
+}

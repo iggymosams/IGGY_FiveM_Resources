@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     import AppShell from "../../../components/AppShell.svelte";
     import type { LaptopApp } from "../../../utils/apps";
     import DepartmentPage from "./DepartmentPage.svelte";
@@ -7,6 +8,9 @@
     import LawsPage from "./LawsPage.svelte";
     import LeadershipPage from "./LeadershipPage.svelte";
     import Navbar from "./Navbar.svelte";
+    import { fetchNui } from "../../../utils/fetchNui";
+    import { useNuiEvent } from "../../../utils/useNuiEvent";
+    import { canEdit } from "../../../store/government";
 
     export let app: LaptopApp;
     let minimized = app.minimized;
@@ -15,6 +19,14 @@
     function navigate(newPage: string) {
         page = newPage;
     }
+
+    useNuiEvent<boolean>("government", "updateCanEdit", (data) => {
+        canEdit.set(data);
+    });
+
+    onMount(() => {
+        fetchNui("government:getInfo");
+    });
 </script>
 
 <AppShell {app} class="bg-slate-200 text-black h-full">
