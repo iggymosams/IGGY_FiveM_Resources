@@ -23,6 +23,13 @@ global.exports["iggy-laptop"].RegisterLaptopCallback(
     }
 );
 
+global.exports["iggy-laptop"].RegisterLaptopCallback(
+    "gov:deleteAnnouncement",
+    async (announcement: number) => {
+        emitNet("iggy-gov:server:deleteAnnouncement", announcement);
+    }
+);
+
 onNet("iggy-gov:client:getAnnouncements", (announcements: Announcement[]) => {
     global.exports["iggy-laptop"].SendAppMessage(
         "gov",

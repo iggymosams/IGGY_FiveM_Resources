@@ -7,7 +7,7 @@ let laws: Law[];
 async function getAnnouncements(): Promise<Announcement[]> {
     if (announcements) return announcements;
     let response = await MySQL.query(
-        "select * FROM `iggy_gov_state_announcements` ORDER BY date DESC"
+        "SELECT * FROM `iggy_gov_state_announcements` WHERE `deletedAt` IS NULL ORDER BY date DESC"
     );
     announcements = response as Announcement[];
     return announcements;
@@ -40,23 +40,30 @@ onNet("iggy-gov:server:getCanEdit", () => {
 onNet(
     "iggy-gov:server:newStateAnnouncement",
     async (data: { title: string; message: string }) => {
+        let date = new Date().toISOString().slice(0, 19).replace("T", " ");
+        console.log(date);
+        let test = await MySQL.query(
+            "INSERT INTO `iggy_gov_state_announcements` (title, message, date) VALUES (?, ?, ?)",
+            [data.title, data.message, date]
+        );
+
         let announcement = {
+            id: test.insertId,
             title: data.title,
             message: data.message,
-            date: new Date().getTime(),
+            date: date,
         };
         announcements.unshift(announcement);
 
-        emitNet("iggy-gov:client:getAnnouncements", -1, announcements);
-        await MySQL.query(
-            "INSERT INTO `iggy_gov_state_announcements` (title, message, date) VALUES (?, ?, ?)",
-            [announcement.title, announcement.message, announcement.date]
+        emitNet(
+            "iggy-gov:client:getAnnouncements",
+            -1,
+            await getAnnouncements()
         );
     }
 );
 
 onNet("iggy-gov:server:saveLaw", async (law: Law) => {
-    let src = source;
     let response = await MySQL.query(
         "UPDATE `iggy_gov_laws` SET `title` = ?, `html` = ? WHERE `uuid` = ?",
         [law.title, law.html, law.uuid]
@@ -73,4 +80,20 @@ onNet("iggy-gov:server:saveLaw", async (law: Law) => {
         laws[i] = law;
     }
     emitNet("iggy-gov:client:getLaws", -1, await getLaws());
+});
+
+onNet("iggy-gov:server:deleteAnnouncement", async (announcementId: number) => {
+    let announcement = announcements.find((a) => a.id === announcementId);
+
+    if (!announcement) {
+        return;
+    }
+
+    await MySQL.query(
+        "UPDATE `iggy_gov_state_announcements` SET `deletedAt` = CURRENT_TIMESTAMP WHERE `id` = ?",
+        [announcement.id]
+    );
+
+    announcements = announcements.filter((a) => a.id !== announcement.id);
+    emitNet("iggy-gov:client:getAnnouncements", -1, await getAnnouncements());
 });

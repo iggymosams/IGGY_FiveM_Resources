@@ -5,7 +5,8 @@ export interface tab {
 }
 
 export interface Announcement {
+    id: number;
     title: string;
     message: string;
-    date: number;
+    date: string;
 }

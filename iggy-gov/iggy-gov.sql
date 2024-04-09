@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS `iggy_gov_state_announcements` (
   `title` text NOT NULL,
   `message` text NOT NULL,
   `date` BIGINT NOT NULL,
+  `deletedAt` TIMESTAMP NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 

@@ -46,6 +46,7 @@
     </div>
     {#each $announcements as announcement}
         <Announcement
+            id={announcement.id}
             title={announcement.title}
             message={announcement.message}
             date={announcement.date}

@@ -1,11 +1,25 @@
 <script lang="ts">
+    import { CircleX } from "lucide-svelte";
+    import { fetchNui } from "../../../utils/fetchNui";
+
+    export let id: number;
     export let title: string;
     export let message: string;
-    export let date: number;
+    export let date: string;
 </script>
 
 <div class="bg-white shadow-md p-4 rounded-lg flex flex-col w-full mb-2">
-    <h3 class="text-2xl font-semibold">{title}</h3>
+    <div class="flex w-full">
+        <h3 class="text-2xl font-semibold">{title}</h3>
+        <button
+            class="ml-auto rounded-full p-2 text-xs hover:bg-black/15 aspect-square"
+            on:click={() => {
+                fetchNui("gov:deleteAnnouncement", id);
+            }}
+        >
+            <CircleX size={17} />
+        </button>
+    </div>
     <p>{message}</p>
     <h4 class="ml-auto text-xs">
         {new Date(date).toLocaleString(undefined, {
