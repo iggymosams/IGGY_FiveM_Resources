@@ -30,7 +30,6 @@ function getLocalStorage() {
             console.error("Error loading settings. Reseting to default.");
         }
 
-        //TODO: NUI FETCH SETTINGS UPDATE
         return settingsValue;
     } catch (error) {
         console.error(error);
@@ -41,7 +40,6 @@ function getLocalStorage() {
 export const settings = writable<LaptopSettings>(getLocalStorage());
 
 settings.subscribe((value) => {
-    //TODO: NUI FETCH SETTINGS UPDATE
     const isDefaultValue =
         JSON.stringify(value) === JSON.stringify(defaultConfig());
     if (isDefaultValue) {
