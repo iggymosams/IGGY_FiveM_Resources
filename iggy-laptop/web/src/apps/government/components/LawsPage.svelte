@@ -94,7 +94,7 @@
             <div class="divide-y divide-blue-400 px-1 overflow-hidden absolute">
                 {#each $laws as tab, i}
                     <button
-                        class="w-full py-5 px-1"
+                        class={`w-full py-5 px-1 font-bold ${tab.uuid === $activeTab.uuid ? "bg-slate-300" : ""}`}
                         on:click={() => {
                             activeTab.set({ ...$laws[i] });
                             title = tab.title;
