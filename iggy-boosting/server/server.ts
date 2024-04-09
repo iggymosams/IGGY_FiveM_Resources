@@ -447,10 +447,13 @@ onNet("iggy-boosting:server:startContract", async (id: number) => {
         return;
     }
 
-    // TODO: ADDED OFFSET
     let blipOffset: Vector3 = {
-        x: location.vector4.x,
-        y: location.vector4.y,
+        x:
+            location.vector4.x +
+            global.exports["iggy-utils"].RandomNumber(-100, 100),
+        y:
+            location.vector4.y +
+            global.exports["iggy-utils"].RandomNumber(-100, 100),
         z: location.vector4.z,
     };
 
