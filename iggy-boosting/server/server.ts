@@ -273,7 +273,6 @@ async function GenerateContract(src: number) {
 
     let vehicle = vehicles[randomIndex];
 
-    // TODO: RANDOM
     let cost = Math.floor(
         global.exports["iggy-utils"].RandomNumber(
             Config.BOOST_PRICE[vehicle.class].min,

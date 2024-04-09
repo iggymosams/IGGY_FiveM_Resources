@@ -205,8 +205,6 @@ onNet("lockpicks:UseLockpick", () => {
             emitNet("iggy-boosting:server:startDropOff");
             RemoveBlip(blip);
         } else {
-            // TODO: TRACKER
-            // StartMapBlips();
             emitNet("iggy-boosting:server:started");
         }
     }
