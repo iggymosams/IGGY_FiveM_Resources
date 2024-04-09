@@ -18,8 +18,9 @@
             modules: {
                 toolbar: [
                     [{ header: 1 }, { header: 2 }],
-                    ["bold", "italic", "underline"],
+                    ["bold", "italic", "underline", "strike"],
                     [{ list: "ordered" }, { list: "bullet" }],
+                    [{ color: [] }, { background: [] }],
                     ["clean"],
                 ],
             },
