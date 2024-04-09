@@ -31,17 +31,19 @@
     });
 
     $: {
-        let content = $activeTab.html;
-        if (content === undefined) {
-            editor.root.innerHTML = "";
-        } else {
-            if (editor && content) {
-                editor.root.innerHTML = content;
+        if ($activeTab) {
+            let content = $activeTab.html;
+            if (content === undefined) {
+                editor.root.innerHTML = "";
+            } else {
+                if (editor && content) {
+                    editor.root.innerHTML = content;
+                }
             }
-        }
-        let readOnly = $editing;
-        if (editor) {
-            editor.enable(readOnly);
+            let readOnly = $editing;
+            if (editor) {
+                editor.enable(readOnly);
+            }
         }
     }
 

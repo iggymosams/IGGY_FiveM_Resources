@@ -1,10 +1,11 @@
-import { Announcement } from "../shared/types";
+import { Announcement, Law } from "../shared/types";
 
 global.exports["iggy-laptop"].RegisterLaptopCallback(
     "gov:getInfo",
     async () => {
         emitNet("iggy-gov:server:getAnnouncements");
         emitNet("iggy-gov:server:getCanEdit");
+        emitNet("iggy-gov:server:getLaws");
     }
 );
 
@@ -12,6 +13,13 @@ global.exports["iggy-laptop"].RegisterLaptopCallback(
     "gov:newStateAnnouncement",
     async (data: { title: string; message: string }) => {
         emitNet("iggy-gov:server:newStateAnnouncement", data);
+    }
+);
+
+global.exports["iggy-laptop"].RegisterLaptopCallback(
+    "gov:saveLaw",
+    async (law: Law) => {
+        emitNet("iggy-gov:server:saveLaw", law);
     }
 );
 
@@ -29,4 +37,8 @@ onNet("iggy-gov:client:updateCanEdit", (canEdit: boolean) => {
         "updateCanEdit",
         canEdit
     );
+});
+
+onNet("iggy-gov:client:getLaws", (laws: Law[]) => {
+    global.exports["iggy-laptop"].SendAppMessage("gov", "updateLaws", laws);
 });

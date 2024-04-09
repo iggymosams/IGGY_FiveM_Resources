@@ -2,7 +2,8 @@
     import { writable } from "svelte/store";
     import TextEditor from "./TextEditor.svelte";
     import type { tab } from "../types";
-    import { canEdit } from "../../../store/government";
+    import { canEdit, laws } from "../../../store/government";
+    import { fetchNui } from "../../../utils/fetchNui";
 
     function randomID() {
         return (
@@ -11,18 +12,10 @@
         );
     }
 
-    let tabs: tab[] = [
-        {
-            title: "The Constitution of San Andreas",
-            html: "<p>dasdadasd</p><p><br></p><h1>Test</h1>",
-            uuid: randomID(),
-        },
-    ];
-
-    let activeTab = writable<tab>(tabs[0]);
+    let activeTab = writable<tab>($laws[0] ? $laws[0] : undefined);
     let editing = writable(false);
 
-    let title = tabs[0].title;
+    let title = $laws[0] ? $laws[0].title : undefined;
     let getEditorContent: any;
 
     function newTab() {
@@ -31,19 +24,26 @@
             uuid: randomID(),
         };
         title = tab.title;
-        $activeTab = tab;
-        tabs.push(tab);
-        $editing = true;
+        activeTab.set(tab);
+        laws.update(($laws) => [tab, ...$laws]);
+        editing.set(true);
     }
 
     function toggleEditing() {
-        if ($editing) {
+        if ($editing && title) {
             $activeTab.html = getEditorContent();
             $activeTab.title = title;
-            let tab = tabs.findIndex((tab) => {
-                tab.uuid === $activeTab.uuid;
-            });
-            tabs[tab] = $activeTab;
+            const tabIdx = $laws.findIndex(
+                (tab) => tab.uuid === $activeTab.uuid
+            );
+            if (tabIdx !== -1) {
+                laws.update(($laws) => {
+                    const updatedLaws = [...$laws];
+                    updatedLaws[tabIdx] = $activeTab;
+                    return updatedLaws;
+                });
+                fetchNui("gov:saveLaw", $activeTab);
+            }
         }
         $editing = !$editing;
     }
@@ -77,11 +77,11 @@
     <div class="w-full h-full grid grid-cols-12 flex-auto">
         <div class="col-span-2 relative overflow-auto">
             <div class="divide-y divide-blue-400 px-1 overflow-hidden absolute">
-                {#each tabs as tab}
+                {#each $laws as tab, i}
                     <button
                         class="w-full py-5 px-1"
                         on:click={() => {
-                            $activeTab = tab;
+                            activeTab.set({ ...$laws[i] });
                             title = tab.title;
                         }}
                     >

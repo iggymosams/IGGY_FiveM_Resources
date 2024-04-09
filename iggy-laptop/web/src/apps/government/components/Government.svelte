@@ -10,7 +10,7 @@
     import Navbar from "./Navbar.svelte";
     import { fetchNui } from "../../../utils/fetchNui";
     import { useNuiEvent } from "../../../utils/useNuiEvent";
-    import { canEdit } from "../../../store/government";
+    import { canEdit, laws } from "../../../store/government";
 
     export let app: LaptopApp;
     let minimized = app.minimized;
@@ -22,6 +22,10 @@
 
     useNuiEvent<boolean>("gov", "updateCanEdit", (data) => {
         canEdit.set(data);
+    });
+
+    useNuiEvent<any>("gov", "updateLaws", (data) => {
+        laws.set(data);
     });
 
     onMount(() => {
