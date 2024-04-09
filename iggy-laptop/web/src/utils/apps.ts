@@ -32,21 +32,20 @@ export type LaptopApp = ConfigApp & {
 
 export const APPS: ConfigApp[] = [
     {
+        id: "GOVERNMENT",
+        name: "San Andreas",
+        backgroundColor: "bg-blue-400",
+        color: "text-white",
+        component: Government,
+        icon: Scale,
+    },
+    {
         id: "GROUPS",
         name: "Groups",
         backgroundColor: "bg-purple-400",
         color: "text-white",
         component: Groups,
         icon: UsersRound,
-    },
-    {
-        id: "BOOSTING",
-        name: "Boosting",
-        backgroundColor: "bg-sky-500",
-        color: "text-white",
-        component: Boosting,
-        icon: CarFront,
-        requiresVPN: true,
     },
     {
         id: "SETTINGS",
@@ -57,12 +56,13 @@ export const APPS: ConfigApp[] = [
         icon: SettingsIcon,
     },
     {
-        id: "GOVERNMENT",
-        name: "San Andreas",
-        backgroundColor: "bg-blue-400",
+        id: "BOOSTING",
+        name: "Boosting",
+        backgroundColor: "bg-sky-500",
         color: "text-white",
-        component: Government,
-        icon: Scale,
+        component: Boosting,
+        icon: CarFront,
+        requiresVPN: true,
     },
 ];
 
