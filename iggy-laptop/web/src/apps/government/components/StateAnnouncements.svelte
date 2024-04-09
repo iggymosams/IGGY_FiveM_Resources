@@ -10,18 +10,13 @@
 
     let open = false;
 
-    useNuiEvent<AnnouncementType[]>(
-        "government",
-        "updateAnnouncements",
-        (data) => {
-            console.log(data);
-            announcements.set(data);
-        }
-    );
+    useNuiEvent<AnnouncementType[]>("gov", "updateAnnouncements", (data) => {
+        announcements.set(data);
+    });
 
     debugData([
         {
-            app: "government",
+            app: "gov",
             action: "updateAnnouncements",
             data: [
                 {

@@ -1,3 +1,5 @@
+import { Announcement } from "../shared/types";
+
 global.exports["iggy-laptop"].RegisterLaptopCallback(
     "gov:getInfo",
     async () => {
@@ -13,9 +15,9 @@ global.exports["iggy-laptop"].RegisterLaptopCallback(
     }
 );
 
-onNet("iggy-gov:client:getAnnouncements", (announcements: any) => {
+onNet("iggy-gov:client:getAnnouncements", (announcements: Announcement[]) => {
     global.exports["iggy-laptop"].SendAppMessage(
-        "government",
+        "gov",
         "updateAnnouncements",
         announcements
     );
@@ -23,7 +25,7 @@ onNet("iggy-gov:client:getAnnouncements", (announcements: any) => {
 
 onNet("iggy-gov:client:updateCanEdit", (canEdit: boolean) => {
     global.exports["iggy-laptop"].SendAppMessage(
-        "government",
+        "gov",
         "updateCanEdit",
         canEdit
     );

@@ -20,7 +20,7 @@
         page = newPage;
     }
 
-    useNuiEvent<boolean>("government", "updateCanEdit", (data) => {
+    useNuiEvent<boolean>("gov", "updateCanEdit", (data) => {
         canEdit.set(data);
     });
 
