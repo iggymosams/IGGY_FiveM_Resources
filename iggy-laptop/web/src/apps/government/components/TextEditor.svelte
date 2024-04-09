@@ -25,6 +25,7 @@
             },
             theme: "bubble",
         });
+        editor.disable();
     });
     onDestroy(() => {
         editor.off("text-change", () => {});
