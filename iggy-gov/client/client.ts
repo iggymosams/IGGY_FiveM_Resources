@@ -12,6 +12,10 @@ global.exports["iggy-laptop"].RegisterLaptopCallback(
             "updateFacilities",
             Config.Facilities
         );
+        global.exports["iggy-laptop"].SendAppMessage(
+            "gov",
+            "updateLeadership",
+            Config.Leadership
         );
     }
 );

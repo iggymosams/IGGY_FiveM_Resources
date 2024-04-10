@@ -16,3 +16,10 @@ export interface Facility {
     description: string;
     location: string;
 }
+
+export interface Leader {
+    name: string;
+    position: string;
+    image: string;
+    bio: string;
+}

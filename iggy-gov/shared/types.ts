@@ -17,3 +17,10 @@ export interface Facility {
     location: string;
     coords: { x: number; y: number };
 }
+
+export interface Leader {
+    name: string;
+    position: string;
+    image: string;
+    bio: string;
+}

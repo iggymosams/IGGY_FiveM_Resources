@@ -10,8 +10,13 @@
     import Navbar from "./Navbar.svelte";
     import { fetchNui } from "../../../utils/fetchNui";
     import { useNuiEvent } from "../../../utils/useNuiEvent";
-    import { canEdit, facilities, laws } from "../../../store/government";
-    import type { Facility, Law } from "../types";
+    import {
+        canEdit,
+        facilities,
+        laws,
+        leadership,
+    } from "../../../store/government";
+    import type { Facility, Law, Leader } from "../types";
 
     export let app: LaptopApp;
     let minimized = app.minimized;
@@ -31,6 +36,10 @@
 
     useNuiEvent<Facility[]>("gov", "updateFacilities", (data) => {
         facilities.set(data);
+    });
+
+    useNuiEvent<Leader[]>("gov", "updateLeadership", (data) => {
+        leadership.set(data);
     });
 
     onMount(() => {
