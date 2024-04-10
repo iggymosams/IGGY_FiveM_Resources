@@ -222,46 +222,46 @@ export let Commands: CommandGroup[] = [
                     },
                 ],
             },
-            {
-                id: "createBoost",
-                name: "Create Boost",
-                type: "SERVER",
-                event: "iggy-admin:server:createBoost",
-                commandType: "COLLAPSE",
-                options: [
-                    {
-                        id: "player",
-                        name: "Player",
-                        type: "PLAYER_LIST",
-                    },
-                    {
-                        id: "boost",
-                        name: "Boost",
-                        type: "INPUT_SELECT",
-                        choices: await GetBoosts(),
-                    },
-                    {
-                        id: "rewardRep",
-                        name: "Rep Reward",
-                        type: "NUMBER",
-                    },
-                    {
-                        id: "cost",
-                        name: "Cost",
-                        type: "NUMBER",
-                    },
-                    {
-                        id: "rewardQBit",
-                        name: "QBit Reward",
-                        type: "NUMBER",
-                    },
-                    {
-                        id: "time",
-                        name: "Duration (in mins)",
-                        type: "NUMBER",
-                    },
-                ],
-            },
+            // {
+            //     id: "createBoost",
+            //     name: "Create Boost",
+            //     type: "SERVER",
+            //     event: "iggy-admin:server:createBoost",
+            //     commandType: "COLLAPSE",
+            //     options: [
+            //         {
+            //             id: "player",
+            //             name: "Player",
+            //             type: "PLAYER_LIST",
+            //         },
+            //         {
+            //             id: "boost",
+            //             name: "Boost",
+            //             type: "INPUT_SELECT",
+            //             choices: await GetBoosts(),
+            //         },
+            //         {
+            //             id: "rewardRep",
+            //             name: "Rep Reward",
+            //             type: "NUMBER",
+            //         },
+            //         {
+            //             id: "cost",
+            //             name: "Cost",
+            //             type: "NUMBER",
+            //         },
+            //         {
+            //             id: "rewardQBit",
+            //             name: "QBit Reward",
+            //             type: "NUMBER",
+            //         },
+            //         {
+            //             id: "time",
+            //             name: "Duration (in mins)",
+            //             type: "NUMBER",
+            //         },
+            //     ],
+            // },
             {
                 id: "setJob",
                 name: "Set Job",

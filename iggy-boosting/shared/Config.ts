@@ -6,14 +6,14 @@ export const Config = {
     POLICE_JOB: "police",
     HACK_COOLDOWN: 1,
     MAX_FAILED: {
-        ["C"]: 5,
+        ["C"]: 0,
         ["B"]: 5,
         ["A"]: 3,
     },
     HACKS: {
-        ["C"]: 5,
+        ["C"]: 0,
         ["B"]: 10,
-        ["A"]: 15,
+        ["A"]: 20,
     },
     BOOST_PRICE: {
         ["C"]: { min: 0, max: 5 },
@@ -25,9 +25,9 @@ export const Config = {
         ["B"]: { min: 1, max: 3 },
         ["A"]: { min: 2, max: 4 },
     },
-    MAX_CONTRACTS_PER_CLASS_PER_RESTART: {
-        ["C"]: -1,
-        ["B"]: 15,
-        ["A"]: 1,
+    MAX_PLAYERS: {
+        ["C"]: { min: -1, max: -1 },
+        ["B"]: { min: 2, max: 2 },
+        ["A"]: { min: 2, max: 4 },
     },
 };

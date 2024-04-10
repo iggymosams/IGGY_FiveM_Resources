@@ -1,20 +1,72 @@
 <script lang="ts">
-    import "./app.css";
-    import Hack from "./components/Hacking/Hack.svelte";
+    import { debugData } from "./utils/debugData";
+    import "./app.pcss";
     import Laptop from "./components/Laptop.svelte";
+    import HandleEditor from "./components/HandleEditor.svelte";
+    import Hack from "./components/Hack.svelte";
     import { useNuiEvent } from "./utils/useNuiEvent";
-    let Restarting = false;
+    import { handle, hasVPN, openedApps, visibility } from "./store/stores";
+    import { activeContract, contracts, inQueue, rep } from "./store/boosting";
+    import { group, groups, isGroupHost, requests } from "./store/groups";
+    import {
+        announcements,
+        canEdit,
+        facilities,
+        laws,
+        leadership,
+    } from "./store/government";
+
+    let restarting = false;
+
+    debugData([
+        {
+            app: "base",
+            action: "toggleLaptop",
+            data: {
+                open: true,
+                hasVPN: true,
+                handle: "Handle",
+            },
+        },
+    ]);
 
     useNuiEvent("base", "restart", async () => {
-        Restarting = true;
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        Restarting = false;
+        restarting = true;
+
+        // Base Stores
+        openedApps.set([]);
+        visibility.set(false);
+        hasVPN.set(false);
+        handle.set("");
+
+        // Boosting Stores
+        rep.set(undefined);
+        inQueue.set(false);
+        contracts.set([]);
+        activeContract.set(undefined);
+
+        // Group Stores
+        groups.set([]);
+        group.set(undefined);
+        isGroupHost.set(false);
+        requests.set([]);
+
+        // Government Stores
+        canEdit.set(false);
+        announcements.set([]);
+        laws.set([]);
+        facilities.set([]);
+        leadership.set([]);
+
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        restarting = false;
     });
 </script>
 
-{#if !Restarting}
-    <main class="h-full flex items-center justify-center p-20 overflow-hidden">
+{#if !restarting}
+    <main class="h-full flex items-center justify-center overflow-hidden">
         <Laptop />
+        <HandleEditor />
         <Hack />
     </main>
 {/if}

@@ -1,6 +1,5 @@
 import { ToggleCloak, ToggleGodmode } from "./handlers";
 import { CommandData, PlayerCoordData } from "../shared/types";
-import { CalcDist } from "../shared/utils";
 import { Server } from "qbcore.js";
 import { GeneratePlate, RegisterAdminCommand } from "./sv_utils";
 import { oxmysql as MySQL } from "@overextended/oxmysql";
@@ -22,7 +21,7 @@ RegisterAdminCommand(
 
         getPlayers().forEach((id) => {
             let coords2 = GetEntityCoords(GetPlayerPed(id));
-            let dist = CalcDist(
+            let dist = global.exports["iggy-utils"].CalcDist(
                 coords[0],
                 coords[1],
                 coords[2],
@@ -287,7 +286,7 @@ RegisterAdminCommand(
     (src: number, data: CommandData) => {
         let weather: string;
         if (data.values["weather"] !== undefined) {
-            data.values["weather"].value;
+            weather = data.values["weather"].value;
         }
         let time: number | undefined = data.values["time"] || undefined;
         if (weather !== undefined) {

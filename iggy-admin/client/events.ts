@@ -1,5 +1,4 @@
 import { ToggleNoClipMode } from "./noclip";
-import { Delay } from "../shared/utils";
 import { SelectedEntity } from "./client";
 import { isDoor, PerformanceUpgradeVehicle, SendMenuMessage } from "./cl_utils";
 import { Client } from "qbcore.js";
@@ -30,7 +29,7 @@ onNet("iggy-admin:client:spawnVehicle", async (model: string) => {
     let waiting = 0;
     while (!HasModelLoaded(hash)) {
         waiting = waiting + 100;
-        await Delay(100);
+        await global.exports["iggy-utils"].Delay(100);
         if (waiting > 5000) {
             TriggerEvent(
                 "QBCore:Notify",
@@ -91,7 +90,7 @@ onNet(
         let waiting = 0;
         while (!HasModelLoaded(hash)) {
             waiting = waiting + 100;
-            await Delay(100);
+            await global.exports["iggy-utils"].Delay(100);
             if (waiting > 5000) {
                 TriggerEvent(
                     "QBCore:Notify",

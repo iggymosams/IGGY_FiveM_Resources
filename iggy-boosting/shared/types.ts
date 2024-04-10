@@ -1,15 +1,10 @@
-import { DropOffLocation, Location } from "./Locations";
-
 export type VehicleClass = "A" | "B" | "C";
 
-export interface Vehicle {
-    model: string;
-    name: string;
-    class: VehicleClass;
-}
-
-export interface vehicleList {
-    [key: string]: Vehicle;
+export interface Rep {
+    level: VehicleClass;
+    xp: number;
+    max: number;
+    min: number;
 }
 
 export interface Contract {
@@ -23,12 +18,15 @@ export interface Contract {
     time: number;
 }
 
-export interface Rep {
-    level: VehicleClass;
-    xp: number;
-    max: number;
-    min: number;
-}
+export type ActiveContract = Omit<Contract, "time"> & {
+    plate: string;
+    netId: number;
+    spawn: SpawnLocation;
+    dropoff: DropOffLocation;
+    hacksFailed: number;
+    group: boolean;
+    started: boolean;
+};
 
 export interface Vector3 {
     x: number;
@@ -40,14 +38,22 @@ export interface Vector4 extends Vector3 {
     w: number;
 }
 
-export interface RunningContract {
-    id: number;
-    location: Location;
+export interface SpawnLocation {
+    vector4: Vector4;
+    inUse: boolean;
+}
+
+export interface DropOffLocation {
+    vector3: Vector3;
+    inUse: boolean;
+}
+
+export interface Vehicle {
     model: string;
+    name: string;
     class: VehicleClass;
-    contract: Contract;
-    vehicle?: number;
-    plate?: string;
-    hacksFailed: number;
-    dropoff: DropOffLocation;
+}
+
+export interface VehicleList {
+    [key: string]: Vehicle;
 }

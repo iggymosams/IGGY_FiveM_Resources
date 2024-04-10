@@ -1,21 +1,17 @@
-import { Server } from "@zerio2/qbcore.js";
+import { Player, Server } from "@zerio2/qbcore.js";
+import "./sv_handle";
+import "./sv_exports";
+import { GetHandle } from "./sv_handle";
+import { HasVPN } from "./sv_exports";
 
-const QBCore: Server = global.exports["qb-core"].GetCoreObject();
+export const QBCore: Server = global.exports["qb-core"].GetCoreObject();
 
-QBCore.Functions.CreateUseableItem("laptop", (src, item) => {
-    emitNet("iggy-laptop:client:open", src);
+QBCore.Functions.CreateUseableItem("laptop", async (src, item) => {
+    let handle = GetHandle(src);
+    emitNet(
+        "iggy-laptop:client:open",
+        src,
+        HasVPN(src) && handle !== undefined,
+        handle
+    );
 });
-
-onNet(
-    "iggy-laptop:server:PlayInDistance",
-    (coords: number[], maxDist: number, sound: string, volume: number) => {
-        emitNet(
-            "iggy-laptop:client:PlayInDistance",
-            -1,
-            coords,
-            maxDist,
-            sound,
-            volume
-        );
-    }
-);

@@ -1,22 +1,22 @@
 <script lang="ts">
-    import Icon from "@iconify/svelte";
+    import type { LaptopApp } from "../utils/apps";
+    import { openedApps } from "../store/stores";
 
-    export let name: string;
-    export let icon: string;
-    export let onClick: (this: Window, ev: MouseEvent) => any = () => {};
-    export let colour: string = "indigo-500";
-    console.log(colour);
+    export let app: LaptopApp;
+
+    function openApp() {
+        if (!$openedApps.includes(app)) {
+            openedApps.update((apps) => {
+                return [...apps, app];
+            });
+        }
+    }
 </script>
 
 <button
-    class={`px-3 content-around outline outline-0 rounded-md hover:outline-2 ${colour} hover:bg-black hover:bg-opacity-60`}
-    on:click|preventDefault={onClick}
+    class={`aspect-square backdrop-blur-sm bg-opacity-50 ${app.backgroundColor} ${app.color} rounded-md flex items-center justify-center flex-col hover:bg-opacity-75 transition-colors h-20`}
+    on:click={openApp}
 >
-    <Icon {icon} class="w-full h-10" />
-
-    <div
-        class="text-center w-full text-lg my-auto overflow-hidden overflow-ellipsis"
-    >
-        {name}
-    </div>
+    <svelte:component this={app.icon} />
+    <span class={app.color}>{app.name}</span>
 </button>

@@ -1,8 +1,6 @@
-CREATE TABLE IF NOT EXISTS `iggy_laptop_settings` (
+CREATE TABLE IF NOT EXISTS `iggy_laptop_handle` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `citizenid` varchar(50) DEFAULT NULL,
-  `settings` text DEFAULT NULL,
+  `handle` varchar(25) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `citizenid` (`citizenid`),
-  KEY `rep` (`rep`)
+  KEY `handle` (`handle`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;

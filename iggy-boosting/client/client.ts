@@ -1,194 +1,263 @@
-import { VEHICLES } from "./../shared/Vehicles";
-import { Config } from "./../shared/Config";
-import { Client } from "qbcore.js";
-import { CalcDist, Delay, RandomNumber } from "../shared/utils";
-import {
-    Contract,
-    Rep,
-    RunningContract,
-    Vector3,
-    Vehicle,
-    VehicleClass,
-    vehicleList,
-} from "./../shared/types";
-import {
-    DROP_OFF_LOCATIONS,
-    DropOffLocation,
-    Location,
-    SPAWN_LOCATIONS,
-} from "../shared/Locations";
+import { Client } from "@zerio2/qbcore.js";
+import { ActiveContract, Contract, Rep, Vector3 } from "../shared/types";
+import { Config } from "../shared/Config";
 
-let contracts: Contract[] = [];
-let rep: Rep;
-
-let createHandle = false;
-let handle = "";
-
-interface ActiveContract extends RunningContract {
-    dropoffBlip?: number;
-    blip?: number;
-}
-let runningContract: ActiveContract;
-let isReady = false;
-
-let blips: { [key: number]: number } = {};
+let active: ActiveContract;
+let blip: number;
+let pdTrackers: { [key: number]: number } = {};
 
 const QBCore: Client = global.exports["qb-core"].GetCoreObject();
 
-RegisterCommand(
-    "iggy-boosting:createContract",
-    (source: number, args: string[]) => {
-        let model = args[0];
-        let hours = args[1] || 0;
-        let mins = args[2] || 0;
-        let cost = args[3] || 0;
-        let reward = args[4] || 0;
-        let target = source === 0 ? GetPlayerServerId(PlayerId()) : args[5];
+global.exports["iggy-laptop"].RegisterLaptopCallback(
+    "boosting:getInfo",
+    async () => {
+        emitNet("iggy-boosting:server:getInfo");
 
-        emitNet(
-            "iggy-boosting:server:createContract",
-            model,
-            hours,
-            mins,
-            cost,
-            reward,
-            target
+        global.exports["iggy-laptop"].SendAppMessage(
+            "boosting",
+            "updateActiveContract",
+            active
         );
-    },
-    false
-);
-
-RegisterCommand(
-    "iggy-boosting:getRep",
-    (source: number, args: string[]) => {
-        emitNet("iggy-boosting:server:getRep");
-    },
-    false
-);
-
-RegisterCommand(
-    "iggy-boosting:getHandle",
-    (source: number, args: string[]) => {
-        emitNet("iggy-boosting:server:getHandle");
-    },
-    false
+    }
 );
 
 global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "boosting:getInGroup",
-    () => {
-        return {
-            inGroup: global.exports["iggy-groups"].IsInGroup(),
-            isReady: isReady,
-        };
+    "boosting:toggleQueue",
+    async () => {
+        emitNet("iggy-boosting:server:toggleQueue");
     }
 );
 
-onNet("iggy-boosting:client:newContract", (contract: Contract) => {
-    contracts.push(contract);
-    global.exports["iggy-laptop"].SendAppMessage(
-        "boosting",
-        "newContract",
-        contract
-    );
-});
+global.exports["iggy-laptop"].RegisterLaptopCallback(
+    "boosting:startContract",
+    async (id: number) => {
+        emitNet("iggy-boosting:server:startContract", id);
+    }
+);
 
-onNet("iggy-boosting:client:removeContract", (id: number) => {
-    global.exports["iggy-laptop"].SendAppMessage(
-        "boosting",
-        "removeContract",
-        id
-    );
-    contracts = contracts.filter((contract) => contract.id !== id);
-});
+global.exports["iggy-laptop"].RegisterLaptopCallback(
+    "boosting:getQbit",
+    async () => {
+        global.exports["iggy-laptop"].SendAppMessage(
+            "boosting",
+            "updateQbit",
+            QBCore.Functions.GetPlayerData().money["crypto"]
+        );
+    }
+);
 
-onNet("iggy-boosting:client:updateRep", (newRep: Rep) => {
-    rep = newRep;
+global.exports["iggy-laptop"].RegisterLaptopCallback(
+    "boosting:hackFailed",
+    async () => {
+        global.exports["iggy-laptop"].SetFocus(false, false);
+        emitNet("iggy-boosting:server:hackFailed", active.netId, active.class);
+    }
+);
+
+global.exports["iggy-laptop"].RegisterLaptopCallback(
+    "boosting:hackComplete",
+    async () => {
+        global.exports["iggy-laptop"].SetFocus(false, false);
+        emitNet("iggy-boosting:server:hackComplete", active.netId);
+        let ent = Entity(NetworkGetEntityFromNetworkId(active.netId));
+        let state = ent.state.hacks;
+        if (state.remaining - 1 === 0) {
+            emitNet("qb-phone:server:sendNewMail", {
+                sender: "???",
+                subject: "Hacks Complete",
+                message: "Hacks Comeplete. Head to the drop off location",
+                button: {},
+            });
+        }
+    }
+);
+
+onNet("iggy-boosting:client:updateRep", (rep: Rep) => {
     global.exports["iggy-laptop"].SendAppMessage("boosting", "updateRep", rep);
 });
 
-onNet("iggy-boosting:client:refuel", (netid: number) => {
-    global.exports["LegacyFuel"].SetFuel(
-        NetworkGetEntityFromNetworkId(netid),
-        100
+onNet("iggy-boosting:client:updateContracts", (contracts: Contract[]) => {
+    global.exports["iggy-laptop"].SendAppMessage(
+        "boosting",
+        "updateContracts",
+        contracts
     );
 });
 
-onNet("iggy-boosting:client:err-plr-count", () => {
-    console.log("test");
-    global.exports["iggy-laptop"].SendAppMessage("base", "notification", {
-        type: "ERROR",
-        message: "You dont have enough players in your group.",
-    });
+onNet("iggy-boosting:client:toggleQueue", (inQueue: boolean) => {
+    global.exports["iggy-laptop"].SendAppMessage(
+        "boosting",
+        "toggleQueue",
+        inQueue
+    );
 });
 
-onNet("iggy-boosting:client:error-price", () => {
-    global.exports["iggy-laptop"].SendAppMessage("base", "notification", {
-        type: "ERROR",
-        message: "You dont have enough qbit.",
-    });
-});
-
-onNet("iggy-boosting:client:error-running", () => {
-    global.exports["iggy-laptop"].SendAppMessage("base", "notification", {
-        type: "ERROR",
-        message: "You are already doing a contract",
-    });
-});
-
-onNet("iggy-boosting:client:error-busy", () => {
-    global.exports["iggy-laptop"].SendAppMessage("base", "notification", {
-        type: "ERROR",
-        message: "The queue is busy",
-    });
+onNet("iggy-boosting:client:toggleQueue", (inQueue: boolean) => {
+    global.exports["iggy-laptop"].SendAppMessage(
+        "boosting",
+        "toggleQueue",
+        inQueue
+    );
 });
 
 onNet("iggy-boosting:client:error-expired", () => {
-    global.exports["iggy-laptop"].SendAppMessage("base", "notification", {
-        type: "ERROR",
-        message: "This contract is expired",
-    });
+    global.exports["iggy-laptop"].SendNotification(
+        "This contract is expired",
+        "ERROR"
+    );
+});
+
+onNet("iggy-boosting:client:error-no-group", () => {
+    global.exports["iggy-laptop"].SendNotification(
+        "You arent in a group",
+        "ERROR"
+    );
+});
+
+onNet("iggy-boosting:client:error-min-players", () => {
+    global.exports["iggy-laptop"].SendNotification(
+        "Your group is too small",
+        "ERROR"
+    );
+});
+
+onNet("iggy-boosting:client:error-max-players", () => {
+    global.exports["iggy-laptop"].SendNotification(
+        "Your group is too big",
+        "ERROR"
+    );
+});
+
+onNet("iggy-boosting:client:error-active", () => {
+    global.exports["iggy-laptop"].SendNotification(
+        "Your are already doing a contract",
+        "ERROR"
+    );
+});
+
+onNet("iggy-boosting:client:error-busy", () => {
+    global.exports["iggy-laptop"].SendNotification(
+        "The queue is too busy. Try again later",
+        "ERROR"
+    );
 });
 
 onNet("iggy-boosting:client:error-veh", () => {
-    global.exports["iggy-laptop"].SendAppMessage("base", "notification", {
-        type: "ERROR",
-        message: "Unable to locate vehicle",
+    global.exports["iggy-laptop"].SendNotification(
+        "Unable to locate vehicle",
+        "ERROR"
+    );
+});
+
+onNet("iggy-boosting:client:error-crypto", () => {
+    global.exports["iggy-laptop"].SendNotification(
+        "You dont have enough Qbit",
+        "ERROR"
+    );
+});
+
+onNet(
+    "iggy-boosting:client:success-started",
+    (plate: string, offset: Vector3, contract: ActiveContract) => {
+        global.exports["iggy-laptop"].SendNotification(
+            `Successfully started contract. Vehicle Plate: ${plate}`,
+            "SUCCESS",
+            5000
+        );
+
+        active = contract;
+
+        blip = AddBlipForRadius(offset.x, offset.y, offset.z, 200);
+        SetBlipAlpha(blip, 100);
+        SetBlipHighDetail(blip, true);
+
+        global.exports["iggy-laptop"].SendAppMessage(
+            "boosting",
+            "updateActiveContract",
+            contract
+        );
+    }
+);
+
+onNet("lockpicks:UseLockpick", () => {
+    if (!active) return;
+    let veh = NetworkGetEntityFromNetworkId(active.netId);
+    if (!DoesEntityExist(veh)) return;
+    let ped = PlayerPedId();
+    if (GetVehiclePedIsIn(ped, false) === veh) return;
+    let vector4 = active.spawn.vector4;
+    let pedCoords = GetEntityCoords(ped, false);
+
+    let dist = global.exports["iggy-utils"].CalcDist(
+        vector4.x,
+        vector4.y,
+        vector4.z,
+        pedCoords[0],
+        pedCoords[1],
+        pedCoords[2]
+    );
+    if (dist <= 2.5) {
+        emitNet(
+            "police:server:policeAlert",
+            `Grand Theft Auto. Plate: ${GetVehicleNumberPlateText(veh)}`
+        );
+        if (active.class === "C") {
+            emitNet("iggy-boosting:server:startDropOff");
+            RemoveBlip(blip);
+        } else {
+            emitNet("iggy-boosting:server:started");
+        }
+    }
+});
+
+onNet("iggy-boosting:client:started", () => {
+    RemoveBlip(blip);
+});
+
+onNet("iggy-boosting:client:dropoffblip", () => {
+    let dropoff: Vector3 = active.dropoff.vector3;
+
+    blip = AddBlipForCoord(dropoff.x, dropoff.y, dropoff.z);
+    SetBlipSprite(blip, 326);
+    SetBlipColour(blip, 2);
+    SetBlipScale(blip, 1);
+
+    BeginTextCommandSetBlipName("STRING");
+    AddTextComponentSubstringPlayerName("Drop Off Location");
+    EndTextCommandSetBlipName(blip);
+});
+
+onNet("iggy-boosting:client:emptyVehicle", () => {
+    emitNet("qb-phone:server:sendNewMail", {
+        sender: "???",
+        subject: "Get out and leave the area",
+        message: "Well done, get out the vehicle and leave the area",
+        button: {},
     });
 });
 
-onNet("iggy-boosting:client:success-started", (contract: RunningContract) => {
-    global.exports["iggy-laptop"].SendAppMessage("base", "notification", {
-        type: "SUCCESS",
-        message: `Successfully started contract. Vehicle Plate: ${contract.plate}`,
-        duration: 5000,
-    });
-    runningContract = { ...contract };
-    let coords = runningContract.location.carLocation;
-    runningContract.blip = AddBlipForRadius(
-        coords.x + RandomNumber(-100, 100),
-        coords.y + RandomNumber(-100, 100),
-        coords.z,
-        200
-    );
-    SetBlipAlpha(runningContract.blip, 100);
-    SetBlipHighDetail(runningContract.blip, true);
-
-    if (Config.DEBUG) {
-        let debugBlip = AddBlipForCoord(coords.x, coords.y, coords.z);
-    }
-
+onNet("iggy-boosting:client:finishContract", () => {
+    RemoveBlip(blip);
+    active = undefined;
     global.exports["iggy-laptop"].SendAppMessage(
         "boosting",
         "updateActiveContract",
-        runningContract
+        undefined
     );
 });
 
-onNet("iggy-boosting:client:openHack", () => {
-    if (!runningContract) return;
+RegisterCommand(
+    "iggy-boosting:create",
+    (src: number, args: string[]) => {
+        emitNet("boost:create", args[0]);
+    },
+    false
+);
 
-    let veh = NetworkGetEntityFromNetworkId(runningContract.vehicle);
+onNet("iggy-boosting:client:openHack", () => {
+    if (!active) return;
+
+    let veh = NetworkGetEntityFromNetworkId(active.netId);
     if (!DoesEntityExist(veh)) return;
 
     let ped = PlayerPedId();
@@ -206,44 +275,13 @@ onNet("iggy-boosting:client:openHack", () => {
         QBCore.Functions.Notify("You cant do this yet");
         return;
     }
+
     global.exports["iggy-laptop"].SendAppMessage("hack", "setVisible", {
         open: true,
-        difficulty: getDifficulty(runningContract.class),
+        difficulty: 1,
     });
 
     global.exports["iggy-laptop"].SetFocus(true, true);
-});
-
-onNet("lockpicks:UseLockpick", () => {
-    if (!runningContract) return;
-    let veh = NetworkGetEntityFromNetworkId(runningContract.vehicle);
-    if (!DoesEntityExist(veh)) return;
-    let ped = PlayerPedId();
-    if (GetVehiclePedIsIn(ped, false) === veh) return;
-    let carCoords = runningContract.location.carLocation;
-    let pedCoords = GetEntityCoords(ped, false);
-
-    let dist = CalcDist(
-        carCoords.x,
-        carCoords.y,
-        carCoords.z,
-        pedCoords[0],
-        pedCoords[1],
-        pedCoords[2]
-    );
-    if (dist <= 2.5) {
-        emitNet(
-            "police:server:policeAlert",
-            `Grand Theft Auto. Plate: ${GetVehicleNumberPlateText(veh)}`
-        );
-        StartMapBlips();
-        emitNet("iggy-boosting:server:started");
-        RemoveBlip(runningContract.blip);
-    }
-});
-
-onNet("iggy-boosting:client:started", () => {
-    RemoveBlip(runningContract.blip);
 });
 
 onNet("iggy-boosting:client:disableVehicle", (netid: number) => {
@@ -257,224 +295,69 @@ onNet("iggy-boosting:client:disableVehicle", (netid: number) => {
     );
 });
 
-onNet("iggy-boosting:client:dropoffblip", async (host: boolean) => {
-    let dropoff: Vector3 = runningContract.dropoff.location;
-
-    runningContract.dropoffBlip = AddBlipForCoord(
-        dropoff.x,
-        dropoff.y,
-        dropoff.z
+onNet("iggy-boosting:client:refuel", (netid: number) => {
+    global.exports["LegacyFuel"].SetFuel(
+        NetworkGetEntityFromNetworkId(netid),
+        100
     );
+});
 
-    SetBlipSprite(runningContract.dropoffBlip, 326);
-    SetBlipColour(runningContract.dropoffBlip, 2);
-    SetBlipScale(runningContract.dropoffBlip, 1);
+onNet("iggy-boosting:client:createBlip", (coords: number[], netId: number) => {
+    let name = QBCore.Functions.GetPlayerData().job.name;
+    let duty = QBCore.Functions.GetPlayerData().job.onduty;
+
+    if (name !== Config.POLICE_JOB) {
+        return;
+    }
+
+    if (!duty) {
+        return;
+    }
+
+    if (pdTrackers[netId]) RemoveBlip(pdTrackers[netId]);
+
+    let blip = AddBlipForCoord(coords[0], coords[1], coords[2]);
+    SetBlipSprite(blip, 326);
+    SetBlipColour(blip, 1);
+    SetBlipFlashes(blip, true);
+    SetBlipScale(blip, 2);
 
     BeginTextCommandSetBlipName("STRING");
-    AddTextComponentSubstringPlayerName("Drop Off Locations");
-    EndTextCommandSetBlipName(runningContract.dropoffBlip);
+    AddTextComponentSubstringPlayerName("Grand Theft Auto Tracker");
+    EndTextCommandSetBlipName(blip);
+
+    pdTrackers[netId] = blip;
 });
 
-onNet("iggy-boosting:client:finishContract", () => {
-    RemoveBlip(runningContract.dropoffBlip);
-    runningContract = undefined;
+onNet("iggy-boosting:client:removeBlip", (netId: number) => {
+    let name = QBCore.Functions.GetPlayerData().job.name;
+    let duty = QBCore.Functions.GetPlayerData().job.onduty;
+
+    if (name !== Config.POLICE_JOB) {
+        return;
+    }
+    if (!duty) {
+        return;
+    }
+
+    if (pdTrackers[netId]) RemoveBlip(pdTrackers[netId]);
 });
 
-onNet("iggy-boosting:client:emptyVehicle", () => {
-    emitNet("qb-phone:server:sendNewMail", {
-        sender: "???",
-        subject: "Get out and leave the area",
-        message: "Well done, get out the vehicle and leave the area",
-        button: {},
+onNet("QBCore:Client:OnPlayerUnload", () => {
+    emit("iggy-boosting:client:playerLeft");
+});
+
+onNet("iggy-boosting:client:playerLeft", () => {
+    global.exports["iggy-laptop"].SendAppMessage("base", "restart");
+    global.exports["iggy-laptop"].SetFocus(false, false);
+
+    active = undefined;
+    if (blip) RemoveBlip(blip);
+    blip = undefined;
+
+    Object.values(pdTrackers).forEach((blip) => {
+        RemoveBlip(blip);
     });
+    pdTrackers = {};
+    emitNet("iggy-boosting:server:toggleQueue", true);
 });
-
-onNet("iggy-groups:updateGroup", () => {
-    global.exports["iggy-laptop"].SendAppMessage(
-        "boosting",
-        "updateInGroup",
-        global.exports["iggy-groups"].IsInGroup()
-    );
-});
-
-global.exports["iggy-laptop"].RegisterLaptopCallback("boosting:getRep", () => {
-    return rep;
-});
-
-// boosting:getContracts
-global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "boosting:getContracts",
-    () => {
-        return { contracts: contracts, active: runningContract };
-    }
-);
-
-// boosting:acceptContract
-global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "boosting:acceptContract",
-    (id: number) => {
-        emitNet("iggy-boosting:server:acceptContract", id);
-    }
-);
-
-// boosting:hackComplete
-global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "boosting:hackComplete",
-    () => {
-        global.exports["iggy-laptop"].SetFocus(false, false);
-        emitNet("iggy-boosting:server:hackComplete", runningContract.vehicle);
-
-        let ent = Entity(
-            NetworkGetEntityFromNetworkId(runningContract.vehicle)
-        );
-        let state = ent.state.hacks;
-        global.exports["iggy-laptop"].PlayInDistance(
-            GetEntityCoords(PlayerPedId(), true),
-            3,
-            "beep.mp3",
-            0.5
-        );
-        if (state.remaining - 1 === 0) {
-            emitNet("qb-phone:server:sendNewMail", {
-                sender: "???",
-                subject: "Hacks Complete",
-                message: "Hacks Comeplete. Head to the drop off location",
-                button: {},
-            });
-        }
-    }
-);
-
-// boosting:hackFailed
-global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "boosting:hackFailed",
-    () => {
-        global.exports["iggy-laptop"].SetFocus(false, false);
-
-        emitNet("iggy-boosting:server:hackFailed", runningContract.vehicle);
-        let veh = NetworkGetEntityFromNetworkId(runningContract.vehicle);
-        let failed = Entity(veh).state.hacks.failed + 1;
-
-        if (failed === 5) {
-            emitNet(
-                "iggy-boosting:server:disableVehicle",
-                runningContract.vehicle
-            );
-        }
-    }
-);
-
-// boosting:toggleReady
-global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "boosting:toggleReady",
-    (ready: boolean) => {
-        isReady = ready;
-        emitNet("iggy-boosting:server:toggleReady", ready);
-    }
-);
-
-onNet("QBCore:Client:OnPlayerLoaded", () => {
-    emitNet("iggy-boosting:server:getRep");
-});
-
-async function StartMapBlips() {
-    let veh = NetworkGetEntityFromNetworkId(runningContract.vehicle);
-    let hacks = Entity(veh).state.hacks;
-    while (hacks.remaining > 0) {
-        if (!DoesEntityExist(veh)) {
-            break;
-        }
-
-        let coords = GetEntityCoords(veh, true);
-
-        emitNet(
-            "iggy-boosting:server:updateBlip",
-            coords,
-            runningContract.vehicle
-        );
-
-        await Delay((Config.DEFAULT_BLIP_DELAY * 1000) / hacks.remaining);
-        hacks = Entity(veh).state.hacks;
-    }
-}
-
-// iggy-boosting:client:createBlip
-onNet(
-    "iggy-boosting:client:createBlip",
-    (coords: number[], vehNetId: number) => {
-        let name = QBCore.Functions.GetPlayerData().job.name;
-        let duty = QBCore.Functions.GetPlayerData().job.onduty;
-
-        if (name !== Config.POLICE_JOB) {
-            return;
-        }
-        if (!duty) {
-            return;
-        }
-
-        if (blips[vehNetId]) RemoveBlip(blips[vehNetId]);
-
-        blips[vehNetId] = AddBlipForCoord(coords[0], coords[1], coords[2]);
-        SetBlipSprite(blips[vehNetId], 326);
-        SetBlipColour(blips[vehNetId], 1);
-        SetBlipFlashes(blips[vehNetId], true);
-        SetBlipScale(blips[vehNetId], 2);
-
-        BeginTextCommandSetBlipName("STRING");
-        AddTextComponentSubstringPlayerName("Grand Theft Auto Tracker");
-        EndTextCommandSetBlipName(blips[vehNetId]);
-    }
-);
-
-global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "boosting:createHandle",
-    (newHandle: string) => {
-        emitNet("iggy-boosting:server:createHandle", newHandle);
-    }
-);
-
-global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "boosting:getPlayer",
-    () => {
-        return {
-            qbit: QBCore.Functions.GetPlayerData().money["crypto"],
-            handle: handle,
-            createHandle: createHandle,
-        };
-    }
-);
-
-onNet("iggy-boosting:client:updateHandle", (handle: string) => {
-    createHandle = false;
-    handle = handle;
-    global.exports["iggy-laptop"].SendAppMessage(
-        "boosting",
-        "createdHandle",
-        handle
-    );
-});
-
-onNet("iggy-boosting:client:createHandle", () => {
-    createHandle = true;
-    global.exports["iggy-laptop"].SendAppMessage("boosting", "createHandle");
-});
-
-onNet("iggy-boosting:client:failedCreatingHandle", (handle: string) => {
-    createHandle = true;
-    global.exports["iggy-laptop"].SendAppMessage(
-        "boosting",
-        "failedCreatingHandle",
-        handle
-    );
-});
-
-function getDifficulty(vehClass: VehicleClass): number {
-    switch (vehClass) {
-        case "A":
-            return 3;
-        case "B":
-            return 2;
-        case "C":
-            return 1;
-    }
-}

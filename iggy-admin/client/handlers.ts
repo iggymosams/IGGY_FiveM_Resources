@@ -1,5 +1,4 @@
 import { RegisterQBCallBack } from "./cl_utils";
-import { Delay } from "../shared/utils";
 import { DevMode } from "./client";
 import { PlayerCoordData } from "../shared/types";
 import { Client } from "qbcore.js";
@@ -33,7 +32,7 @@ onNet("iggy-admin:client:toggleGodmode", async (toggle: boolean) => {
     godmode = toggle;
     while (godmode) {
         SetPlayerInvincible(PlayerId(), true);
-        await Delay(1);
+        await global.exports["iggy-utils"].Delay(1);
     }
     SetPlayerInvincible(PlayerId(), false);
 });
@@ -58,7 +57,7 @@ onNet(
     "iggy-admin:client:updatePlayerCoords",
     async (players: PlayerCoordData[]) => {
         playerCoords = players;
-        await Delay(1000);
+        await global.exports["iggy-utils"].Delay(1000);
         fetching = false;
     }
 );
@@ -83,7 +82,7 @@ onNet("iggy-admin:client:displayCoords", async () => {
         SetTextOutline();
         AddTextComponentString(`vector4(${c.x}, ${c.y}, ${c.z}, ${heading})`);
         DrawText(0.4, 0.025);
-        await Delay(0);
+        await global.exports["iggy-utils"].Delay(0);
     }
 });
 
@@ -133,9 +132,9 @@ async function CloakLoop() {
             }
         });
         if (keys.length === 0) {
-            await Delay(500);
+            await global.exports["iggy-utils"].Delay(500);
         } else {
-            await Delay(0);
+            await global.exports["iggy-utils"].Delay(0);
         }
     }
 }
@@ -226,9 +225,9 @@ async function NameBlipLoop() {
                 blipsData.forEach((blip) => RemoveBlip(blip));
                 blipsData = [];
             }
-            await Delay(0);
+            await global.exports["iggy-utils"].Delay(0);
         } else {
-            await Delay(1000);
+            await global.exports["iggy-utils"].Delay(1000);
         }
     }
 }
@@ -266,7 +265,7 @@ async function ToggleSpectate(targetPed: number, targetPlayerId: number) {
         );
 
         while (!HasCollisionLoadedAroundEntity(targetPed)) {
-            await Delay(5);
+            await global.exports["iggy-utils"].Delay(5);
         }
 
         AttachEntityToEntity(
@@ -320,7 +319,7 @@ onNet(
         DoScreenFadeOut(200);
 
         while (!IsScreenFadedOut()) {
-            await Delay(10);
+            await global.exports["iggy-utils"].Delay(10);
         }
 
         SetEntityCoords(
@@ -344,7 +343,7 @@ onNet(
                 break;
             }
 
-            await Delay(50);
+            await global.exports["iggy-utils"].Delay(50);
 
             if (targetPed !== -1) {
                 break;

@@ -1,5 +1,3 @@
-import { Delay } from "../shared/utils";
-
 let noClipEnabled: boolean = false;
 let noClipCam: number | null = null;
 
@@ -10,7 +8,7 @@ const maxY: number = 89.0;
 
 let inputRotEnabled: boolean = false;
 
-async function toggleNoclip(): Promise<void> {
+async function toggleNoclip() {
     const ped: number = PlayerPedId();
     let veh: number = GetVehiclePedIsIn(ped, false);
     let inVehicle: boolean = false;
@@ -267,7 +265,7 @@ async function toggleNoclip(): Promise<void> {
         DisableControlAction(2, 17, true);
 
         DisablePlayerFiring(PlayerId(), true);
-        await Delay(0);
+        await global.exports["iggy-utils"].Delay(0);
     }
 
     DestroyCam(noClipCam, false);
@@ -291,12 +289,12 @@ async function toggleNoclip(): Promise<void> {
     }
 }
 
-async function checkInputRotation(): Promise<void> {
+async function checkInputRotation() {
     let rotz;
     let rotx;
     while (inputRotEnabled) {
         while (noClipCam === null) {
-            await Delay(0);
+            await global.exports["iggy-utils"].Delay(0);
         }
 
         const rightAxisX: number = GetDisabledControlNormal(0, 220);
@@ -317,14 +315,14 @@ async function checkInputRotation(): Promise<void> {
             SetCamRot(noClipCam, rotx, rotation[1], rotz, 2);
         }
 
-        await Delay(0);
+        await global.exports["iggy-utils"].Delay(0);
     }
 }
 
-export function ToggleNoClipMode(): void {
-    const pIsEnabled: boolean = !noClipEnabled;
-    noClipEnabled = pIsEnabled;
-    inputRotEnabled = pIsEnabled;
+export function ToggleNoClipMode() {
+    const isEnabled: boolean = !noClipEnabled;
+    noClipEnabled = isEnabled;
+    inputRotEnabled = isEnabled;
 
     if (noClipEnabled && inputRotEnabled) {
         toggleNoclip();

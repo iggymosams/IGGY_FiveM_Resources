@@ -1,54 +1,52 @@
-import { TriggerQBCallBack } from "./cl_utils";
-import { Group } from "../shared/Group";
-import { Client, PlayerData } from "qbcore.js";
-let currentGroup: Group | undefined;
-let groups: Group[] = [];
-let requests: PlayerData[] = [];
+import { Client } from "@zerio2/qbcore.js";
+import type { GroupPlayer, Group, PublicGroup } from "../shared/types";
+import { GroupToPublicGroup } from "../shared/utils";
 
 const QBCore: Client = global.exports["qb-core"].GetCoreObject();
 
-global.exports["iggy-laptop"].RegisterLaptopCallback("groups:getGroups", () => {
-    let isHost =
-        currentGroup?.leader.PlayerData.source ===
-        QBCore.Functions.GetPlayerData().source;
+let CurrentGroupId: number;
 
-    return {
-        groups: groups,
-        inGroup: currentGroup === undefined ? false : true,
-        currentGroup: currentGroup,
-        isHost: isHost,
-    };
-});
+global.exports["iggy-laptop"].RegisterLaptopCallback(
+    "groups:getInfo",
+    async () => {
+        emitNet("iggy-groups:server:getGroups");
+        if (CurrentGroupId) {
+            emitNet("iggy-groups:server:getRequests", CurrentGroupId);
+            emitNet("iggy-groups:server:getGroup", CurrentGroupId);
+        } else {
+            global.exports["iggy-laptop"].SendAppMessage(
+                "groups",
+                "leaveGroup"
+            );
+        }
+    }
+);
 
 global.exports["iggy-laptop"].RegisterLaptopCallback(
     "groups:createGroup",
     async () => {
-        let group: Group = await TriggerQBCallBack(
+        let group: Group = await global.exports["iggy-utils"].TriggerQBCallBack(
             "iggy-groups:cb:createGroup"
         );
+        CurrentGroupId = group.id;
         global.exports["iggy-laptop"].SendAppMessage("groups", "joinGroup", {
-            group: group,
+            group: GroupToPublicGroup(group),
             isHost: true,
         });
-        currentGroup = group;
-        updateGroup();
     }
 );
 
 global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "groups:leaveGroup",
+    "groups:createPrivateGroup",
     async () => {
-        await TriggerQBCallBack("iggy-groups:cb:leaveGroup");
-        global.exports["iggy-laptop"].SendAppMessage("groups", "leaveGroup");
-        currentGroup = undefined;
-        updateGroup();
-    }
-);
-
-global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "groups:getRequests",
-    () => {
-        return { requests: requests };
+        let group: Group = await global.exports["iggy-utils"].TriggerQBCallBack(
+            "iggy-groups:cb:createPrivateGroup"
+        );
+        CurrentGroupId = group.id;
+        global.exports["iggy-laptop"].SendAppMessage("groups", "joinGroup", {
+            group: GroupToPublicGroup(group),
+            isHost: true,
+        });
     }
 );
 
@@ -56,141 +54,100 @@ global.exports["iggy-laptop"].RegisterLaptopCallback(
     "groups:requestGroup",
     async (id: number) => {
         emitNet("iggy-groups:server:requestGroup", id);
-    }
-);
-
-global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "groups:acceptPlayer",
-    async (cid: string) => {
-        let group: Group = await TriggerQBCallBack(
-            "iggy-groups:cb:acceptPlayer",
-            cid,
-            currentGroup.id
-        );
-        currentGroup = group;
-        requests = requests.filter((player) => player.citizenid !== cid);
-        global.exports["iggy-laptop"].SendAppMessage(
-            "groups",
-            "updateRequests",
-            requests
-        );
-        global.exports["iggy-laptop"].SendAppMessage(
-            "groups",
-            "updateGroup",
-            currentGroup
+        global.exports["iggy-laptop"].SendNotification(
+            "Request Sent",
+            "SUCCESS"
         );
     }
 );
 
 global.exports["iggy-laptop"].RegisterLaptopCallback(
-    "groups:rejectPlayer",
-    async (cid: string) => {
-        requests = requests.filter((player) => player.citizenid !== cid);
-        global.exports["iggy-laptop"].SendAppMessage(
-            "groups",
-            "updateRequests",
-            requests
-        );
-        global.exports["iggy-laptop"].SendAppMessage(
-            "groups",
-            "updateGroup",
-            currentGroup
+    "groups:acceptRequest",
+    async (request: string) => {
+        emitNet("iggy-groups:server:acceptRequest", request, CurrentGroupId);
+    }
+);
+
+global.exports["iggy-laptop"].RegisterLaptopCallback(
+    "groups:rejectRequest",
+    async (request: string) => {
+        emitNet("iggy-groups:server:rejectRequest", request, CurrentGroupId);
+    }
+);
+
+global.exports["iggy-laptop"].RegisterLaptopCallback(
+    "groups:promotePlayer",
+    async (player: string) => {
+        emitNet("iggy-groups:server:promotePlayer", player, CurrentGroupId);
+        global.exports["iggy-laptop"].SendNotification(
+            "Promoted " + player,
+            "SUCCESS"
         );
     }
 );
 
 global.exports["iggy-laptop"].RegisterLaptopCallback(
     "groups:kickPlayer",
-    async (cid: string) => {
-        let group: Group = await TriggerQBCallBack(
-            "iggy-groups:cb:kickPlayer",
-            cid,
-            currentGroup.id
-        );
-        currentGroup = group;
-        global.exports["iggy-laptop"].SendAppMessage(
-            "groups",
-            "updateGroup",
-            currentGroup
+    async (player: string) => {
+        emitNet("iggy-groups:server:kickPlayer", player, CurrentGroupId);
+        global.exports["iggy-laptop"].SendNotification(
+            "Kicked " + player,
+            "SUCCESS"
         );
     }
 );
 
-onNet("iggy-groups:client:updateGroups", (newGroups: Group[]) => {
+global.exports["iggy-laptop"].RegisterLaptopCallback(
+    "groups:leaveGroup",
+    () => {
+        emitNet("iggy-groups:server:leaveGroup", CurrentGroupId);
+    }
+);
+
+onNet("iggy-groups:client:updateGroups", (newGroups: PublicGroup[]) => {
     global.exports["iggy-laptop"].SendAppMessage(
         "groups",
         "updateGroups",
         newGroups
     );
-    groups = newGroups;
 });
 
-onNet("iggy-groups:client:updateGroup", (newGroup: Group) => {
-    global.exports["iggy-laptop"].SendAppMessage(
-        "groups",
-        "updateGroup",
-        newGroup
-    );
-    currentGroup = newGroup;
-});
-
-onNet("iggy-groups:client:promotePlayer", () => {
-    global.exports["iggy-laptop"].SendAppMessage("groups", "joinGroup", {
-        group: currentGroup,
-        isHost: true,
-    });
-});
-
-onNet("iggy-groups:client:newRequest", (player: PlayerData) => {
-    if (requests.find((p) => p.citizenid === player.citizenid) !== undefined)
-        return;
-    requests = [...requests, player];
+onNet("iggy-groups:client:updateRequests", (requests: string[]) => {
     global.exports["iggy-laptop"].SendAppMessage(
         "groups",
         "updateRequests",
         requests
     );
-    global.exports["iggy-laptop"].PlaySound("request.mp3", 0.2);
 });
 
-onNet("iggy-groups:client:joinGroup", (newGroup: Group) => {
-    currentGroup = newGroup;
+onNet("iggy-groups:client:joinGroup", (group: Group, isHost = false) => {
+    CurrentGroupId = group.id;
+
     global.exports["iggy-laptop"].SendAppMessage("groups", "joinGroup", {
-        group: newGroup,
-        isHost: false,
+        group: GroupToPublicGroup(group),
+        isHost: isHost,
     });
-    global.exports["iggy-laptop"].SendAppMessage("base", "notification", {
-        type: "SUCCESS",
-        message: `${currentGroup.leader.PlayerData.charinfo.firstname} accepted your join request`,
-        duration: 5000,
-    });
-    updateGroup();
 });
 
-onNet("iggy-groups:client:kicked", () => {
-    currentGroup = undefined;
+onNet("iggy-groups:client:updateGroup", (group: Group) => {
+    global.exports["iggy-laptop"].SendAppMessage(
+        "groups",
+        "updateGroup",
+        GroupToPublicGroup(group)
+    );
+});
+
+onNet("iggy-groups:client:leaveGroup", () => {
+    CurrentGroupId = undefined;
     global.exports["iggy-laptop"].SendAppMessage("groups", "leaveGroup");
-    updateGroup();
 });
-
-onNet("iggy-groups:client:requestInGroup", () => {
-    global.exports["iggy-laptop"].SendAppMessage("base", "notification", {
-        type: "ERROR",
-        message: `That player is already in a group.`,
-    });
-});
-
-function updateGroup() {
-    emitNet("iggy-groups:updateGroup", currentGroup);
-    emit("iggy-groups:updateGroup", currentGroup);
-}
 
 function IsInGroup(): boolean {
-    return currentGroup === undefined ? false : true;
+    return CurrentGroupId === undefined ? false : true;
 }
 global.exports("IsInGroup", IsInGroup);
 
-function GetGroup(): Group | undefined {
-    return currentGroup;
-}
-global.exports("GetGroup", GetGroup);
+onNet("QBCore:Client:OnPlayerUnload", () => {
+    if (CurrentGroupId)
+        emitNet("iggy-groups:server:leaveGroup", CurrentGroupId);
+});

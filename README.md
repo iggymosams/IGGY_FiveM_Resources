@@ -7,8 +7,8 @@ A Collection of FiveM Resources made using Typescript and Svelte.
 -   [Admin Menu](#admin-menu)
 -   [Laptop](#laptop)
 -   [Boosting](#boosting)
--   [Rental](#rental)
 -   [Groups](#groups)
+-   [Utils](#utils)
 
 ## Admin Menu
 
@@ -85,6 +85,18 @@ The UI and core for all the laptop resources below
 
 ### Features
 
+-   Easy app creation
+-   Dynamic app movement
+-   Custom Wallpapers
+-   Access NUI callbacks from external resources
+-   Send NUI messages from external resources
+-   VPN Item for hidden apps
+-   Handles to keep players annoynmus when using illegal apps
+
+### Commands
+
+-   `iggy-laptop:restart` Restarts the laptop ui and resets stores
+
 ### Exports
 
 #### Client
@@ -117,31 +129,25 @@ Closes the laptop
 SetFocus(hasFocus: boolean, hasCursor: boolean)
 ```
 
-Sets the users NUI focus in the resource context
+#### Server
 
 ```typescript
-GetFocus(): { hasFocus: boolean; hasCursor: boolean }
+HasVPN(src: string | number): boolean
 ```
 
-Gets the users focus in the resource context
+Returns true if the player has a VPN
 
 ```typescript
-GetIsOpen(): boolean
+GetHandle(src: string | number): string | undefined
 ```
 
-Returns if the laptop is open
+Returns the players current handle if they have a vpn
 
 ```typescript
-PlaySound(sound: string, volume: number)
+SetHandle(handle: string, replace?: string): Promise<boolean>
 ```
 
-Plays a sound for the client
-
-```typescript
-PlayInDistance(coords: number[], maxDist: number, sound: string, volume: number)
-```
-
-Plays a sound within a set distance of the provided location
+Sets the players handle and replaces the old one if any
 
 ### Screen Shots
 
@@ -183,18 +189,6 @@ Add/Remove rep
 
 -   TODO
 
-## Rental
-
-A Rental system for QBCore. Kinda Broken and needs to be reworked
-
-### Features
-
--   TODO
-
-### Screen Shots
-
--   TODO
-
 ## Groups
 
 Manages the groups for boosting and future resources
@@ -213,12 +207,6 @@ IsInGroup(): boolean
 
 Returns if a player is in a group
 
-```typescript
-GetGroup(): Group | undefined
-```
-
-Returns the players group
-
 #### Server
 
 ```typescript
@@ -228,10 +216,16 @@ GetGroupById(id: number): Group
 Returns a group by group id
 
 ```typescript
-GetGroupFromLeader(cid: string): Group | undefined
+GetGroupFromLeaderCid(cid: string): Group | undefined
 ```
 
 Returns a group by the leaders cid
+
+```typescript
+GetGroupFromLeaderName(name: string): Group | undefined
+```
+
+Returns a group by the leaders name
 
 ```typescript
 GetPlayerGroup(cid: string): Group | undefined
@@ -240,9 +234,62 @@ GetPlayerGroup(cid: string): Group | undefined
 Returns a group by players cid
 
 ```typescript
+GetPlayerGroupFromName(name: string): Group | undefined
+```
+
+Returns a group by players name
+
+```typescript
+GetPlayerGroupFromSource(src: string): Group | undefined
+```
+
+Returns a group by players server id
+
+```typescript
 GroupEmitNet(groupId: number, eventName: string, ...args: any[])
 ```
 
 Triggers an event for every player in a group
 
 ### Screen Shots
+
+## Utils
+
+A bunch of useful exports
+
+### Exports
+
+#### Client
+
+```typescript
+TriggerQBCallBack(name: string, ...args: any[])
+```
+
+Triggers a QBCore callback asynchronously
+
+#### Shared
+
+```typescript
+function Delay(ms: number): Promise<void>;
+```
+
+Delays the execution for a specified amount of time.
+
+```typescript
+function CalcDist(
+    start_x: number,
+    start_y: number,
+    start_z: number,
+    target_x: number,
+    target_y: number,
+    target_z: number
+): number;
+```
+
+Returns the distance between to vectors
+
+```typescript
+function RandomNumber(min: number, max: number): number;
+```
+
+Returns a random number
