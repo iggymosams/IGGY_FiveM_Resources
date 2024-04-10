@@ -173,7 +173,7 @@ onNet("iggy-groups:server:acceptRequest", (req: string, id: number) => {
 
     group.requests = group.requests.filter((r) => r !== request);
 
-    //TODO: Check if player is already in a group;
+    if (GetPlayerGroupFromSource(request.src)) return;
 
     group.players.push(request);
 
@@ -193,8 +193,6 @@ onNet("iggy-groups:server:rejectRequest", (req: string, id: number) => {
     let request = group.requests.find((r) => req === r.name);
 
     group.requests = group.requests.filter((r) => r !== request);
-
-    //TODO: Check if player is already in a group;
 
     emitNet(
         "iggy-groups:client:updateRequests",

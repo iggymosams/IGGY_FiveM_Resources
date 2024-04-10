@@ -1,10 +1,17 @@
 import type { SvelteComponent } from "svelte";
 import Groups from "../apps/groups/components/Groups.svelte";
 import type { ComponentType } from "svelte";
-import { UsersRound, type Icon, SettingsIcon, CarFront } from "lucide-svelte";
+import {
+    UsersRound,
+    type Icon,
+    SettingsIcon,
+    CarFront,
+    Scale,
+} from "lucide-svelte";
 import Settings from "../apps/settings/components/Settings.svelte";
 import { writable, type Writable } from "svelte/store";
 import Boosting from "../apps/boosting/components/Boosting.svelte";
+import Government from "../apps/government/components/Government.svelte";
 
 export interface ConfigApp {
     id: string;
@@ -25,12 +32,28 @@ export type LaptopApp = ConfigApp & {
 
 export const APPS: ConfigApp[] = [
     {
+        id: "GOVERNMENT",
+        name: "San Andreas",
+        backgroundColor: "bg-blue-400",
+        color: "text-white",
+        component: Government,
+        icon: Scale,
+    },
+    {
         id: "GROUPS",
         name: "Groups",
         backgroundColor: "bg-purple-400",
         color: "text-white",
         component: Groups,
         icon: UsersRound,
+    },
+    {
+        id: "SETTINGS",
+        name: "Settings",
+        backgroundColor: "bg-gray-600",
+        color: "text-white",
+        component: Settings,
+        icon: SettingsIcon,
     },
     {
         id: "BOOSTING",
@@ -40,14 +63,6 @@ export const APPS: ConfigApp[] = [
         component: Boosting,
         icon: CarFront,
         requiresVPN: true,
-    },
-    {
-        id: "Settings",
-        name: "Settings",
-        backgroundColor: "bg-gray-600",
-        color: "text-white",
-        component: Settings,
-        icon: SettingsIcon,
     },
 ];
 
