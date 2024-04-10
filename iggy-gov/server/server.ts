@@ -16,7 +16,7 @@ async function getAnnouncements(): Promise<Announcement[]> {
 async function getLaws(): Promise<Law[]> {
     if (laws) return laws;
     let response = await MySQL.query(
-        "select * FROM `iggy_gov_laws` ORDER BY id DESC"
+        "select * FROM `iggy_gov_laws` WHERE `deletedAt` IS NULL ORDER BY id DESC "
     );
     laws = response as Law[];
     return laws;
@@ -41,7 +41,7 @@ onNet(
     "iggy-gov:server:newStateAnnouncement",
     async (data: { title: string; message: string }) => {
         let date = new Date().toISOString().slice(0, 19).replace("T", " ");
-        console.log(date);
+
         let test = await MySQL.query(
             "INSERT INTO `iggy_gov_state_announcements` (title, message, date) VALUES (?, ?, ?)",
             [data.title, data.message, date]
