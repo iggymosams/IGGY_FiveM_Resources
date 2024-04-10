@@ -1,4 +1,4 @@
-function Delay(ms: number) {
+function Delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 global.exports("Delay", Delay);
@@ -10,7 +10,7 @@ function CalcDist(
     target_x: number,
     target_y: number,
     target_z: number
-) {
+): number {
     var a = start_x - target_x;
     var b = start_y - target_y;
     var c = start_z - target_z;
@@ -19,7 +19,7 @@ function CalcDist(
 }
 global.exports("CalcDist", CalcDist);
 
-function RandomNumber(min: number, max: number) {
+function RandomNumber(min: number, max: number): number {
     return Math.random() * (max - min) + min;
 }
 global.exports("RandomNumber", RandomNumber);
