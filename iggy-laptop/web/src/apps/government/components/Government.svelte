@@ -11,6 +11,7 @@
     import { fetchNui } from "../../../utils/fetchNui";
     import { useNuiEvent } from "../../../utils/useNuiEvent";
     import { canEdit, laws } from "../../../store/government";
+    import type { Law } from "../types";
 
     export let app: LaptopApp;
     let minimized = app.minimized;
@@ -24,7 +25,7 @@
         canEdit.set(data);
     });
 
-    useNuiEvent<any>("gov", "updateLaws", (data) => {
+    useNuiEvent<Law[]>("gov", "updateLaws", (data) => {
         laws.set(data);
     });
 

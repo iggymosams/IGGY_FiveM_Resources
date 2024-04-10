@@ -1,4 +1,4 @@
-export interface tab {
+export interface Law {
     title: string;
     html?: string;
     uuid: string;

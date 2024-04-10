@@ -6,12 +6,12 @@
     import "quill/dist/quill.bubble.css";
     import Quill from "quill";
     import { onDestroy, onMount } from "svelte";
-    import type { tab } from "../types";
+    import type { Law } from "../types";
 
     let editor: Quill;
 
     export let editing: Writable<boolean>;
-    export let activeTab: Writable<tab>;
+    export let activeLaw: Writable<Law>;
 
     onMount(() => {
         editor = new Quill("#editor", {
@@ -33,8 +33,8 @@
     });
 
     $: {
-        if ($activeTab) {
-            let content = $activeTab.html;
+        if ($activeLaw) {
+            let content = $activeLaw.html;
             if (content === undefined) {
                 editor.root.innerHTML = "";
             } else {

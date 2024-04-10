@@ -1,7 +1,7 @@
 <script lang="ts">
     import { writable } from "svelte/store";
     import TextEditor from "./TextEditor.svelte";
-    import type { tab } from "../types";
+    import type { Law } from "../types";
     import { canEdit, laws } from "../../../store/government";
     import { fetchNui } from "../../../utils/fetchNui";
     import { debugData } from "../../../utils/debugData";
@@ -13,37 +13,37 @@
         );
     }
 
-    let activeTab = writable<tab>($laws[0] ? $laws[0] : undefined);
+    let activeLaw = writable<Law>($laws[0] ? $laws[0] : undefined);
     let editing = writable(false);
 
     let title = $laws[0] ? $laws[0].title : undefined;
     let getEditorContent: any;
 
-    function newTab() {
-        let tab: tab = {
-            title: "New Tab",
+    function newLaw() {
+        let law: Law = {
+            title: "New Law",
             uuid: randomID(),
         };
-        title = tab.title;
-        activeTab.set(tab);
-        laws.update(($laws) => [tab, ...$laws]);
+        title = law.title;
+        activeLaw.set(law);
+        laws.update(($laws) => [law, ...$laws]);
         editing.set(true);
     }
 
     function toggleEditing() {
         if ($editing && title) {
-            $activeTab.html = getEditorContent();
-            $activeTab.title = title;
-            const tabIdx = $laws.findIndex(
-                (tab) => tab.uuid === $activeTab.uuid
+            $activeLaw.html = getEditorContent();
+            $activeLaw.title = title;
+            const lawIdx = $laws.findIndex(
+                (law) => law.uuid === $activeLaw.uuid
             );
-            if (tabIdx !== -1) {
+            if (lawIdx !== -1) {
                 laws.update(($laws) => {
                     const updatedLaws = [...$laws];
-                    updatedLaws[tabIdx] = $activeTab;
+                    updatedLaws[lawIdx] = $activeLaw;
                     return updatedLaws;
                 });
-                fetchNui("gov:saveLaw", $activeTab);
+                fetchNui("gov:saveLaw", $activeLaw);
             }
         }
         $editing = !$editing;
@@ -77,7 +77,7 @@
 
             <button
                 class="py-1 px-2 rounded-md bg-blue-400 hover:bg-blue-500 col-start-11"
-                on:click={newTab}
+                on:click={newLaw}
             >
                 New
             </button>
@@ -92,22 +92,22 @@
     <div class="w-full h-full grid grid-cols-12 flex-auto">
         <div class="col-span-2 relative overflow-auto">
             <div class="divide-y divide-blue-400 px-1 overflow-hidden absolute">
-                {#each $laws as tab, i}
+                {#each $laws as law, i}
                     <button
-                        class={`w-full py-5 px-1 font-bold ${tab.uuid === $activeTab.uuid ? "bg-slate-300" : ""}`}
+                        class={`w-full py-5 px-1 font-bold ${law.uuid === $activeLaw.uuid ? "bg-slate-300" : ""}`}
                         on:click={() => {
-                            activeTab.set({ ...$laws[i] });
-                            title = tab.title;
+                            activeLaw.set({ ...$laws[i] });
+                            title = law.title;
                         }}
                     >
-                        {tab.title}
+                        {law.title}
                     </button>
                 {/each}
             </div>
         </div>
         <div class="col-span-10 h-full relative">
             <div class="h-full w-full bg-white rounded-md shadow-md absolute">
-                <TextEditor {activeTab} {editing} bind:getEditorContent />
+                <TextEditor {activeLaw} {editing} bind:getEditorContent />
             </div>
         </div>
     </div>
