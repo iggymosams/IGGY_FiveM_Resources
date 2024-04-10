@@ -10,3 +10,9 @@ export interface Announcement {
     message: string;
     date: string;
 }
+
+export interface Facility {
+    name: string;
+    description: string;
+    location: string;
+}
