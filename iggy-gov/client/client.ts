@@ -10,7 +10,8 @@ global.exports["iggy-laptop"].RegisterLaptopCallback(
         global.exports["iggy-laptop"].SendAppMessage(
             "gov",
             "updateFacilities",
-            Config.Facilites
+            Config.Facilities
+        );
         );
     }
 );
@@ -39,7 +40,7 @@ global.exports["iggy-laptop"].RegisterLaptopCallback(
 global.exports["iggy-laptop"].RegisterLaptopCallback(
     "gov:locateFacility",
     async (facility: Facility) => {
-        let f = Config.Facilites.find((f) => f.name === facility.name);
+        let f = Config.Facilities.find((f) => f.name === facility.name);
         SetNewWaypoint(f.coords.x, f.coords.y);
     }
 );

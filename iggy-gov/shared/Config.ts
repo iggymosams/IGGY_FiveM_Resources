@@ -1,5 +1,5 @@
 export const Config = {
-    Facilites: [
+    Facilities: [
         {
             name: "Los Santos City Hall",
             location: "Downtown, Los Santos",
