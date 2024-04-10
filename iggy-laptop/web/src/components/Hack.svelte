@@ -131,7 +131,7 @@
     useNuiEvent<HackData>("hack", "setVisible", async (data) => {
         visible = data.open;
         difficulty = data.difficulty;
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         selectButtons();
     });
 
