@@ -1,4 +1,5 @@
-import { Announcement, Law } from "../shared/types";
+import { Config } from "../shared/Config";
+import { Announcement, Facility, Law } from "../shared/types";
 
 global.exports["iggy-laptop"].RegisterLaptopCallback(
     "gov:getInfo",
@@ -6,6 +7,11 @@ global.exports["iggy-laptop"].RegisterLaptopCallback(
         emitNet("iggy-gov:server:getAnnouncements");
         emitNet("iggy-gov:server:getCanEdit");
         emitNet("iggy-gov:server:getLaws");
+        global.exports["iggy-laptop"].SendAppMessage(
+            "gov",
+            "updateFacilities",
+            Config.Facilites
+        );
     }
 );
 
@@ -27,6 +33,14 @@ global.exports["iggy-laptop"].RegisterLaptopCallback(
     "gov:deleteAnnouncement",
     async (announcement: number) => {
         emitNet("iggy-gov:server:deleteAnnouncement", announcement);
+    }
+);
+
+global.exports["iggy-laptop"].RegisterLaptopCallback(
+    "gov:locateFacility",
+    async (facility: Facility) => {
+        let f = Config.Facilites.find((f) => f.name === facility.name);
+        SetNewWaypoint(f.coords.x, f.coords.y);
     }
 );
 

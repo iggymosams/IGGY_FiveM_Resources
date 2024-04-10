@@ -1,6 +1,7 @@
 <script lang="ts">
     import { Locate } from "lucide-svelte";
     import type { Facility } from "../types";
+    import { fetchNui } from "../../../utils/fetchNui";
 
     export let facility: Facility;
 </script>
@@ -13,5 +14,7 @@
             {facility.description}
         </p>
     </div>
-    <button><Locate /></button>
+    <button on:click={() => fetchNui("gov:locateFacility", facility)}>
+        <Locate />
+    </button>
 </div>

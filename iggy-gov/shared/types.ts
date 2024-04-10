@@ -10,3 +10,10 @@ export interface Law {
     html?: string;
     uuid: string;
 }
+
+export interface Facility {
+    name: string;
+    description: string;
+    location: string;
+    coords: { x: number; y: number };
+}
