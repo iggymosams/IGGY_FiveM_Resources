@@ -5,10 +5,10 @@
     export let bio: string;
 </script>
 
-<div class="bg-white shadow-md p-4 rounded-lg h-40">
+<div class="bg-white shadow-md p-4 rounded-lg h-48">
     <p class="mb-2 h-1/6 text-xl font-bold">{position}</p>
     <div class="flex h-5/6 gap-2">
-        <div class="h-full aspect-square object-cover">
+        <div class="h-5/6 aspect-square object-cover">
             <img src={image} alt={name} class="rounded-full" />
         </div>
         <div>
