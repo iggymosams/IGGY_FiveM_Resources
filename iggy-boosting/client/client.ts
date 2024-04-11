@@ -1,6 +1,14 @@
 import { Client } from "@zerio2/qbcore.js";
-import { ActiveContract, Contract, Rep, Vector3 } from "../shared/types";
+import {
+    ActiveContract,
+    Contract,
+    DropOffLocation,
+    Rep,
+    SpawnLocation,
+    Vector3,
+} from "../shared/types";
 import { Config } from "../shared/Config";
+import { SPAWN_LOCATIONS, DROP_OFF_LOCATIONS } from "../shared/locations";
 
 let active: ActiveContract;
 let blip: number;
@@ -361,3 +369,186 @@ onNet("iggy-boosting:client:playerLeft", () => {
     pdTrackers = {};
     emitNet("iggy-boosting:server:toggleQueue", true);
 });
+
+let debug: SpawnLocation[] = [];
+RegisterCommand(
+    "iggy-boosting:debug:addLocation",
+    async (source: string, args: string[]) => {
+        let coords = GetEntityCoords(PlayerPedId(), true);
+        let w = GetEntityHeading(PlayerPedId());
+        let newLocation: SpawnLocation = {
+            vector4: { x: coords[0], y: coords[1], z: coords[2], w: w },
+            inUse: false,
+        };
+        debug.push(newLocation);
+        emitNet("coords", debug);
+    },
+    false
+);
+
+let debug2: DropOffLocation[] = [];
+RegisterCommand(
+    "iggy-boosting:debug:addDropLocation",
+    async (source: string, args: string[]) => {
+        let coords = GetEntityCoords(PlayerPedId(), true);
+        let w = GetEntityHeading(PlayerPedId());
+        let newLocation: DropOffLocation = {
+            vector3: { x: coords[0], y: coords[1], z: coords[2] },
+            inUse: false,
+        };
+        debug2.push(newLocation);
+        emitNet("coords", debug2);
+    },
+    false
+);
+
+RegisterCommand(
+    "iggy-boosting:debug",
+    async (source: string, args: string[]) => {
+        // let vehClass = "C";
+        if (args[0] === "SPAWN") {
+            let CLocations: SpawnLocation[] = SPAWN_LOCATIONS["C"];
+            let BLocations: SpawnLocation[] = SPAWN_LOCATIONS["B"];
+            let locations: SpawnLocation[] = CLocations.concat(BLocations);
+            locations.forEach((location, index) => {
+                let coords = location.vector4;
+                let blip = AddBlipForCoord(coords.x, coords.y, coords.z);
+                SetBlipColour(blip, 2);
+                locations.forEach((l, i) => {
+                    if (index !== i) {
+                        let c = l.vector4;
+                        let dist = global.exports["iggy-utils"].CalcDist(
+                            coords.x,
+                            coords.y,
+                            coords.z,
+                            c.x,
+                            c.y,
+                            c.z
+                        );
+                        if (dist <= 5) {
+                            console.log(
+                                "found",
+                                dist,
+                                i,
+                                coords.x,
+                                coords.y,
+                                coords.z,
+                                c.x,
+                                c.y,
+                                c.z
+                            );
+                            SetBlipColour(blip, 1);
+                        }
+                    }
+                });
+            });
+            while (true) {
+                await global.exports["iggy-utils"].Delay(10);
+                locations.forEach((location, index) => {
+                    let coords = location.vector4;
+                    DrawMarker(
+                        0,
+                        // COORDS
+                        coords.x,
+                        coords.y,
+                        coords.z,
+                        //DIR
+                        0.0,
+                        0.0,
+                        0.0,
+                        //ROT
+                        0.0,
+                        0.0,
+                        0.0,
+                        //SCALE
+                        0.5,
+                        0.5,
+                        0.5,
+                        120,
+                        10,
+                        20,
+                        155,
+                        false,
+                        false,
+                        0,
+                        false,
+                        null,
+                        null,
+                        false
+                    );
+                });
+            }
+        } else if (args[0] === "DROP") {
+            let locations: DropOffLocation[] = DROP_OFF_LOCATIONS;
+            locations.forEach((location, index) => {
+                let coords = location.vector3;
+                let blip = AddBlipForCoord(coords.x, coords.y, coords.z);
+                SetBlipColour(blip, 2);
+                locations.forEach((l, i) => {
+                    if (index !== i) {
+                        let c = l.vector3;
+                        let dist = global.exports["iggy-utils"].CalcDist(
+                            coords.x,
+                            coords.y,
+                            coords.z,
+                            c.x,
+                            c.y,
+                            c.z
+                        );
+                        if (dist <= 5) {
+                            console.log(
+                                "found",
+                                dist,
+                                i,
+                                coords.x,
+                                coords.y,
+                                coords.z,
+                                c.x,
+                                c.y,
+                                c.z
+                            );
+                            SetBlipColour(blip, 1);
+                        }
+                    }
+                });
+            });
+            while (true) {
+                await global.exports["iggy-utils"].Delay(10);
+                locations.forEach((location, index) => {
+                    let coords = location.vector3;
+                    DrawMarker(
+                        0,
+                        // COORDS
+                        coords.x,
+                        coords.y,
+                        coords.z,
+                        //DIR
+                        0.0,
+                        0.0,
+                        0.0,
+                        //ROT
+                        0.0,
+                        0.0,
+                        0.0,
+                        //SCALE
+                        0.5,
+                        0.5,
+                        0.5,
+                        120,
+                        10,
+                        20,
+                        155,
+                        false,
+                        false,
+                        0,
+                        false,
+                        null,
+                        null,
+                        false
+                    );
+                });
+            }
+        }
+    },
+    false
+);

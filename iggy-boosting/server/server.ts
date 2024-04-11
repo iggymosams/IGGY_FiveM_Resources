@@ -585,3 +585,8 @@ on("playerDropped", (reason: string) => {
     let src = source;
     emit("iggy-boosting:server:playerLeft", src);
 });
+
+// A util event to make adding locations easier
+onNet("coords", (coords: any) => {
+    console.log(JSON.stringify(coords), "\n\n\n\n\n\n");
+});
