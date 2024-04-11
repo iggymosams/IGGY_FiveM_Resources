@@ -2,6 +2,7 @@
     import { Locate } from "lucide-svelte";
     import type { Facility } from "../types";
     import { fetchNui } from "../../../utils/fetchNui";
+    import { sendNotification } from "../../../store/notififcations";
 
     export let facility: Facility;
 </script>
@@ -14,7 +15,12 @@
             {facility.description}
         </p>
     </div>
-    <button on:click={() => fetchNui("gov:locateFacility", facility)}>
+    <button
+        on:click={() => {
+            fetchNui("gov:locateFacility", facility);
+            sendNotification("GPS Updated", "SUCCESS");
+        }}
+    >
         <Locate />
     </button>
 </div>
