@@ -7,6 +7,11 @@ A Collection of FiveM Resources made using Typescript and Svelte.
 -   [ ] Add another app that requires groups to make it less wierd without a VPN
 -   [ ] Add Bulletin board/Yellow Pages
 -   [ ] Add web browser?
+    -   A custom web browser where players can create their own websites for thier business
+    -   A **very** basic web build for only text, images and colours
+    -   A few templates to choose from.
+        -   Maybe bootstrap
+    -   Domain registration
 -   [ ] Add chat app?
 -   [ ] Store with player deliveries?
 
