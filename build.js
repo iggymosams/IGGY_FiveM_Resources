@@ -2,7 +2,14 @@ const { exec } = require("child_process");
 const path = require("path");
 const fs = require("fs");
 
-const resources = ["iggy-admin"];
+const resources = [
+    "iggy-admin",
+    "iggy-utils",
+    "iggy-laptop",
+    "iggy-groups",
+    "iggy-boosting",
+    "iggy-gov",
+];
 
 resources.forEach(async (resource) => {
     const resourcePath = path.resolve(__dirname, resource);
@@ -16,8 +23,8 @@ resources.forEach(async (resource) => {
                 if (viteError) {
                     console.log(viteError);
                 }
+                console.log(`Built resource and NUI ${resource}`);
             });
-            console.log(`Built resource and NUI ${resource}`);
         } else {
             console.log(`Built resource ${resource}`);
         }
