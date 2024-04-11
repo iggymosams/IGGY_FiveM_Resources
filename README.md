@@ -2,6 +2,14 @@
 
 A Collection of FiveM Resources made using Typescript and Svelte.
 
+#### General TODO/Ideas
+
+-   [ ] Add another app that requires groups to make it less wierd without a VPN
+-   [ ] Add Bulletin board/Yellow Pages
+-   [ ] Add web browser?
+-   [ ] Add chat app?
+-   [ ] Store with player deliveries?
+
 ## Table of Contents
 
 -   [Admin Menu](#admin-menu)
