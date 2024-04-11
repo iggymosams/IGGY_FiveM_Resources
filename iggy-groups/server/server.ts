@@ -275,5 +275,5 @@ global.exports("GroupEmitNet", GroupEmitNet);
 on("playerDropped", (reason: string) => {
     let src = source;
     let group = GetPlayerGroupFromSource(src);
-    leaveGroup(group, src);
+    if (group) leaveGroup(group, src);
 });
