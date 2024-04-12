@@ -1,12 +1,35 @@
 <script lang="ts">
-    export let data: { [key: string]: string };
-    let input1Value = data["input1"] || "Welcome to Ridge Browser";
+    import { editing } from "../../../../store/ridge";
+    import type { PageData } from "../../types";
+    import Template from "../Template.svelte";
+
+    export let data: PageData;
+
+    let inputValues: PageData = {};
+
+    for (const key in data) {
+        inputValues[key] = data[key];
+    }
+
+    function handleInput(event: Event, key: string) {
+        const newValue = (event.target as HTMLElement).innerText;
+        inputValues[key] = newValue;
+    }
 </script>
 
-<div
-    class="w-full h-full flex flex-col items-center justify-center gap-2 bg-neutral-600"
->
-    <div contenteditable={false}>{input1Value}</div>
+<Template pageData={inputValues}>
+    <div
+        class="w-full h-full flex flex-col items-center justify-center gap-2 bg-neutral-300"
+    >
+        <div
+            contenteditable={$editing}
+            on:input={(event) => handleInput(event, "input1")}
+        >
+            {inputValues["input1"]}
+        </div>
 
-    {JSON.stringify(data)}
-</div>
+        {JSON.stringify(data)}
+        {$editing}
+        {JSON.stringify(inputValues)}
+    </div>
+</Template>
