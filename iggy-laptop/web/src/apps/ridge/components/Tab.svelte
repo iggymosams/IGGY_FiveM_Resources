@@ -14,7 +14,7 @@
     on:click={() => ($activeTab = tab)}
 >
     <Mountain size={20} class="text-orange-400" />
-    <span class="w-min overflow-hidden">{tab.title}</span>
+    <span class="overflow-hidden text-nowrap">{tab.title}</span>
     <button
         class="ml-auto rounded-md hover:bg-neutral-500 aspect-square"
         on:click={() => {
