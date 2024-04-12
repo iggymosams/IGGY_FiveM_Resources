@@ -28,7 +28,14 @@
                 page: { content: HomePage },
             },
         ]);
-    }
+    activeTab.subscribe((newActive) => {
+        if (newActive === undefined) return;
+        if (newActive.url) {
+            url = newActive.url;
+        } else {
+            url = "";
+        }
+    });
 </script>
 
 <div class="w-full bg-neutral-700 h-20">
@@ -61,7 +68,7 @@
             <input
                 class="bg-transparent w-full px-3 focus:outline-none"
                 placeholder="Search or go anywhere..."
-                bind:value={$activeTab.url}
+                bind:value={url}
             />
         </div>
         <ToolbarButton>
