@@ -9,5 +9,3 @@ export const tabs = writable<Tab[]>([
 export const activeTab = writable<Tab>();
 
 export const progress = writable<number>(0);
-
-export const editing = writable<boolean>(false);

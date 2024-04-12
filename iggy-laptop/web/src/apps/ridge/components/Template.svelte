@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { fetchNui } from "../../../utils/fetchNui";
-    import { activeTab, editing, tabs } from "../../../store/ridge";
+    import { activeTab, tabs } from "../../../store/ridge";
     import { Pencil } from "lucide-svelte";
     import type { PageData } from "../types";
 
@@ -10,7 +10,6 @@
     let isOwner = false;
 
     onMount(async () => {
-        $editing = false;
         try {
             let owner = await fetchNui("ridge:isSiteOwner", $activeTab.url);
             isOwner = owner;
@@ -40,7 +39,7 @@
         <button
             class="p-3 bg-orange-400 rounded-full shadow-lg text-white hover:bg-orange-500"
             on:click={() => {
-                editing.set(!$editing);
+                $activeTab.editing = !$activeTab.editing;
                 saveData();
             }}
         >

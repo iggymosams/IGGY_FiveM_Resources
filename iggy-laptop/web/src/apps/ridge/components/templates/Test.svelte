@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { editing } from "../../../../store/ridge";
+    import { activeTab } from "../../../../store/ridge";
     import type { PageData } from "../../types";
     import Template from "../Template.svelte";
 
@@ -22,14 +22,14 @@
         class="w-full h-full flex flex-col items-center justify-center gap-2 bg-neutral-300"
     >
         <div
-            contenteditable={$editing}
+            contenteditable={$activeTab.editing}
             on:input={(event) => handleInput(event, "input1")}
         >
             {inputValues["input1"]}
         </div>
 
         {JSON.stringify(data)}
-        {$editing}
+        {$activeTab.editing}
         {JSON.stringify(inputValues)}
     </div>
 </Template>

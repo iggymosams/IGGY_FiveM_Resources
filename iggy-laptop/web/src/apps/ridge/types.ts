@@ -5,6 +5,7 @@ export interface Tab {
     title: string;
     page: Page;
     url?: string;
+    editing?: boolean;
 }
 
 export interface Page {
