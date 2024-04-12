@@ -12,7 +12,7 @@
     onMount(async () => {
         $editing = false;
         try {
-            let owner = await fetchNui("ridge:getSiteOwner", $activeTab.url);
+            let owner = await fetchNui("ridge:isSiteOwner", $activeTab.url);
             isOwner = owner;
         } catch (error) {
             isOwner = true;
