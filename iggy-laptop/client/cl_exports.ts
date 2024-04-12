@@ -6,8 +6,8 @@ function RegisterLaptopCallback(name: string, callback: Function) {
     RegisterNuiCallbackType(`iggy-laptop:ui:${name}`);
     on(
         `__cfx_nui:iggy-laptop:ui:${name}`,
-        (data: any, cb: (arg0: any) => void) => {
-            cb(callback(data));
+        async (data: any, cb: (arg0: any) => void) => {
+            cb(await callback(data));
         }
     );
     console.log(`Created Callback: iggy-laptop:ui:${name}`);
