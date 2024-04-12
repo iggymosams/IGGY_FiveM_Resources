@@ -7,11 +7,13 @@ import {
     SettingsIcon,
     CarFront,
     Scale,
+    Mountain,
 } from "lucide-svelte";
 import Settings from "../apps/settings/components/Settings.svelte";
 import { writable, type Writable } from "svelte/store";
 import Boosting from "../apps/boosting/components/Boosting.svelte";
 import Government from "../apps/government/components/Government.svelte";
+import Ridge from "../apps/ridge/components/Ridge.svelte";
 
 export interface ConfigApp {
     id: string;
@@ -63,6 +65,14 @@ export const APPS: ConfigApp[] = [
         component: Boosting,
         icon: CarFront,
         requiresVPN: true,
+    },
+    {
+        id: "RIDGE",
+        name: "Ridge",
+        backgroundColor: "bg-orange-400",
+        color: "text-white",
+        component: Ridge,
+        icon: Mountain,
     },
 ];
 
