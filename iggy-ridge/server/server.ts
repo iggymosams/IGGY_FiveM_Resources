@@ -1,5 +1,6 @@
 import { Player, Server } from "@zerio2/qbcore.js";
 import { oxmysql as MySQL } from "@overextended/oxmysql";
+import { PageData } from "../shared/types";
 
 const QBCore: Server = global.exports["qb-core"].GetCoreObject();
 
@@ -49,3 +50,11 @@ QBCore.Functions.CreateCallback(
         cb(player.PlayerData.citizenid === data[0].owner);
     }
 );
+
+onNet("iggy-ridge:server:saveSite", (url: string, data: PageData) => {
+    console.log(url, data);
+    MySQL.update("UPDATE `iggy_ridge_website` SET data = ? WHERE `url` = ?", [
+        JSON.stringify(data),
+        url,
+    ]);
+});

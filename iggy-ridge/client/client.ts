@@ -1,3 +1,5 @@
+import { PageData, Tab } from "../shared/types";
+
 global.exports["iggy-laptop"].RegisterLaptopCallback(
     "ridge:searchURL",
     async (url: string) => {
@@ -17,5 +19,12 @@ global.exports["iggy-laptop"].RegisterLaptopCallback(
             url
         );
         return data;
+    }
+);
+
+global.exports["iggy-laptop"].RegisterLaptopCallback(
+    "ridge:saveSite",
+    async (data: { pageData: PageData; tab: Tab }) => {
+        emitNet("iggy-ridge:server:saveSite", data.tab.url, data.pageData);
     }
 );

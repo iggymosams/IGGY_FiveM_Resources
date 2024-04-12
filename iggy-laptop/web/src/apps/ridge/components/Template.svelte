@@ -30,7 +30,7 @@
             return currentTabs;
         });
         activeTab.set($tabs.find((t) => t.id === tabId) || $tabs[0]);
-        fetchNui("ridge:saveSite", { pageData, $activeTab });
+        fetchNui("ridge:saveSite", { pageData: pageData, tab: $activeTab });
     }
 </script>
 
