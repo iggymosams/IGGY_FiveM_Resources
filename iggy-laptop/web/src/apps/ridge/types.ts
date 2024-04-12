@@ -9,5 +9,7 @@ export interface Tab {
 
 export interface Page {
     content: typeof SvelteComponent<any>;
-    data?: any;
+    data?: PageData;
 }
+
+export type PageData = { [key: string]: string };
