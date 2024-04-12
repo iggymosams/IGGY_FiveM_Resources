@@ -11,6 +11,7 @@
     import Tab from "./Tab.svelte";
     import { activeTab, progress, tabs } from "../../../store/ridge";
     import HomePage from "./HomePage.svelte";
+    import { searchURL } from "../utils";
     import { randomID } from "../../../utils/misc";
     import { fade } from "svelte/transition";
 
@@ -25,7 +26,7 @@
                 page: { content: HomePage },
             },
         ]);
-activeTab.set($tabs[$tabs.length - 1]);
+        activeTab.set($tabs[$tabs.length - 1]);
     }
 
     activeTab.subscribe((newActive) => {
@@ -36,6 +37,12 @@ activeTab.set($tabs[$tabs.length - 1]);
             url = "";
         }
     });
+
+    function handleSearch(event: KeyboardEvent) {
+        if (event.key === "Enter") {
+            searchURL(url, $activeTab.id);
+        }
+    }
 </script>
 
 <div class="w-full bg-neutral-700 h-20">
@@ -69,6 +76,7 @@ activeTab.set($tabs[$tabs.length - 1]);
                 class="bg-transparent w-full px-3 focus:outline-none"
                 placeholder="Search or go anywhere..."
                 bind:value={url}
+                on:keydown={handleSearch}
             />
         </div>
         <ToolbarButton>
