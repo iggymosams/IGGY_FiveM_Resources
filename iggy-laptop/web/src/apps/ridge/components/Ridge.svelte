@@ -23,7 +23,7 @@
                 },
             ]);
         }
-        if ($activeTab === undefined) {
+        if ($activeTab === undefined || !$tabs.includes($activeTab)) {
             $activeTab = $tabs[0];
         }
     }
