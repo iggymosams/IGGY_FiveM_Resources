@@ -33,10 +33,12 @@
     <div class="absolute w-full h-full flex flex-col">
         <Toolbar />
         <div class="w-full flex-auto overflow-auto">
-            <svelte:component
-                this={$activeTab.page.content}
-                data={$activeTab.page.data}
-            />
+            {#key $activeTab}
+                <svelte:component
+                    this={$activeTab.page.content}
+                    data={$activeTab.page.data}
+                />
+            {/key}
         </div>
     </div>
 </AppShell>
