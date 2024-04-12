@@ -28,6 +28,9 @@
                 page: { content: HomePage },
             },
         ]);
+activeTab.set($tabs[$tabs.length - 1]);
+    }
+
     activeTab.subscribe((newActive) => {
         if (newActive === undefined) return;
         if (newActive.url) {
