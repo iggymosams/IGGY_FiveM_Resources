@@ -9,15 +9,12 @@
     } from "lucide-svelte";
     import ToolbarButton from "./ToolbarButton.svelte";
     import Tab from "./Tab.svelte";
-    import { activeTab, tabs } from "../../../store/ridge";
+    import { activeTab, progress, tabs } from "../../../store/ridge";
     import HomePage from "./HomePage.svelte";
+    import { randomID } from "../../../utils/misc";
+    import { fade } from "svelte/transition";
 
-    function randomID() {
-        return (
-            Math.random().toString(36).substring(2, 15) +
-            Math.random().toString(36).substring(2, 15)
-        );
-    }
+    let url: string = "";
 
     function newTab() {
         tabs.update((currentTabs) => [
@@ -78,4 +75,12 @@ activeTab.set($tabs[$tabs.length - 1]);
             <Menu class="text-neutral-400" />
         </ToolbarButton>
     </div>
+    {#if $progress !== 0}
+        <div class={"w-full h-0.5 absolute"} transition:fade>
+            <div
+                class="bg-orange-400 h-full transition-[width]"
+                style={`width: ${$progress}%;`}
+            />
+        </div>
+    {/if}
 </div>
