@@ -1,6 +1,6 @@
 import { Player, Server } from "@zerio2/qbcore.js";
 import { oxmysql as MySQL } from "@overextended/oxmysql";
-import { PageData } from "../shared/types";
+import { PageData, SearchResult, Site } from "../shared/types";
 
 const QBCore: Server = global.exports["qb-core"].GetCoreObject();
 
@@ -13,13 +13,13 @@ function containsTLD(url: string): boolean {
 
 QBCore.Functions.CreateCallback(
     "iggy-ridge:cb:searchURL",
-    async (src, cb: (data: any) => void, args: unknown[]) => {
-        let url: string = args[0] as string;
-        let isUrl = containsTLD(url);
+    async (src, cb: (data: Site | SearchResult[]) => void, args: unknown[]) => {
+        let search: string = args[0] as string;
+        let isUrl = containsTLD(search);
         if (isUrl) {
             let data = await MySQL.query(
                 "SELECT * FROM `iggy_ridge_website` WHERE `url` = ?",
-                [url]
+                [search]
             );
             console.log(data[0]);
             let site = {
@@ -31,8 +31,15 @@ QBCore.Functions.CreateCallback(
                 },
             };
             cb(site);
+        } else {
+            let data = await MySQL.query(
+                "SELECT `url`, `title` FROM `iggy_ridge_website` WHERE `url` LIKE CONCAT('%', ?, '%') OR `title` LIKE CONCAT('%', ?, '%') ",
+                [search, search]
+            );
+            console.log(data);
+            let results: SearchResult[] = data as SearchResult[];
+            cb(results);
         }
-        cb(url);
     }
 );
 

@@ -11,3 +11,17 @@ export interface Page {
 }
 
 export type PageData = { [key: string]: string };
+
+export interface Site {
+    title: string;
+    url: string;
+    page: {
+        template: string;
+        data: PageData;
+    };
+}
+
+export interface SearchResult {
+    title: string;
+    url: string;
+}
