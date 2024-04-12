@@ -16,6 +16,7 @@
     import { fade } from "svelte/transition";
 
     let url: string = "";
+    let searchInput: HTMLInputElement;
 
     function newTab() {
         tabs.update((currentTabs) => [
@@ -41,6 +42,7 @@
     function handleSearch(event: KeyboardEvent) {
         if (event.key === "Enter") {
             searchURL(url, $activeTab.id);
+            searchInput.blur();
         }
     }
 </script>
@@ -77,6 +79,7 @@
                 placeholder="Search or go anywhere..."
                 bind:value={url}
                 on:keydown={handleSearch}
+                bind:this={searchInput}
             />
         </div>
         <ToolbarButton>
