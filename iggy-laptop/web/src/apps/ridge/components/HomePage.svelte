@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { Mountain, Search } from "lucide-svelte";
+    import { Mountain } from "lucide-svelte";
+    import SearchInput from "./SearchInput.svelte";
 </script>
 
 <div
@@ -9,13 +10,7 @@
     <div class="text-6xl font-semibold mb-3 text-white">
         Welcome to <span class=" font-bold text-orange-400">Ridge</span> Browser
     </div>
-    <div
-        class="w-2/5 bg-neutral-700 rounded-full text-white p-3 flex items-center focus-within:outline focus-within:outline-2 focus-within:outline-orange-400"
-    >
-        <Search />
-        <input
-            class="bg-transparent w-full px-3 focus:outline-none"
-            placeholder="Search or go anywhere..."
-        />
+    <div class="w-2/5">
+        <SearchInput />
     </div>
 </div>

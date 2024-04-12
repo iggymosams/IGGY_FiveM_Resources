@@ -3,6 +3,7 @@
     import { type PageData } from "../types";
     import { activeTab } from "../../../store/ridge";
     import { searchURL } from "../utils";
+    import SearchInput from "./SearchInput.svelte";
 
     export let data: PageData;
 </script>
@@ -15,15 +16,7 @@
             <Mountain class="text-orange-400 h-full" size={28} />
             Ridge
         </div>
-        <div
-            class="w-full bg-neutral-700 rounded-full text-white p-3 flex items-center focus-within:outline focus-within:outline-2 focus-within:outline-orange-400"
-        >
-            <Search />
-            <input
-                class="bg-transparent w-full px-3 focus:outline-none"
-                placeholder="Search or go anywhere..."
-            />
-        </div>
+        <SearchInput />
     </div>
     <span class="font-light text-neutral-400">Ridge found these results</span>
     <div>
