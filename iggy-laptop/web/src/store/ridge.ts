@@ -7,3 +7,5 @@ export const tabs = writable<Tab[]>([
 ]);
 
 export const activeTab = writable<Tab>();
+
+export const progress = writable<number>(0);
