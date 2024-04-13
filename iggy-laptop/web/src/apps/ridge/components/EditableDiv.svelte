@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { createEventDispatcher, onMount } from "svelte";
+    import { createEventDispatcher } from "svelte";
     import { activeTab, selectedElement } from "../../../store/ridge";
     import type { PageData } from "../types";
 
@@ -11,7 +11,10 @@
     let div: HTMLDivElement;
 
     function handleInput(event: Event) {
-        dispatch("input", { event, id });
+        dispatch("input", {
+            event: (event.target as HTMLElement).innerText,
+            id,
+        });
     }
 </script>
 
