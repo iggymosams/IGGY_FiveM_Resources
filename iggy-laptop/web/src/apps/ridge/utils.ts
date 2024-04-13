@@ -30,8 +30,8 @@ export async function searchURL(url: string, tab: string) {
         pageData = resp;
     } catch (error) {
         let example =
-            // '{"title":"IGGYMOSAMS","url":"iggymosams.dev","page":{"template":"Test","data":{"input1":"Welcome to IGGYMOSAMS.dev"}}}';
-            '[{"url": "iggy.dev", "title":"iggy"},{"url": "iggymosams.com", "title":"IGGYMOSAMS"}]';
+            '{"title":"IGGYMOSAMS","url":"iggymosams.dev","page":{"template":"Test","data":{"input1":"Welcome to &cIGGYMOSAMS.dev", "image1":"https://i.iggymosams.dev/u/qUYfyF.png"}}}';
+        // '[{"url": "iggy.dev", "title":"iggy"},{"url": "iggymosams.com", "title":"IGGYMOSAMS"}]';
         pageData = JSON.parse(example);
     }
     if (pageData === undefined) return;
