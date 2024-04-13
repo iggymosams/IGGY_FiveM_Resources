@@ -571,13 +571,6 @@ onNet("iggy-boosting:server:hackComplete", (netId: number) => {
     }
 });
 
-//TODO: DELETE
-onNet("boost:create", (veh: string) => {
-    let src = source;
-    let v: VehicleClass = veh ? (veh as VehicleClass) : "C";
-    CreateContract(v, "Adder", "adder", 1, 1, 1, 1712326762, src);
-});
-
 QBCore.Functions.CreateUseableItem("electronickit", async (src, item) => {
     emitNet("iggy-boosting:client:openHack", src);
 });

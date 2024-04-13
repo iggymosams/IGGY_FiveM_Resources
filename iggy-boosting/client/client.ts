@@ -254,14 +254,6 @@ onNet("iggy-boosting:client:finishContract", () => {
     );
 });
 
-RegisterCommand(
-    "iggy-boosting:create",
-    (src: number, args: string[]) => {
-        emitNet("boost:create", args[0]);
-    },
-    false
-);
-
 onNet("iggy-boosting:client:openHack", () => {
     if (!active) return;
 
