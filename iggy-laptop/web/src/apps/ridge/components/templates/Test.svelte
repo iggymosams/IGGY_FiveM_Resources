@@ -1,6 +1,7 @@
 <script lang="ts">
     import { activeTab } from "../../../../store/ridge";
     import type { PageData } from "../../types";
+    import EditableDiv from "../EditableDiv.svelte";
     import Template from "../Template.svelte";
 
     export let data: PageData;
@@ -21,12 +22,14 @@
     <div
         class="w-full h-full flex flex-col items-center justify-center gap-2 bg-neutral-300"
     >
-        <div
-            contenteditable={$activeTab.editing}
-            on:input={(event) => handleInput(event, "input1")}
-        >
-            {inputValues["input1"]}
-        </div>
+        <EditableDiv
+            id="input1"
+            {inputValues}
+            on:input={(data) => {
+                let detail = data.detail;
+                handleInput(detail.event, detail.id);
+            }}
+        />
 
         {JSON.stringify(data)}
         {$activeTab.editing}
