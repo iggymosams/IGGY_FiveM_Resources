@@ -316,9 +316,10 @@ async function awardContract(iteration = 0) {
 
 async function ContractLoop() {
     while (true) {
-        // TODO: Add Random noise
         await global.exports["iggy-utils"].Delay(
-            Config.TIME_BETWEEN_CONTRACTS * 1000
+            (Config.TIME_BETWEEN_CONTRACTS +
+                global.exports["iggy-utils"].RandomNumber(0, 30)) *
+                1000
         );
         if (queue.length <= 0) continue;
         let chance = Math.random();
