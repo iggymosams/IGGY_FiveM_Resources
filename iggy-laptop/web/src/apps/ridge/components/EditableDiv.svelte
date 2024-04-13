@@ -1,6 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
-    import { activeTab, selectedElement } from "../../../store/ridge";
+    import { activeTab } from "../../../store/ridge";
     import type { PageData } from "../types";
 
     export let id: string;
@@ -21,9 +21,6 @@
 <div
     contenteditable={$activeTab.editing}
     on:input={(event) => handleInput(event)}
-    on:focus={() => {
-        $selectedElement = div;
-    }}
     bind:this={div}
     class="whitespace-pre-wrap"
 >
