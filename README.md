@@ -22,6 +22,7 @@ A Collection of FiveM Resources made using Typescript and Svelte.
 -   [Boosting](#boosting)
 -   [Groups](#groups)
 -   [Utils](#utils)
+-   [Gov](#gov)
 
 ## Admin Menu
 
@@ -306,3 +307,24 @@ function RandomNumber(min: number, max: number): number;
 ```
 
 Returns a random number
+
+## Gov
+
+A government app for [laptop](#laptop)
+
+### Features
+
+-   State Announcements: Certain players will be allowed to post announcements for everyone to see in the app.
+-   A Departments Page: Allows players to see all the government departments and what they do.
+-   A Leadership Page: See the people who run the state.
+-   A Live Editable Laws & Regulations Page: Where certain players can edit/create laws in-game in real-time.
+-   A Government Facilities Page: Helps players find important government buildings quickly.
+
+### TODO
+
+-   [ ] Remove law feature
+-   [ ] Add edit whitelist
+
+### Screen Shots
+
+-   TODO
