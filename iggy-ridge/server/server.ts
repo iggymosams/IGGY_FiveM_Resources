@@ -21,7 +21,6 @@ QBCore.Functions.CreateCallback(
                 "SELECT * FROM `iggy_ridge_website` WHERE `url` = ?",
                 [search]
             );
-            console.log(data[0]);
             let site = {
                 title: data[0].title,
                 url: data[0].url,
@@ -36,7 +35,6 @@ QBCore.Functions.CreateCallback(
                 "SELECT `url`, `title` FROM `iggy_ridge_website` WHERE `url` LIKE CONCAT('%', ?, '%') OR `title` LIKE CONCAT('%', ?, '%') ",
                 [search, search]
             );
-            console.log(data);
             let results: SearchResult[] = data as SearchResult[];
             cb(results);
         }
@@ -59,7 +57,6 @@ QBCore.Functions.CreateCallback(
 );
 
 onNet("iggy-ridge:server:saveSite", (url: string, data: PageData) => {
-    console.log(url, data);
     MySQL.update("UPDATE `iggy_ridge_website` SET data = ? WHERE `url` = ?", [
         JSON.stringify(data),
         url,
